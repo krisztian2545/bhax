@@ -32,31 +32,34 @@
         </para>
         <para>
             A végtelen ciklusok nagyon hasznosak tudnak lenni például ha egy menüt akarunk írni ahol semmi mást nem csinálunk, csak várunk valamilyen bemenetre és az alapján végrehajtunk valamit, majd újra várakozunk. C-ben 2 féle módon írhatunk végtelen ciklust:
-        </para>     
-        <para>
-            1) for ciklussal
-        </para>       
-        <programlisting language="c"><![CDATA[
+        </para>  
+        <itemizedlist>
+                <listitem>
+                    <para>for ciklussal</para>     
+                    <programlisting language="c"><![CDATA[
             for(;;){
             //infinite loop
             }]]>
-        </programlisting>
-        <para>
-            2) while ciklussal
-        </para>
-        <programlisting language="c"><![CDATA[
+                    </programlisting>
+                </listitem>
+                <listitem>
+                    <para>while ciklussal</para>    
+                    <programlisting language="c"><![CDATA[
             while(1){
             //infinite loop
             }]]>
-        </programlisting>
+                    </programlisting>
+                </listitem>
+        </itemizedlist>   
+        
         <para>
             Először nézzük meg a processzort 100%-on futtató programot. A könnyebb olvashatóság érdekében a while ciklust használtam és az "1"-es értékkel (amit a fordító logikai igaz értékként értelmez ebben az esetben) a ciklus soha nem ér véget. Mivel a ciklusba nem írtunk semmit, a program a while ciklus feltételének vizsgálásával tölti minden idejét, ami a processzor 100% leterheltségét eredményezi.
         </para>
         <mediaobject>
-    <imageobject>
-      <imagedata fileref="images/cropped.jpg" format="JPG"/>
-    </imageobject>
-  </mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf.jpg" scale="65"/>
+            </imageobject>
+        </mediaobject>
         <para>
             Ahhoz hogy az összes magot 100%-on pörgessük, csak 1 sorral kell kibővítenünk a programot, de ehhez szükségünk lesz az "omp.h" könyvtárra is.
         </para>
@@ -70,9 +73,20 @@ int main(){
 	return 0;
 }]]>
         </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf2.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
         <para>
-            Ha 0%-os terhelést akarunk, akkor csökkenteni kell a feltételvizsgálat gyakoriságát. Vagyis a <function>sleep(szam)</function> paranccsal várakozásra utasítjuk a processzort.
+            Ha 0%-os terhelést akarunk, akkor csökkenteni kell a feltételvizsgálat gyakoriságát. Vagyis a <function>sleep(seconds)</function> paranccsal várakozásra utasítjuk a processzort.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf3.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        
     </section>        
         
     <section>
