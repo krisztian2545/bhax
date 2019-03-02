@@ -2,7 +2,7 @@
 
 int main(){
 
-	while(1) sleep(1);
+	while(1) sleep(1000);
 
 	return 0;
 }

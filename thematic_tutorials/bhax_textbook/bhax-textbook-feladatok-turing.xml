@@ -61,7 +61,7 @@
             </imageobject>
         </mediaobject>
         <para>
-            Ahhoz hogy az összes magot 100%-on pörgessük, csak 1 sorral kell kibővítenünk a programot, de ehhez szükségünk lesz az "omp.h" könyvtárra is.
+            Ahhoz hogy az összes magot 100%-on pörgessük, csak 1 sorral kell kibővítenünk a programot, de ehhez szükségünk lesz az <function>omp.h</function> könyvtár implementálására és fordításkor a "-fopenmp" kapcsolóra.
         </para>
         <programlisting language="c"><![CDATA[#include <omp.h>
 
@@ -81,6 +81,15 @@ int main(){
         <para>
             Ha 0%-os terhelést akarunk, akkor csökkenteni kell a feltételvizsgálat gyakoriságát. Vagyis a <function>sleep(seconds)</function> paranccsal várakozásra utasítjuk a processzort.
         </para>
+        <programlisting><![CDATA[#include <unistd.h>
+
+int main(){
+
+	while(1) sleep(1);
+
+	return 0;
+}]]>
+        </programlisting>
         <mediaobject>
             <imageobject>
                 <imagedata fileref="images/inf3.jpg" scale="50"/>
@@ -171,7 +180,7 @@ false]]></screen>
             függvényt, azaz a T100 program nem is létezik.                
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            
         </para>
     </section>        
                 
