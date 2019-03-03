@@ -195,10 +195,31 @@ false]]></screen>
         </para>
         <para>
             Megoldás forrása:  
+            <link xlink:href="turing/valtcsere.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/valtcsere.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            Változók értékének felcserélésére leggyakrabban a rendezési algoritmusoknál van szükség. Ilyenkor a legegyszerűbb módszer jut az eszembe, miszerint veszek egy harmadik, úgymond segédváltozót, amiben ideiglenesen eltárolom az egyik változó értékét, hogy azt majd a másik változó kaphassa meg.
         </para>
+        <programlisting><![CDATA[int c = a;
+	  a = b;
+	  b = c;]]>
+        </programlisting>
+        <para>
+            Ha segédváltozó nélkül szeretnénk megoldani a problémát, akkor képtelenek vagyunk valamilyen műveleteket alkalmazni. Nem kell sokáig keresgélni, mivel az összeadás és kivonás tökéletesen megfelel erre a feladatra. Ehhez először összeadjuk őket az <function>a</function> változóba, majd abból kivonva a <function>b</function>-t megkapjuk először a  <function>b</function>, majd az <function>a</function> értékét, ahogy azt a programkód szemlélteti:
+        </para>
+        <programlisting><![CDATA[  a = a + b;
+	b = a - b;
+	a = a - b;]]>
+        </programlisting>
+        <para>
+            Ha azon töprengsz van-e más megoldás is, igen létezik. Az EXOR művelet legépelésénél még annyit se kell gondolkodni, mint az előzőnél:
+        </para>
+        <programlisting><![CDATA[	a = a ^ b;
+	b = a ^ b;
+	a = a ^ b;]]>
+        </programlisting>
     </section>                     
 
     <section>
@@ -226,14 +247,49 @@ false]]></screen>
             Használd ugyanazt a while ciklus fejet, amit Linus Torvalds a BogoMIPS rutinjában! 
         </para>
         <para>
-            Megoldás videó: <link xlink:href=""></link>
+            Megoldás videó:
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>
+            Megoldás forrása: 
+            <link xlink:href="turing/bogomips.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/bogomips.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat... 
+            Mi is ez a BogoMips valójában? Megméri, hogy 1 másodperc alatt hányszor fut le a programunk egy ciklusa. Sokan abba a hibába esnek, hogy ez alapján hasonlítják össze a gépüket, hogy kié gyorsabb. Egyedül a linux bootolásakor érdemes odafigyelni rá, hogy a processzor és a cache rendben van-e.
         </para>
+        <para>
+            A <function>ticks</function> változóba elmentjük a jelenlegi processzoridőt, majd a for ciklus egy bizonyos számú lefutása után a jelenlegi processzoridőből kivonjuk a <function>ticks</function> értékét, így megkapjuk hogy mennyi ideig tartott a ciklus x-szeri lefutása.
+        </para>
+        <programlisting><![CDATA[    while ((loops_per_sec <<= 1))
+    {
+        ticks = clock ();
+        delay (loops_per_sec);
+        ticks = clock () - ticks;]]>
+        ...
+    }
+        </programlisting>
+        <para>
+            Ha ez az idő kisebb mint 1 másodperc, akkor legközelebb többször futtatjuk le a for ciklust, ellenben viszont némi átalakításokkal kiírjuk a gépünk BogoMips értékét.
+        </para>
+        <programlisting>    Calibrating delay loop..ok - 690.00 BogoMIPS
+        </programlisting>
+        <para>
+            A BogoMips while ciklus fejét használva mostmár könnyen megkapjuk szóhosszt. Konkrétan itt az történik, hogy az <function>int</function> típusú változó elején levő bitet ciklusonként eltoljuk és hozzáadunk egyet a szóhosszt tároló <function>length</function> változóhoz.
+        </para>
+        <programlisting><![CDATA[	int x = 1;
+	int length = 0;
+
+	do
+		length++;
+	while((x <<= 1));]]>
+        </programlisting>
+        <para>
+            Az én gépemen a szóhossz mérete 32.
+        </para>
+        <programlisting>$ ./szohossz 
+A szóhossz mérete: 32
+        </programlisting>
     </section>                     
 
     <section>

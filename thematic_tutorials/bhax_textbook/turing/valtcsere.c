@@ -7,9 +7,21 @@ int main(){
 
 	printf("a = %d\nb = %d\n", a, b);
 
+	int c = a;
+	a = b;
+	b = c;
+
+	printf("a = %d\nb = %d\n", a, b);
+
 	a = a + b;
 	b = a - b;
 	a = a - b;
+
+	printf("a = %d\nb = %d\n", a, b);
+
+	a = a ^ b;
+	b = a ^ b;
+	a = a ^ b;
 
 	printf("a = %d\nb = %d\n", a, b);
 
