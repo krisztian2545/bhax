@@ -15,17 +15,16 @@ double tav = 0.0;
 int i;
 for(i=0;i<db;i++)
 	tav += (pagerank_temp[i] - pagerank[i]) * (pagerank_temp[i] - pagerank[i]);
-/*tav +=(pagerank[i] - pagerank_temp[i]);*/
 return sqrt(tav);
 }
 
 int main(void)
 {
 double L[4][4] = {
-{0.0, 0.0, 1.0 / 2.0, 0.0},
-{1.0, 1.0 / 3.0, 1.0 / 2.0, 1.0},
-{0.0, 1.0 / 3.0, 0.0, 0.0},
-{0.0, 1.0 / 3.0, 0.0, 0.0}
+{0.0, 0.0, 1.0 / 3.0, 0.0},
+{1.0, 1.0 / 2.0, 1.0 / 3.0, 1.0},
+{0.0, 1.0 / 2.0, 0.0, 0.0},
+{0.0, 0.0, 1.0 / 3.0, 0.0}
 };
 
 double PR[4] = {0.0, 0.0, 0.0, 0.0};

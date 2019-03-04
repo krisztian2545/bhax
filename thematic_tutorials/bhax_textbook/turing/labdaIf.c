@@ -31,7 +31,6 @@ int main(){
 
 		usleep(15000);
 		
-
 	}
 
 	return 0;

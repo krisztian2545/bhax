@@ -81,7 +81,7 @@ int main(){
         <para>
             Ha 0%-os terhelést akarunk, akkor csökkenteni kell a feltételvizsgálat gyakoriságát. Vagyis a <function>sleep(seconds)</function> paranccsal várakozásra utasítjuk a processzort.
         </para>
-        <programlisting><![CDATA[#include <unistd.h>
+        <programlisting language="c"><![CDATA[#include <unistd.h>
 
 int main(){
 
@@ -202,21 +202,21 @@ false]]></screen>
         <para>
             Változók értékének felcserélésére leggyakrabban a rendezési algoritmusoknál van szükség. Ilyenkor a legegyszerűbb módszer jut az eszembe, miszerint veszek egy harmadik, úgymond segédváltozót, amiben ideiglenesen eltárolom az egyik változó értékét, hogy azt majd a másik változó kaphassa meg.
         </para>
-        <programlisting><![CDATA[int c = a;
+        <programlisting language="c"><![CDATA[int c = a;
 	  a = b;
 	  b = c;]]>
         </programlisting>
         <para>
             Ha segédváltozó nélkül szeretnénk megoldani a problémát, akkor képtelenek vagyunk valamilyen műveleteket alkalmazni. Nem kell sokáig keresgélni, mivel az összeadás és kivonás tökéletesen megfelel erre a feladatra. Ehhez először összeadjuk őket az <function>a</function> változóba, majd abból kivonva a <function>b</function>-t megkapjuk először a  <function>b</function>, majd az <function>a</function> értékét, ahogy azt a programkód szemlélteti:
         </para>
-        <programlisting><![CDATA[  a = a + b;
+        <programlisting language="c"><![CDATA[  a = a + b;
 	b = a - b;
 	a = a - b;]]>
         </programlisting>
         <para>
             Ha azon töprengsz van-e más megoldás is, igen létezik. Az EXOR művelet legépelésénél még annyit se kell gondolkodni, mint az előzőnél:
         </para>
-        <programlisting><![CDATA[	a = a ^ b;
+        <programlisting language="c"><![CDATA[	a = a ^ b;
 	b = a ^ b;
 	a = a ^ b;]]>
         </programlisting>
@@ -234,9 +234,69 @@ false]]></screen>
         </para>
         <para>
             Megoldás forrása:  
+            <link xlink:href="turing/labdaIf.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/labdaIf.c</filename>
+            </link>
+            <link xlink:href="turing/labdaIfNelkul.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/labdaIfNelkul.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            Ez a feladat sokkal egyszerűbb, mint az ember gondolná, legalábbis ha használhatunk <function>if</function>-eket. Csak annyit kell csinálni, hogy ciklusonként növeljük a labda pozícióját és ha elérjük az ablak kereteit, megfordítjuk a labda irányát. Ezután már csak meg kell jeleníteni a labdát. 
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+
+#define width 80
+#define height 24
+
+void draw(int x, int y){
+
+	for(int i = 0; i < y; i++) printf("\n");
+	for(int k = 0; k < x; k++) printf(" ");
+	printf("@\n");
+
+}
+
+int main(){
+
+	int x = 1;
+	int y = 1;
+	int a = 1;
+	int b = 1;
+
+	while(1){
+
+		system("clear");
+
+		if(x >= width  || x <= 0) a *= -1;
+		if(y >= height || y <= 0) b *= -1;
+
+		draw(x, y);
+		x += a;
+		y += b;
+
+		usleep(15000);
+		
+	}
+
+	return 0;
+}]]>        
+        </programlisting>
+        <para>
+            If-ek nélkül azonban már kicsit nehezebb a dolgunk, ugyanis egy kicsit gondolkodni kell. De ekkor se kell kétségbe esni, mert ugyebár a matematika a "barátunk" és mindíg nyújt számunkra egy bonyolultnak látszó képletet, hogy azt egyszer bepötyögve örökre megszabaduljunk tőle. Most mi is ezt tesszük és még egy magyarázatot is csatolok hozzá. 
+        </para>
+        <programlisting language="c"><![CDATA[draw(abs(width-(x++%(width*2))), abs(height-(y++%(height*2))));]]>
+        </programlisting>
+        <para>
+            Tegyük fel hogy az <function>x</function> értéke 1 és a <function>width</function> értéke pedig 5. Ha az 1-et elosztjuk maradékos osztással a <function>width</function> kétszeresével, akkor 1-et kapunk, amit kivonunk a szélességből. Ennek eredményeként a labda pattogása az ablak jobb alsó sarkából indul.
+        </para>
+        <programlisting>    x = 1; width = 5;
+    |5 - ( 1 % ( 5 * 2 ) )| = 
+    |5 - ( 1 % 10 )| = 
+    |5 - 1| = 4
+        </programlisting>
+        <para>
+            Ha az <function>x</function> eléri a 6-ot, az abszolútérték miatt a végeredmény növekedni kezd, egészen amíg el nem éri a <function>width</function> kétszeresét, amikoris újra csökkenni kezd és ez így megy körbe-körbe. A <function>++</function> az <function>x</function> után a számolások után megnöveli 1-el az <function>x</function>-et. 
         </para>
     </section>                     
 
@@ -261,7 +321,7 @@ false]]></screen>
         <para>
             A <function>ticks</function> változóba elmentjük a jelenlegi processzoridőt, majd a for ciklus egy bizonyos számú lefutása után a jelenlegi processzoridőből kivonjuk a <function>ticks</function> értékét, így megkapjuk hogy mennyi ideig tartott a ciklus x-szeri lefutása.
         </para>
-        <programlisting><![CDATA[    while ((loops_per_sec <<= 1))
+        <programlisting language="c"><![CDATA[    while ((loops_per_sec <<= 1))
     {
         ticks = clock ();
         delay (loops_per_sec);
@@ -277,7 +337,7 @@ false]]></screen>
         <para>
             A BogoMips while ciklus fejét használva mostmár könnyen megkapjuk szóhosszt. Konkrétan itt az történik, hogy az <function>int</function> típusú változó elején levő bitet ciklusonként eltoljuk és hozzáadunk egyet a szóhosszt tároló <function>length</function> változóhoz.
         </para>
-        <programlisting><![CDATA[	int x = 1;
+        <programlisting language="c"><![CDATA[	int x = 1;
 	int length = 0;
 
 	do
@@ -302,11 +362,75 @@ A szóhossz mérete: 32
             Megoldás videó: <link xlink:href=""></link>
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>
+            Megoldás forrása: 
+            <link xlink:href="turing/helloGoogle.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/helloGoogle.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            Most megvizsgáljuk a PageRank algoritmust, ami hatalmas fellendülést hozott a Google-nek. 
         </para>
+        <para>
+            Egy oldal PageRankját az határozza meg, hogy mennyi oldal hivatkozik rá. Mivel ez így magába nem lesz elég, mert az algoritmus azt is figyelembe veszi, hogy mekkora a PageRankjuk a rá hivatkozó oldalaknak. Például ha a Facebook hivatkozik a te oldaladra, akkor az sokkal többet jelent, mintha csak valami ismeretlen oldal hivatkozna rá, még akkor is ha több van belőlük.
+        </para>
+        <para>
+            A program elején létrehozunk egy kétdimenziós tömböt, ami meghatározza, hogy melyik mire hivatkozik. Ezután egy végtelen ciklusba bizonyos számításokkal addig finomítgatjuk az oldalak PR értékét, amíg már nincs értelme tovább számolgatni.
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+#include <math.h>
+
+void
+kiir (double tomb[], int db)
+{
+int i;
+for (i=0; i<db; i++)
+printf("PageRank [%d]: %lf\n", i, tomb[i]);
+}
+
+double tavolsag(double pagerank[],double pagerank_temp[],int db)
+{
+double tav = 0.0;
+int i;
+for(i=0;i<db;i++)
+	tav += (pagerank_temp[i] - pagerank[i]) * (pagerank_temp[i] - pagerank[i]);
+return sqrt(tav);
+}
+
+int main(void)
+{
+double L[4][4] = {
+{0.0, 0.0, 1.0 / 3.0, 0.0},
+{1.0, 1.0 / 2.0, 1.0 / 3.0, 1.0},
+{0.0, 1.0 / 2.0, 0.0, 0.0},
+{0.0, 0.0, 1.0 / 3.0, 0.0}
+};
+
+double PR[4] = {0.0, 0.0, 0.0, 0.0};
+double PRv[4] = {1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0};
+
+long int i,j,h;
+i=0; j=0; h=5;
+
+for (;;)
+{
+for(i=0;i<4;i++)
+PR[i] = PRv[i];
+for (i=0;i<4;i++)
+{
+double temp=0;
+for (j=0;j<4;j++)
+temp+=L[i][j]*PR[j];
+PRv[i]=temp;
+}
+
+if ( tavolsag(PR,PRv, 4) < 0.00001)
+break;
+}
+kiir (PR,4);
+return 0;
+
+}]]>
+        </programlisting>
     </section>
 
     <section xml:id="Brun">
