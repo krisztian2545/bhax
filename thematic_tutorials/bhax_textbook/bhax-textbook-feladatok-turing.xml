@@ -207,19 +207,13 @@ false]]></screen>
 	  b = c;]]>
         </programlisting>
         <para>
-            Ha segédváltozó nélkül szeretnénk megoldani a problémát, akkor képtelenek vagyunk valamilyen műveleteket alkalmazni. Nem kell sokáig keresgélni, mivel az összeadás és kivonás tökéletesen megfelel erre a feladatra. Ehhez először összeadjuk őket az <function>a</function> változóba, majd abból kivonva a <function>b</function>-t megkapjuk először a  <function>b</function>, majd az <function>a</function> értékét, ahogy azt a programkód szemlélteti:
+            Ha segédváltozó nélkül szeretnénk megoldani a problémát, akkor kénytelenek vagyunk valamilyen műveleteket alkalmazni. Nem kell sokáig keresgélni, mivel az összeadás és kivonás tökéletesen megfelel erre a feladatra. Ehhez először összeadjuk őket az <function>a</function> változóba, majd abból kivonva a <function>b</function>-t megkapjuk először a  <function>b</function>, majd az <function>a</function> értékét, ahogy azt a programkód szemlélteti:
         </para>
         <programlisting language="c"><![CDATA[  a = a + b;
 	b = a - b;
 	a = a - b;]]>
         </programlisting>
-        <para>
-            Ha azon töprengsz van-e más megoldás is, igen létezik. Az EXOR művelet legépelésénél még annyit se kell gondolkodni, mint az előzőnél:
-        </para>
-        <programlisting language="c"><![CDATA[	a = a ^ b;
-	b = a ^ b;
-	a = a ^ b;]]>
-        </programlisting>
+        
     </section>                     
 
     <section>
@@ -442,8 +436,41 @@ return 0;
             Megoldás videó: <link xlink:href="https://youtu.be/xbYhp9G6VqQ">https://youtu.be/xbYhp9G6VqQ</link>
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/Primek_R">https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/Primek_R</link>
+            Megoldás forrása: 
+            <link xlink:href="turing/brun.r">bhax/thematic_tutorials/bhax_textbook/turing/brun.r</link>
         </para>
+        <programlisting><![CDATA[#   Copyright (C) 2019  Dr. Norbert Bátfai, nbatfai@gmail.com
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+library(matlab)
+
+stp <- function(x){
+
+    primes = primes(x)
+    diff = primes[2:length(primes)]-primes[1:length(primes)-1]
+    idx = which(diff==2)
+    t1primes = primes[idx]
+    t2primes = primes[idx]+2
+    rt1plust2 = 1/t1primes+1/t2primes
+    return(sum(rt1plust2))
+}
+
+x=seq(13, 1000000, by=10000)
+y=sapply(x, FUN = stp)
+plot(x,y,type="b")
+]]></programlisting>
     </section>
     
     <section xml:id="bhax-textbook-feladatok-turing.MontyHall">
@@ -455,11 +482,74 @@ return 0;
             Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan">https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan</link>
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/MontyHall_R">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/MontyHall_R</link>
+            Megoldás forrása: 
+            <link xlink:href="turing/monty.r">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/monty.r</filename>
+            </link>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
+        <programlisting><![CDATA[#   An illustration written in R for the Monty Hall Problem 
+#   Copyright (C) 2019  Dr. Norbert Bátfai, nbatfai@gmail.com
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>
+#
+#   https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan
+# 
+
+kiserletek_szama=10000000
+kiserlet = sample(1:3, kiserletek_szama, replace=T)
+jatekos = sample(1:3, kiserletek_szama, replace=T)
+musorvezeto=vector(length = kiserletek_szama)
+
+for (i in 1:kiserletek_szama) {
+
+    if(kiserlet[i]==jatekos[i]){
+    
+        mibol=setdiff(c(1,2,3), kiserlet[i])
+    
+    }else{
+    
+        mibol=setdiff(c(1,2,3), c(kiserlet[i], jatekos[i]))
+    
+    }
+
+    musorvezeto[i] = mibol[sample(1:length(mibol),1)]
+
+}
+
+nemvaltoztatesnyer= which(kiserlet==jatekos)
+valtoztat=vector(length = kiserletek_szama)
+
+for (i in 1:kiserletek_szama) {
+
+    holvalt = setdiff(c(1,2,3), c(musorvezeto[i], jatekos[i]))
+    valtoztat[i] = holvalt[sample(1:length(holvalt),1)]
+    
+}
+
+valtoztatesnyer = which(kiserlet==valtoztat)
+
+
+sprintf("Kiserletek szama: %i", kiserletek_szama)
+length(nemvaltoztatesnyer)
+length(valtoztatesnyer)
+length(nemvaltoztatesnyer)/length(valtoztatesnyer)
+length(nemvaltoztatesnyer)+length(valtoztatesnyer)
+]]>
+        </programlisting>
     </section>
 
 </chapter>                
