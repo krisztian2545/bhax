@@ -101,6 +101,35 @@
                    | break ;
                    | return <expression> ;]]>
         </programlisting>
+        <para>
+            A következő példáva szemlélteti a c nyelv fejlődését:
+        </para>
+        <programlisting><![CDATA[int main(){
+	
+	// can't compile me with: -std=c89
+
+	for(int i = 0; i < 10; i++)
+		printf("Succes!\n");
+
+	return 0;
+}]]>
+        </programlisting>
+        <para>
+            Ha a "-std=c89" kapcsolóval próbáljuk meg lefordíttatni ezt a programot, akkor hibába ütközünk.
+        </para>
+        <programlisting><![CDATA[hivatk.c: In function ‘main’:
+hivatk.c:5:2: error: C++ style comments are not allowed in ISO C90
+  // can't compile me with: -std=c89
+  ^
+hivatk.c:5:2: error: (this will be reported only once per input file)
+hivatk.c:7:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+  for(int i = 0; i < 10; i++)
+  ^~~
+hivatk.c:7:2: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code]]>
+        </programlisting>
+        <para>
+            Tehát a c89-es szabvánnyal meǵ nem lehetett dupla "/"-jeles kommentet írni és a <function>for</function> ciklus ciklusváltozóját a ciklus előtt kellett deklarálni. 
+        </para>
     </section>                     
 
     <section>
@@ -115,9 +144,53 @@
         </para>
         <para>
             Megoldás forrása:  
+            <link xlink:href="chomsky/realnum.l">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/realnum.l</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            Ez a lexer úgy működik, hogy az általunk megadott minták alapján átnézi az általunk megadott szöveget. Először megírjuk a mintákat ami alapján a lexer legenerálja a c programunkat és az fogja elvégezni a szövegelemzést.
+        </para>
+        <para>
+            A "%{" és "%}" jelek közé berakjuk a generálandó program elejére szánt sorokat, mint pl.: könyvtár importálás vagy deklaráció:
+        </para>
+        <programlisting language="c"><![CDATA[%{
+#include <stdio.h>
+int realnumbers = 0;
+%}]]>
+        </programlisting>
+        <para>
+            Ezután jönnek a definíciók. Jelen esetben egyedül a számjegy fogalmát kell definiálnunk, mivel ez már elegendő egy valós szám leírására.
+        </para>
+        <programlisting language="c"><![CDATA[digit	[0-9]]]>
+        </programlisting>
+        <para>
+            Az első "%%" jel után megadjuk, hogy mit keresünk és hogy mit csináljunk, ha megtaláltuk a keresett szövegrészt.
+        </para>
+        <programlisting language="c"><![CDATA[%%
+{digit}*(\.{digit}+)?	{++realnumbers; 
+    printf("[realnum=%s %f]", yytext, atof(yytext));}]]>
+        </programlisting>
+        <para>
+            Az utolsó rész - a második "%%" jel után - pedig a programunk, ahol elindítjuk a lexikális elemzést a <function>yylex()</function> függvény hívásával.
+        </para>
+        <programlisting language="c"><![CDATA[%%
+int
+main ()
+{
+ yylex ();
+ printf("The number of real numbers is %d\n", realnumbers);
+ return 0;
+}]]>
+        </programlisting>
+        <para>
+            A <function>flex</function> és a <function>bison</function> csomagok telepítése után már hozzá is láthatunk a fordításhoz. Először a lexerrel legeneráltatjuk a c fájlt, amit majd lefordítunk és futtatunk.
+        </para>
+        <para>
+            <command>lex -o realnum.c realnum.l</command>
+        </para>
+        <para>
+            <command>gcc realnum.c -o realnum</command>
         </para>
     </section>                     
 
