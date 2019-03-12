@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <signal.h>
 
-int jelkezelo(){
+void jelkezelo(){
 	printf("asd");
 }
 
@@ -13,6 +13,4 @@ int main(){
 		if(signal(SIGINT, SIG_IGN)!=SIG_IGN)
 			signal(SIGINT, jelkezelo);
 	}
-
-	return 0;
 }

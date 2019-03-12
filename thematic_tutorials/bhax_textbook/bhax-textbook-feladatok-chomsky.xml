@@ -299,18 +299,69 @@ A feladat teljesitve.
         <orderedlist numeration="lowerroman">
             <listitem>                                    
                 <programlisting><![CDATA[if(signal(SIGINT, SIG_IGN)!=SIG_IGN)
-    signal(SIGINT, jelkezelo);]]></programlisting>
+    signal(SIGINT, jelkezelo);]]>
+                </programlisting>
+                <para>
+                    Itt viszont akkor kezeli a <function>jelkezelo</function> a SIGINT jelet, ha a SIGINT jel nem lett figyelmen kívül hagyva.
+                </para>
+                <programlisting><![CDATA[/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/thematic_tutorials/bhax_textbook/chomsky/forrasolv.c: (in function main)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/forrasolv.c:10:8:
+    Test expression for while not boolean, type int: 1
+  Test expression type is not boolean or int. (Use -predboolint to inhibit
+  warning)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/forrasolv.c:14:4:
+    Return value (type [function (int) returns void]) ignored:
+    signal(SIGINT, j...
+  Result returned by function call is not used. If this is intended, can cast
+  result to (void) to eliminate message. (Use -retvalother to inhibit warning)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/forrasolv.c:4:6:
+    Function exported but not used outside forrasolv: jelkezelo
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   /home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bha
+   x/thematic_tutorials/bhax_textbook/chomsky/forrasolv.c:6:1:
+   Definition of jelkezelo
+
+Finished checking --- 3 code warnings
+]]>
+                </programlisting>
             </listitem>
             <listitem>                                    
-                <programlisting><![CDATA[for(i=0; i<5; ++i)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<5; ++i)]]></programlisting>          
+                <para>
+                    Ez egy <function>for</function> ciklus, ami 5-ször fog lefutni és minden egyes alkalommal 1-el növeli az <function>i</function> értékét preorder alakban.
+                </para>
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[for(i=0; i<5; i++)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<5; i++)]]></programlisting>          
+                <para>
+                    Ez egy ugyanúgy 5-ször lefutó <function>for</function> ciklus, ami mostmár postorder alakban növeli a ciklusváltozót, de ettől függetlenül a ciklus ugyanannyiszor fog lefutni.
+                </para>
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[for(i=0; i<5; tomb[i] = i++)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<5; tomb[i] = i++)]]></programlisting>
+                <para>
+                    Ez nem úgy fog működni, ahogy azt szeretnénk. A <command>splint</command> paranccsal megvizsgálva a programkódot rájövünk hogy miért. A program futása során nem egyértelmű, hogy mikor lesz növelve az <function>i</function> értéke, így például az <function>i</function> értéke a tömb nem várt pozíciójára kerülhet.
+                </para>
+                <programlisting><![CDATA[/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/thematic_tutorials/bhax_textbook/chomsky/for52.c: (in function main)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/for52.c:6:31:
+    Expression has undefined behavior (left operand uses i, modified by right
+    operand): tomb[i] = i++
+  Code has unspecified behavior. Order of evaluation of function parameters or
+  subexpressions is not defined, so if a value is used and modified in
+  different places not separated by a sequence point constraining evaluation
+  order, then the result of the expression is unspecified. (Use -evalorder to
+  inhibit warning)
+
+Finished checking --- 1 code warning
+]]>
+                </programlisting>
             </listitem>
             <listitem>                                    
 
@@ -331,6 +382,7 @@ A feladat teljesitve.
         </orderedlist>
         <para>
             Megoldás forrása:  
+
         </para>
 
         <para>
@@ -338,7 +390,7 @@ A feladat teljesitve.
         </para>
 
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            
         </para>
 
     </section>                     
