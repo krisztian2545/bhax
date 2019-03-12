@@ -525,22 +525,39 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
 
         <itemizedlist>
             <listitem>
-                <programlisting><![CDATA[int a;]]></programlisting>            
+                <programlisting><![CDATA[int a;]]></programlisting> 
+                <para>
+                    Ez egy <function>int</function> típusú változó lesz.
+                </para>           
             </listitem>
             <listitem>
-                <programlisting><![CDATA[int *b = &a;]]></programlisting>            
+                <programlisting><![CDATA[int *b = &a;]]></programlisting>        
+                <para>
+                    Ez egy <function>int</function> típusú mutató, aminek átadjuk az <function>a</function> változó referenciaértékét (tehát a memóriacímet).
+                </para>    
             </listitem>
             <listitem>
-                <programlisting><![CDATA[int &r = a;]]></programlisting>            
+                <programlisting><![CDATA[int &r = a;]]></programlisting> 
+                <para>
+                    Ilyen nincs a C nyelvben. A "&"-jellel csak átadni tudjuk egy változó referenciáját, de így deklarálni egy referenciát nem lehet.
+                </para>           
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int c[5];]]></programlisting>            
+                <para>
+                    Ez egy <function>int</function> típusú, 5 elemű egydimenziós tömb.
+                </para>
             </listitem>
             <listitem>
-                <programlisting><![CDATA[int (&tr)[5] = c;]]></programlisting>            
+                <programlisting><![CDATA[int (&tr)[5] = c;]]></programlisting>           <para>
+                    Még mindíg nem lehet így változót deklarálni C-ben.
+                </para>
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int *d[5];]]></programlisting>            
+                <para>
+                    Ez egy pointer, ami egy <function>int</function> típusú, 5 elemű tömbre mutat.
+                </para>
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int *h ();]]></programlisting>            
