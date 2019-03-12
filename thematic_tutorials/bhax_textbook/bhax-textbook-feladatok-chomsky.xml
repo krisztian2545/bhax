@@ -556,20 +556,32 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
             <listitem>
                 <programlisting><![CDATA[int *d[5];]]></programlisting>            
                 <para>
-                    Ez egy pointer, ami egy <function>int</function> típusú, 5 elemű tömbre mutat.
+                    Ez egy 5 elemű pointertömb, amely elemei <function>int</function> típusú értékekre mutatnak.
                 </para>
             </listitem>
             <listitem>
-                <programlisting><![CDATA[int *h ();]]></programlisting>            
+                <programlisting><![CDATA[int *h ();]]></programlisting>
+                <para>
+                    Egy olyan függvény, ami egészre mutató pointert ad vissza.
+                </para>
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int *(*l) ();]]></programlisting>            
+                <para>
+                    Egy olyan függvényre mutató pointer, ami egészre mutató pointert ad vissza.
+                </para>
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int (*v (int c)) (int a, int b)]]></programlisting>            
+                <para>
+                    Egészet visszaadó és két egészet kapó függvényre mutató pointert visszaadó, egészet kapó függvény.
+                </para>
             </listitem>            
             <listitem>
                 <programlisting><![CDATA[int (*(*z) (int)) (int, int);]]></programlisting>            
+                <para>
+                    Függvénymutató egy egészet visszaadó és két egészet kapó függvényre mutató pointert visszaadó, egészet kapó függvény.
+                </para>
             </listitem>            
         </itemizedlist>       
 
