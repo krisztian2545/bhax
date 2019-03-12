@@ -190,7 +190,7 @@ main ()
             <command>lex -o realnum.c realnum.l</command>
         </para>
         <para>
-            <command>gcc realnum.c -o realnum</command>
+            <command>gcc realnum.c -o realnum -lfl</command>
         </para>
     </section>                     
 
@@ -203,10 +203,75 @@ main ()
             Megoldás videó: 
         </para>
         <para>
-            Megoldás forrása:  
+            Megoldás forrása: 
+             <link xlink:href="chomsky/i33t.l">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/i33t.l</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            A 1337 (Leet) egy - az interneten használt - ábécé, ami a betűket számokkal vagy szimbólumokkal helyettesíti. Először hacker-ek és cracker-ek használták, de később sokaknak megtetszett és a felhasználóneveiket ilyen módon módosítva kezdték el használni. 
+        </para>
+        <para>
+            A változatosság kedvéért minden betűhöz hozzárendelünk 4 laternatívát és egy random generált szám fogja megmondani, hogy melyiket válasszuk. Ezt úgy oldjuk meg, hogy a <function>struct</function> segítségével létrehozunk egy típust, ami egy karaktert és egy 4 elemű tömböt tartalmaz, majd ebből egy kétdimenziós tömböt készítünk.
+        </para>
+        <programlisting><![CDATA[struct cipher {
+    char c;
+    char *leet[4];
+  } l337d1c7 [] = {
+
+  {'a', {"4", "4", "@", "/-\\"}},
+  {'b', {"|o", "8", "|3", "|}"}},
+  {'c', {"c", "(", "<", "{"}},
+  ...
+  {'8', {"X", "X", "X", "X"}},
+  {'9', {"g", "g", "j", "j"}}
+  
+// https://simple.wikipedia.org/wiki/Leet
+  };
+  
+%}
+%%
+.	{
+	  
+	  int found = 0;
+	  for(int i=0; i<L337SIZE; ++i)
+	  {
+	  
+	    if(l337d1c7[i].c == tolower(*yytext))
+	    {
+	    
+	      int r = 1+(int) (100.0*rand()/(RAND_MAX+1.0));
+	    
+          if(r<91)
+	        printf("%s", l337d1c7[i].leet[0]);
+          else if(r<95)
+	        printf("%s", l337d1c7[i].leet[1]);
+	      else if(r<98)
+	        printf("%s", l337d1c7[i].leet[2]);
+	      else 
+	        printf("%s", l337d1c7[i].leet[3]);
+
+	      found = 1;
+	      break;
+	    }
+	    
+	  }
+	  
+	  if(!found)
+	     printf("%c", *yytext);	  
+	  
+	}]]>
+        </programlisting>
+        <para>
+            Amint azt láthatjuk, az "a" betűt felcserélte egy "4"-esre és az "e"-t "3"-asra (ezek a leggyakrabban használt átalakítások).
+        </para>
+        <programlisting><![CDATA[A feladat teljesítve.
+4 f3l/-\d4t t3lj3sítv3.
+A feladat teljesitve.
+4 f3l4d4t t3|_j3s1t\/3.]]>
+        </programlisting>
+        <para>
+            A fordításhoz és futtatáshoz ugyanúgy kell eljárni, mint az előző feladatban.
         </para>
     </section>                     
 
