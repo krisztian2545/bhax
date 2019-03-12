@@ -184,7 +184,7 @@ main ()
 }]]>
         </programlisting>
         <para>
-            A <function>flex</function> és a <function>bison</function> csomagok telepítése után már hozzá is láthatunk a fordításhoz. Először a lexerrel legeneráltatjuk a c fájlt, amit majd lefordítunk és futtatunk.
+            A <function>flex</function> csomag telepítése után már hozzá is láthatunk a fordításhoz. Először a lexerrel legeneráltatjuk a c fájlt, amit majd lefordítunk és futtatunk.
         </para>
         <para>
             <command>lex -o realnum.c realnum.l</command>
@@ -365,19 +365,77 @@ Finished checking --- 1 code warning
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[for(i=0; i<n && (*d++ = *s++); ++i)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<n && (*d++ = *s++); ++i)]]></programlisting>
+                <para>
+                    Ez a ciklus minimum <function>n</function>-szer le fog futni. Hogy maximum hányszor az attól függ, hogy mi lesz a <function>*d++</function> visszatérési értéke.
+                </para>
+                <para>
+                    Abban az esetben, ha a <function>d</function> és az <function>s</function> <function>int</function> típusú pointerek, akkor a <command>splint</command> hibát jelez, mivel az és jelek jobb oldalán nem logikai értéket kapunk.
+                </para>
+                <programlisting><![CDATA[/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/thematic_tutorials/bhax_textbook/chomsky/for53.c: (in function main)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/for53.c:9:18:
+    Right operand of && is non-boolean (int): i < n && (*d++ = *s++)
+  The operand of a boolean operator is not a boolean. Use +ptrnegate to allow !
+  to be used on pointers. (Use -boolops to inhibit warning)
+
+Finished checking --- 1 code warning
+]]>
+                </programlisting>
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[printf("%d %d", f(a, ++a), f(++a, a));]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(a, ++a), f(++a, a));]]></programlisting>
+                <para>
+                    Ez a kód úgyanazt a híbát  követi el, mint a tömbös, ezen felül amikor az egyik <function>f</function> függvénynek átadjuk az <function>a</function>-t és növeljük, akkor az módosítja a másik <function>f</function> függvénynek átadott értéket is.
+                </para>
+                <programlisting><![CDATA[/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/thematic_tutorials/bhax_textbook/chomsky/print1.c: (in function main)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/print1.c:11:23:
+    Argument 2 modifies a, used by argument 1 (order of evaluation of actual
+    parameters is undefined): f(a, ++a)
+  Code has unspecified behavior. Order of evaluation of function parameters or
+  subexpressions is not defined, so if a value is used and modified in
+  different places not separated by a sequence point constraining evaluation
+  order, then the result of the expression is unspecified. (Use -evalorder to
+  inhibit warning)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/print1.c:11:31:
+    Argument 1 modifies a, used by argument 2 (order of evaluation of actual
+    parameters is undefined): f(++a, a)
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/print1.c:11:18:
+    Argument 2 modifies a, used by argument 3 (order of evaluation of actual
+    parameters is undefined): printf("%d %d", f(a, ++a), f(++a, a))
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/print1.c:11:29:
+    Argument 3 modifies a, used by argument 2 (order of evaluation of actual
+    parameters is undefined): printf("%d %d", f(a, ++a), f(++a, a))
+/home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bhax/t
+    hematic_tutorials/bhax_textbook/chomsky/print1.c:3:5:
+    Function exported but not used outside print1: f
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   /home/my/Documents/H\377\377lyes\377\377gek/masodik_felev/Prog_1/the_book/bha
+   x/thematic_tutorials/bhax_textbook/chomsky/print1.c:5:1: Definition of f
+
+Finished checking --- 5 code warnings
+]]>
+                </programlisting>
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[printf("%d %d", f(a), a);]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(a), a);]]></programlisting> 
+                <para>
+                    Tegyük fel, hogy az <function>f</function> függvény visszatérési értéke az argumentum négyzete. Ekkor először kiírja az <function>a</function> négyzetét, majd magát az <function>f</function>-t.
+                </para>           
             </listitem>
             <listitem>                                    
 
-                <programlisting><![CDATA[printf("%d %d", f(&a), a);]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(&a), a);]]></programlisting>
+                <para>
+                    Ha az <function>f</function> függvény 1-el nagyobb értéket ad vissza, mint az az érték amire az argumentum mutat, akkor először kiírjuk az <function>a+1</function>-et, majd az <function>a</function> értékét.
+                </para>
             </listitem>
         </orderedlist>
         <para>
