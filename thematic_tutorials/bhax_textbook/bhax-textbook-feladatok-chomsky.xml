@@ -54,6 +54,9 @@
             </link> 
         </para>
         <para>
+            <link xlink:href="https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm"></link> 
+        </para>
+        <para>
             Először nézzük meg mi is az a BNF. A BNF (Backus-Naur Form) egy olyan nyelv, ami más nyelvek helyesírását írja le. Nézzünk meg ráegy egyszerű példát:
         </para>
         <programlisting language="algol"><![CDATA[<egész szám> ::= <előjel><szam>
@@ -440,7 +443,29 @@ Finished checking --- 5 code warnings
         </orderedlist>
         <para>
             Megoldás forrása:  
-
+            <link xlink:href="chomsky/forrasolv.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/forrasolv.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="chomsky/for51.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/for51.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="chomsky/for52.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/for52.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="chomsky/for53.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/for53.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="chomsky/for51.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/for51.c</filename>
+            </link>
         </para>
 
         <para>
@@ -539,7 +564,7 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
             <listitem>
                 <programlisting><![CDATA[int &r = a;]]></programlisting> 
                 <para>
-                    Ilyen nincs a C nyelvben. A "&"-jellel csak átadni tudjuk egy változó referenciáját, de így deklarálni egy referenciát nem lehet.
+                    Ilyen nincs a C nyelvben. A "&amp;"-jellel csak átadni tudjuk egy változó referenciáját, de így deklarálni egy referenciát nem lehet.
                 </para>           
             </listitem>
             <listitem>
