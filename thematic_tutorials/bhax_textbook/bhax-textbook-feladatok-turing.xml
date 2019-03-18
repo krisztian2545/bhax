@@ -180,7 +180,11 @@ false]]></screen>
             függvényt, azaz a T100 program nem is létezik.                
         </para>
         <para>
-            
+            Nézzünk erre egy másik példát: 
+            Tegyük fel, hogy Lajos bárkiről megtudja mondani, hogy csődbe fog-e menni vagy sem (Lefagy fv.). A fia, Szabolcs ugyanazt csinálja, de ő már egy kicsit másképp csinálja (Lefagy2 fv.). 
+            Egyszer, amikor Szabolcs a saját pénzügyeit vizsgálta, válaszát apja válaszára építette. 
+            Ekkor 2 lehetőség merül fel. Egy, hogy ha Lajos azt mondja, hogy Szabolcs csődbe megy, akkor annak ellenére, hogy igazat ad apjának, nem megy csődbe, ha nemmel válszol, akkor viszont csődbe megy.
+            Amint láthatjuk, ellentmondásba ütköztünk, vagyis ez a módszer így nem fog működni.
         </para>
     </section>        
                 
@@ -470,7 +474,39 @@ stp <- function(x){
 x=seq(13, 1000000, by=10000)
 y=sapply(x, FUN = stp)
 plot(x,y,type="b")
-]]></programlisting>
+]]>
+        </programlisting>
+        <para>
+            A Brun tétel szerint ha az ikerprímek reciprokát összeadjuk, akkor ez az összeg egy konkrét szám, ún. Brun-konstans. Hogy az ikerprímek száma véges vagy végtelen azt senki se tudja.
+        </para>
+        <para>
+            Az R nyelv használatához szükségünk lesz az R-base szoftverkörnyezet telepítésére, amit az Ubuntu Software programon keresztül tehetünk meg a legegyszerűbben.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Ezután a terminálba megnyitjuk az R környezetét (az <command>R</command> paranccsal) és telepítjük a <function>matlab</function> csomagot, hogy kezelni tudjuk a prímeket. (Majd a <command>library(matlab)</command> paranccsal betöltjük a csomagot)
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun2.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            A <function>primes( meggig )</function> függvénnyel lekérhetjük a prím számokat és a <function>primes[ hanyadiktól : hanyadikig ]</function> módon lekérhetjük annak tetszőleges intervallumát (Arra vigyázzunk, hogy amíg a <function>primes</function> először függvényként, másodszor viszont már azonosítóként szerepel). Az egymás mellet levő prímek egymásból való kivonásával megkapjuk azok különbségét. Ahol a különbség 2, ott ikerprímekről beszélünk és a <function>which()</function> függvénny visszaadja, hogy hanyadik hellyen találjuk őket.
+        </para>
+        <programlisting><![CDATA[
+    primes = primes(x)
+    diff = primes[2:length(primes)]-primes[1:length(primes)-1]
+    idx = which(diff==2)]]>
+        </programlisting>
+        <para>
+            Ezután 2 vektorba párhuzamosan eltároljuk ezeket az ikerprímeket és összeadjuk azok reciprokát. 
+        </para>
+
     </section>
     
     <section xml:id="bhax-textbook-feladatok-turing.MontyHall">
