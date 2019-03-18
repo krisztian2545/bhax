@@ -504,8 +504,13 @@ plot(x,y,type="b")
     idx = which(diff==2)]]>
         </programlisting>
         <para>
-            Ezután 2 vektorba párhuzamosan eltároljuk ezeket az ikerprímeket és összeadjuk azok reciprokát. 
+            Ezután 2 vektorba párhuzamosan eltároljuk ezeket az ikerprímeket és összeadjuk azok reciprokát. A <function>plot()</function> paranccsal megjelenítjük az összeget és láthatjuk, hogy ez a függvény egy konkrét számhoz divergál.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun3.jpg" scale="35"/>
+            </imageobject>
+        </mediaobject>
 
     </section>
     
