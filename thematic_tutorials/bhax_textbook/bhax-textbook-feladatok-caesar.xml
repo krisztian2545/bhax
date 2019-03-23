@@ -20,7 +20,7 @@
             Megoldás forrása:          
             <link xlink:href="caesar/haromszog.c">
             <filename>bhax/thematic_tutorials/bhax_textbook/caesar/haromszog.c</filename>
-            </link>      
+            </link>
         </para>
         <para>
             Egy 5 soros háromszögmátrixot fogunk létrehozni. Ezt egy <function>double</function> típusú pointerekre mutató pointerrel fogjuk megvalósítani.
@@ -71,11 +71,45 @@ free (tm);]]>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="caesar/e.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/caesar/e.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+            A titkosítást EXOR művelettel fogjuk végrehajtani egy általunk megadott kulcs és a titkosítandó szöveg között.
+        </para>
+        <para>
+            A <function>kulcs_meret</function> változóban eltároljuk a futtatáskor átadott második argumentum (tehát a kulcs) hosszát. Majd a <function>strncpy( hova, honnan, méret )</function> függvénnyel a <function>kulcs</function> változóba másoljuk a kulcsot.
+        </para>
+        <programlisting><![CDATA[  int kulcs_meret = strlen (argv[1]);
+  strncpy (kulcs, argv[1], MAX_KULCS);]]>
+        </programlisting>
+        <para>
+            Folyamatosan beolvassuk a szöveget és a kulcs egyes elemeivel végrehajtjuk rajta a műveletet, miközben kiírjuk a titkosított szöveget a standard outputra.
+        </para>
+        <programlisting><![CDATA[while ((olvasott_bajtok = read (0, (void *) buffer, BUFFER_MERET)))
+  {
+    for (int i = 0; i < olvasott_bajtok; ++i)
+    {
+
+      buffer[i] = buffer[i] ^ kulcs[kulcs_index];
+      kulcs_index = (kulcs_index + 1) % kulcs_meret;
+
+	  }
+
+    write (1, buffer, olvasott_bajtok);
+
+  }]]>
+        </programlisting>
+        <para>
+            A futtatáskor megadjuk a kulcsot a titkosításhoz és a kimenetet átirányítjuk a titkos.szoveg állományba:
+        </para>
+        <para>
+            <command><![CDATA[./e 56789012 <tiszta.txt > titkos.szoveg]]></command>
+        </para>
+        
+
     </section>        
     <section>
         <title>Java EXOR titkosító</title>
@@ -101,11 +135,106 @@ free (tm);]]>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="caesar/t.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/caesar/t.c</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+            <link xlink:href="caesar/t_par.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/caesar/t_par.c</filename>
+            </link>
+        </para>
+        <para>
+            Hiába tudjuk milyen módon lett titkosítva a szöveg, ahhoz hogy dekódoljuk, meg kell találnunk a kulcsot. Ezt úgy fogjuk csinálni, hogy szépen sorba végigmegyünk az összes kulcson és közbe keresünk néhány "kulcsszót", amelyek gyakran előfordulhatnak, ezért ha megegyeznek a dekódolt szóval, akkor kiíratjuk ezt a kulcsot és a szöveget, mint lehetséges megoldás és tovább keresünk. Erre azért van szükség, mert megeshet, hogy a kulcsszavak helyesen lettek dekódolva, de ettől még sok karakter eltér a várt eredménytől.
+        </para>
+        <para>
+            A kulcsok legenerálása és kipróbálása annyi egymásba ágyazott for ciklust igényel, amekkora a kulcs mérete. Ez esetben tudjuk, hogy 8 karakter hosszú.
+        </para>
+        <programlisting><![CDATA[    // osszes kulcs eloallitasa
+    for (int ii = '0'; ii <= '9'; ++ii)
+        for (int ji = '0'; ji <= '9'; ++ji)
+            for (int ki = '0'; ki <= '9'; ++ki)
+                for (int li = '0'; li <= '9'; ++li)
+                    for (int mi = '0'; mi <= '9'; ++mi)
+                        for (int ni = '0'; ni <= '9'; ++ni)
+                            for (int oi = '0'; oi <= '9'; ++oi)
+                                for (int pi = '0'; pi <= '9'; ++pi)
+                                {
+                                    kulcs[0] = ii;
+                                    kulcs[1] = ji;
+                                    kulcs[2] = ki;
+                                    kulcs[3] = li;
+                                    kulcs[4] = mi;
+                                    kulcs[5] = ni;
+                                    kulcs[6] = oi;
+                                    kulcs[7] = pi;
+
+                                    if (exor_tores (kulcs, KULCS_MERET, titkos, p - titkos))
+                                        printf
+                                        ("Kulcs: [%c%c%c%c%c%c%c%c]\nTiszta szoveg: [%s]\n",
+                                         ii, ji, ki, li, mi, ni, oi, pi, titkos);
+
+                                    // ujra EXOR-ozunk, igy nem kell egy masodik buffer
+                                    exor (kulcs, KULCS_MERET, titkos, p - titkos);
+                                }]]>
+        </programlisting>
+        <para>
+            A következő 2 függvény fogja nekünk eldönteni, hogy rátaláltunk-e a keresett kulcsra. Ha az átlagos szóhossz 6 és 9 közé esik, valamit a dekódolt szövegben megtalálható a "hogy", a "nem", az "az" és a "ha" szavak, akkor kiírjuk a dekódolt szöveget.
+        </para>
+        <programlisting><![CDATA[double
+atlagos_szohossz (const char *titkos, int titkos_meret)
+{
+    int sz = 0;
+    for (int i = 0; i < titkos_meret; ++i)
+        if (titkos[i] == ' ')
+            ++sz;
+
+    return (double) titkos_meret / sz;
+}
+
+int
+tiszta_lehet (const char *titkos, int titkos_meret)
+{
+    // a tiszta szoveg valszeg tartalmazza a gyakori magyar szavakat
+    // illetve az átlagos szóhossz vizsgálatával csökkentjük a
+    // potenciális töréseket
+
+    double szohossz = atlagos_szohossz (titkos, titkos_meret);
+
+    return szohossz > 6.0 && szohossz < 9.0
+           && strcasestr (titkos, "hogy") && strcasestr (titkos, "nem")
+           && strcasestr (titkos, "az") && strcasestr (titkos, "ha");
+
+}]]>
+        </programlisting>
+        <para>
+            Mivel a kulcsok egyesével való kipróbálgatása elég időigényes, a for ciklusokat párhuzamosítjuk a végtelen ciklusoknál használt módon.
+        </para>
+        <programlisting><![CDATA[// osszes kulcs eloallitasa
+#pragma omp parallel for private(kulcs)
+    for (int ii = '0'; ii <= '9'; ++ii)
+        for (int ji = '0'; ji <= '9'; ++ji)
+            for (int ki = '0'; ki <= '9'; ++ki)
+                for (int li = '0'; li <= '9'; ++li)
+                    for (int mi = '0'; mi <= '9'; ++mi)
+                        for (int ni = '0'; ni <= '9'; ++ni)
+                            for (int oi = '0'; oi <= '9'; ++oi)
+                                for (int pi = '0'; pi <= '9'; ++pi)
+                                {
+                                    kulcs[0] = ii;
+                                    kulcs[1] = ji;
+                                    kulcs[2] = ki;
+                                    kulcs[3] = li;
+                                    kulcs[4] = mi;
+                                    kulcs[5] = ni;
+                                    kulcs[6] = oi;
+                                    kulcs[7] = pi;
+
+                                    exor_tores (kulcs, KULCS_MERET, titkos, p - titkos);
+
+                                }]]></programlisting>
+
     </section>        
     <section>
         <title>Neurális OR, AND és EXOR kapu</title>
@@ -120,7 +249,8 @@ free (tm);]]>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+        </para>   
+        
     </section>        
     <section>
         <title>Hiba-visszaterjesztéses perceptron</title>
@@ -132,6 +262,12 @@ free (tm);]]>
         </para>
         <para>
             Megoldás forrása:                
+            <link xlink:href="caesar/percr.hpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/caesar/percr.hpp</filename>
+            </link>
+        </para>
+        <para>
+            A feladat megoldásában tutorált engem: Szilágyi Csaba.
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
