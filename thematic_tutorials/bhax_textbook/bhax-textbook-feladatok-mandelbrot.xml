@@ -14,8 +14,169 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="mandelbrot/mandelpngt.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot/mandelpngt.cpp</filename>
+            </link>
         </para>
+        
+        <para>
+            <link xlink:href="https://hirmagazin.sulinet.hu/HU/pedagogia/mandelbrot-halmaz">https://hirmagazin.sulinet.hu/HU/pedagogia/mandelbrot-halmaz
+            </link>
+        </para>
+        <para>
+            Ez a halmaz Benoit B. Mandelbrot, lengyel származású matematikusról, a megalkotójától kapta a nevét. (A képe e cikk ajánlója mellett látható.) Hogyan építhető fel ez a halmaz? A komplex számsíkon veszünk egy C pontot.
+        </para>
+        <para>
+            Erre képezzük a következő sorozatot: 
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/mandel_keplet.jpg" scale="100"/>
+                </imageobject>
+            </mediaobject>
+            Ezzel az egyszerű rekurzióval definiált sorozatról be lehet bizonyítani, hogy bizonyos C számok választása esetében végtelenbe tart, vagy más C-k esetében pedig nullához tart. Más eset nem lehetséges.
+
+            A Mandelbrot-halmaznak azok és csak azok a C komplex számok az elemei, amelyek esetében a fenti sorozat nullához tart. Ábrázolás esetében ezeket általában feketére szokták festeni, míg a többi pontot attól függően, hogy "milyen gyorsan" tart a végtelenbe.
+        </para>
+        <para>
+            Az elso programunk a CPUt használva számolja ki a Mandelbrot halmaz elemeit. A fordításhoz szükségünk lesz néhány kapcsolóra:
+            <command><![CDATA[g++ mandelpngt.cpp -o mandelpngt -lpng16 -O3]]></command>
+        </para>
+        <programlisting><![CDATA[// mandelpngt.c++
+// Copyright (C) 2019
+// Norbert Bátfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, ormandelbrot/mandelpngt.cpp
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//mandelbrot/mandelpngt.cppmandelbrot/mandelpngt.cpp
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// Version history
+//mandelbrot/mandelpngt.cpp
+//  Mandelbrot png
+//  Programozó Páternoszter/PARP
+//   https://www.tankonyvtar.hu/hu/tartalom/tamop412A/2011-0063_01_parhuzamos_prog_linux
+//
+//  https://youtu.be/gvaqijHlRUs
+//
+#include <iostream>
+#include "png++/png.hpp"
+#include <sys/times.h>
+
+#define MERET 600
+#define ITER_HAT 32000
+
+void
+mandel (int kepadat[MERET][MERET]) {
+
+    // Mérünk időt (PP 64)mandelbrot/mandelpngt.cppmandelbrot/mandelpngt.cppmandelbrot/mandelpngt.cpp
+    clock_t delta = clock ();
+    // Mérünk időt (PP 66)
+    struct tms tmsbuf1, tmsbuf2;
+    times (&tmsbuf1);
+
+    // számítás adatai
+    float a = -2.0, b = .7, c = -1.35, d = 1.35;
+    int szelesseg = MERET, magassag = MERET, iteraciosHatar = ITER_HAT;
+
+    // a számítás
+    float dx = (b - a) / szelesseg;
+    float dy = (d - c) / magassag;
+    float reC, imC, reZ, imZ, ujreZ, ujimZ;
+    // Hány iterációt csináltunk?
+    int iteracio = 0;
+    // Végigzongorázzuk a szélesség x magasság rácsot:
+    for (int j = 0; j < magassag; ++j)
+    {
+        //sor = j;
+        for (int k = 0; k < szelesseg; ++k)
+        {
+            // c = (reC, imC) a rács csomópontjainak
+            // megfelelő komplex szám
+            reC = a + k * dx;
+            imC = d - j * dy;
+            // z_0 = 0 = (reZ, imZ)
+            reZ = 0;
+            imZ = 0;
+            iteracio = 0;
+            // z_{n+1} = z_n * z_n + c iterációk
+            // számítása, amíg |z_n| < 2 vagy még
+            // nem értük el a 255 iterációt, ha
+            // viszont elértük, akkor úgy vesszük,
+            // hogy a kiinduláci c komplex számra
+            // az iteráció konvergens, azaz a c a
+            // Mandelbrot halmaz eleme
+            while (reZ * reZ + imZ * imZ < 4 && iteracio < iteraciosHatar)
+            {
+                // z_{n+1} = z_n * z_n + c
+                ujreZ = reZ * reZ - imZ * imZ + reC;
+                ujimZ = 2 * reZ * imZ + imC;
+                reZ = ujreZ;
+                imZ = ujimZ;
+
+                ++iteracio;
+
+            }
+
+            kepadat[j][k] = iteracio;
+        }
+    }
+
+    times (&tmsbuf2);
+    std::cout << tmsbuf2.tms_utime - tmsbuf1.tms_utime
+              + tmsbuf2.tms_stime - tmsbuf1.tms_stime << std::endl;
+
+    delta = clock () - delta;
+    std::cout << (float) delta / CLOCKS_PER_SEC << " sec" << std::endl;
+
+}
+
+int
+main (int argc, char *argv[])
+{
+
+    if (argc != 2)
+    {
+        std::cout << "Hasznalat: ./mandelpng fajlnev";
+        return -1;
+    }
+
+    int kepadat[MERET][MERET];
+
+    mandel(kepadat);
+
+    png::image < png::rgb_pixel > kep (MERET, MERET);
+
+    for (int j = 0; j < MERET; ++j)
+    {
+        //sor = j;
+        for (int k = 0; k < MERET; ++k)
+        {
+            kep.set_pixel (k, j,
+                           png::rgb_pixel (255 -
+                                           (255 * kepadat[j][k]) / ITER_HAT,
+                                           255 -
+                                           (255 * kepadat[j][k]) / ITER_HAT,
+                                           255 -
+                                           (255 * kepadat[j][k]) / ITER_HAT));
+        }
+    }
+
+    kep.write (argv[1]);
+    std::cout << argv[1] << " mentve" << std::endl;
+
+}
+]]>
+        </programlisting>
+
     </section>        
         
     <section>
@@ -27,8 +188,130 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="mandelbrot/mandelpngt.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot/mandelpngt.cpp</filename>
+            </link>
         </para>
+        <para>
+            A feladat ismét a Mandelbrot-halmaz kirajzoltatása egy fájlba, most viszont a komplex számok használatához complex típust fogunk használni.
+            Egy ilyen típus deklarálásakor először megadjuk a valós, majd az imaginárius értékét a komplex számnak.
+        </para>
+        <programlisting><![CDATA[std::complex<double> c ( valos, imaginarius );]]>
+        </programlisting>
+        <para>
+            A fordításhoz és futtatáshoz szükséges parancsok a forráskód elején szerepelnek. Ez a verzió már sokkal több lehetőséget tár elénk, mivel megadhatjuk a számolás paramétereit, mint pl. a kimeneti kép mérete vagy az n értéke.
+        </para>
+        
+        <programlisting language="c++">
+<![CDATA[// Verzio: 3.1.2.cpp
+// Forditas:
+// g++ 3.1.2.cpp -lpng -O3 -o 3.1.2
+// Futtatas:
+// ./3.1.2 mandel.png 1920 1080 2040 -0.01947381057309366392260585598705802112818 -0.0194738105725413418456426484226540196687 0.7985057569338268601555341774655971676111 0.798505756934379196110285192844457924366
+// ./3.1.2 mandel.png 1920 1080 1020 0.4127655418209589255340574709407519549131 0.4127655418245818053080142817634623497725 0.2135387051768746491386963270997512154281 0.2135387051804975289126531379224616102874
+// Nyomtatas:
+// a2ps 3.1.2.cpp -o 3.1.2.cpp.pdf -1 --line-numbers=1  --left-footer="BATF41 HAXOR STR34M" --right-footer="https://bhaxor.blog.hu/" --pro=color
+// ps2pdf 3.1.2.cpp.pdf 3.1.2.cpp.pdf.pdf
+//
+//
+// Copyright (C) 2019
+// Norbert Bátfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+#include <iostream>
+#include "png++/png.hpp"
+#include <complex>
+
+int
+main ( int argc, char *argv[] )
+{
+
+  int szelesseg = 1920;
+  int magassag = 1080;
+  int iteraciosHatar = 255;
+  double a = -1.9;
+  double b = 0.7;
+  double c = -1.3;
+  double d = 1.3;
+
+  if ( argc == 9 )
+    {
+      szelesseg = atoi ( argv[2] );
+      magassag =  atoi ( argv[3] );
+      iteraciosHatar =  atoi ( argv[4] );
+      a = atof ( argv[5] );
+      b = atof ( argv[6] );
+      c = atof ( argv[7] );
+      d = atof ( argv[8] );
+    }
+  else
+    {
+      std::cout << "Hasznalat: ./3.1.2 fajlnev szelesseg magassag n a b c d" << std::endl;
+      return -1;
+    }
+
+  png::image < png::rgb_pixel > kep ( szelesseg, magassag );
+
+  double dx = ( b - a ) / szelesseg;
+  double dy = ( d - c ) / magassag;
+  double reC, imC, reZ, imZ;
+  int iteracio = 0;
+
+  std::cout << "Szamitas\n";
+
+  // j megy a sorokon
+  for ( int j = 0; j < magassag; ++j )
+    {
+      // k megy az oszlopokon
+
+      for ( int k = 0; k < szelesseg; ++k )
+        {
+
+          // c = (reC, imC) a halo racspontjainak
+          // megfelelo komplex szam
+
+          reC = a + k * dx;
+          imC = d - j * dy;
+          std::complex<double> c ( reC, imC );
+
+          std::complex<double> z_n ( 0, 0 );
+          iteracio = 0;
+
+          while ( std::abs ( z_n ) < 4 && iteracio < iteraciosHatar )
+            {
+              z_n = z_n * z_n + c;
+
+              ++iteracio;
+            }
+
+          kep.set_pixel ( k, j,
+                          png::rgb_pixel ( iteracio%255, (iteracio*iteracio)%255, 0 ) );
+        }
+
+      int szazalek = ( double ) j / ( double ) magassag * 100.0;
+      std::cout << "\r" << szazalek << "%" << std::flush;
+    }
+
+  kep.write ( argv[1] );
+  std::cout << "\r" << argv[1] << " mentve." << std::endl;
+
+}
+]]></programlisting>
+
     </section>        
                 
     <section>
@@ -42,8 +325,16 @@
             Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Biomorf">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Biomorf</link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>                        
+            <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tamop412A/2011-0052_31_fraktalok/a_juliahalmazok.scorml">https://www.tankonyvtar.hu/hu/tartalom/tamop412A/2011-0052_31_fraktalok/a_juliahalmazok.scorml</link>
+        </para>
+        <para>
+            Nem véletlen a többes szám, mivel Julia halmazból végtelen sok van. Hasonlóan indulunk, mint a Mandelbrot halmaznál, veszünk egy
+f(z)=z^2+c 
+kvadratikus komplex együtthatós polinomot. Most viszont a c konstansot rögzítjük és különböző x értékekre vizsgáljuk a pályákat. Hasonlóan a Mandelbrot halmazhoz, itt is a nem divergens pályájú pontok fognak a keresett halmazhoz tartozni. Mivel a c értéket bárhogy választhatjuk, végtelen sok Julia halmazt kapunk.
+        </para>
+        <para>
+        </para>
+
     </section>                     
 
     <section>
@@ -56,6 +347,31 @@
         <para>
             Megoldás forrása:  
         </para>
+        <para>
+            <link xlink:href="mandelbrot/mandelpngc_60x60_100.cu">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot/mandelpngc_60x60_100.cu</filename>
+            </link>
+        </para>
+
+        <para>
+            Hogy sokkal gyorsabbá tegyük a programot, az Nvidia által kifejlesztett CUDA nyújtotta lehetőséget fogjuk kihasználni. Ehhez szükséges a csomag telepítése:
+        </para>
+        <para>
+            <command>sudo apt install nvidia-cuda-toolkit</command>
+        </para>
+        <para>
+            <command>nvcc mandelpngc_60x60_100.cu -lpng16 -O3 -o mandelpngc</command>
+        </para>
+        
+        <para>
+            Ezután ha lefordítjuk és futtatjuk a kódot, láthatjuk, hogy a sebesség kb. a 60-szorosára nő.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mandel_sebesseg.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+
     </section>                     
 
     <section>
@@ -82,5 +398,5 @@
         <para>
         </para>
     </section>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
 </chapter>                

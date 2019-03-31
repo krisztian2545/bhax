@@ -259,6 +259,7 @@ tiszta_lehet (const char *titkos, int titkos_meret)
         </para>
         <para>
             Megoldás videó:
+            <link xlink:href="https://youtu.be/XpBnR31BRJY">https://youtu.be/XpBnR31BRJY</link>
         </para>
         <para>
             Megoldás forrása:                
@@ -267,11 +268,37 @@ tiszta_lehet (const char *titkos, int titkos_meret)
             </link>
         </para>
         <para>
-            A feladat megoldásában tutorált engem: Szilágyi Csaba.
+            <link xlink:href="http://www.cs.ubbcluj.ro/~csatol/mestint/pdfs/neur_halo_alap.pdf">
+            http://www.cs.ubbcluj.ro/~csatol/mestint/pdfs/neur_halo_alap.pdf
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+            A feladat megoldásában tutorált engem: Szilágyi Csaba.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/neuron.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>      
+        <para>
+            Az agyi neuronok bemenetei a dendritek, amelyek más neuronokhoz csatlakoznak. A tényleges feldolgozást a neuron tulajdonképpeni sejtmagja végzi, és az eredményet az axonon keresztül juttatja el a többi neuronhoz. Az axon végződései több másik neuron dendritjeihez csatlakozhatnak.
+        </para>
+        <para>
+            Egy neurális hálózat több neuronból állnak, amelyek rétegekbe vannak sorolva:
+        </para>
+        <para>
+            a.  Bemeneti réteg: azok a neuronok találhatók itt, amelyek a bemeneti jel továbbítását végzik a hálózat felé. A legtöbb esetben nem jelöljük őket külön. 
+        </para>
+        <para>
+            b.  Rejtett réteg: a tulajdonképpeni feldolgozást végző neuronok tartoznak ide. Egy hálózaton belül több rejtett réteg is lehet.
+        </para>
+        <para>
+            c.  Kimeneti réteg: az itt található neuronok a külvilág felé továbbítják az információt. A feladatuk ugyanaz, mint a rejtett rétegbeli neuronoké.
+        </para>
+        <para>
+            A neurális hálózatok újrafelfedezése akkor kezdődött, amikor a 80-as évek elején felfedezték a tanítására alkalmas hibavisszaterjesztéses algoritmust. A többrétegű perceptron hálózatokban perceptronokat kötünk össze.
+        </para>
+
     </section>        
         
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
