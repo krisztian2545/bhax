@@ -17,12 +17,68 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:       
+            <link xlink:href="welch/PolárGenerátor.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/welch/PolárGenerátor.java</filename>
+            </link>         
+
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat... térj ki arra is, hogy a JDK forrásaiban a Sun programozói
             pont úgy csinálták meg ahogyan te is, azaz az OO nemhogy nem nehéz, hanem éppen természetes neked!
         </para>                
+        <programlisting>
+        <![CDATA[public class PolárGenerátor {
+    
+    boolean nincsTárolt = true;
+    double tárolt;
+    
+    public PolárGenerátor() {
+        
+        nincsTárolt = true;
+        
+    }
+    
+    public double következő() {
+        
+        if(nincsTárolt) {
+            
+            double u1, u2, v1, v2, w;
+            do {
+                u1 = Math.random();
+                u2 = Math.random();
+                
+                v1 = 2*u1 - 1;
+                v2 = 2*u2 - 1;
+                
+                w = v1*v1 + v2*v2;
+                
+            } while(w > 1);
+            
+            double r = Math.sqrt((-2*Math.log(w))/w);
+            
+            tárolt = r*v2;
+            nincsTárolt = !nincsTárolt;
+            
+            return r*v1;
+            
+        } else {
+            nincsTárolt = !nincsTárolt;
+            return tárolt;
+        }
+    }
+    
+    public static void main(String[] args) {
+        
+        PolárGenerátor g = new PolárGenerátor();
+        
+        for(int i=0; i<10; ++i)
+            System.out.println(g.következő());
+        
+    }
+    
+}]]>
+        </programlisting>
     </section>        
 
     <section>
@@ -34,8 +90,131 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="welch/binfa_c.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/welch/binfa_c.c</filename>
+            </link>
         </para>
+        <para>
+            Egy fa adatszerkezet leprogramozására c-ben a <function>struct</function> típus fog segíteni. Egy ilyen fa ugyanolyan szerkezetű elemekből áll: érték(gyökér), mutató a jobboldali levélelemre, mutató a beloldali levélelemre.
+        </para>
+        <programlisting><![CDATA[typedef struct binfa
+{
+  int ertek;
+  struct binfa *bal_nulla;
+  struct binfa *jobb_egy;
+
+} BINFA, *BINFA_PTR;]]>
+        </programlisting>
+        <para>
+            Ezután az <function>uj_elem()</function> függvénnyel lefoglaljuk a memóriát a fa gyökér elemének és ha nincs neki elég memória, akkor egy hibaüzenet után kilépünk a programból.
+        </para>
+        <programlisting><![CDATA[BINFA_PTR
+uj_elem ()
+{
+  BINFA_PTR p;
+
+  if ((p = (BINFA_PTR) malloc (sizeof (BINFA))) == NULL)
+    {
+      perror ("memoria");
+      exit (EXIT_FAILURE);
+    }
+  return p;
+}]]>
+        </programlisting>
+        <para>
+            A while ciklus fejébe folyamatosan beolvassuk a futtatáskor átadott txt állomány karaktereit, amelyek a fa egyes elemei. A 0-ást balra, az 1-est jobbra fogjuk beágyazni a fába úgy, hogy ha ismeretlen bitsorozathoz jutunk, akkor azt "letörjük" és beletesszük a fába:
+        </para>
+        <programlisting>00011101110 -> 0 00 1 11 01 110
+        
+              / 
+       0             1
+   0      1              1
+                       0
+        </programlisting>
+        <programlisting><![CDATA[  char b;
+
+  BINFA_PTR gyoker = uj_elem ();
+  gyoker->ertek = '/';
+  BINFA_PTR fa = gyoker;
+
+  while (read (0, (void *) &b, 1))
+    {
+      write (1, &b, 1);
+      if (b == '0')
+	    {
+	      if (fa->bal_nulla == NULL)
+	      {
+	        fa->bal_nulla = uj_elem ();
+	        fa->bal_nulla->ertek = 0;
+	        fa->bal_nulla->bal_nulla = fa->bal_nulla->jobb_egy = NULL;
+	        fa = gyoker;
+	      }
+	      else
+	      {
+	       fa = fa->bal_nulla;
+	      }
+	    }
+      else
+	    {
+	      if (fa->jobb_egy == NULL)
+	      {
+	        fa->jobb_egy = uj_elem ();
+	        fa->jobb_egy->ertek = 1;
+	        fa->jobb_egy->bal_nulla = fa->jobb_egy->jobb_egy = NULL;
+	        fa = gyoker;
+	      }
+	      else
+	      {
+	        fa = fa->jobb_egy;
+	      }
+	    }
+    }]]>
+        </programlisting>
+        <para>
+            A kiíratásnál a fát jobb oldalról posztorder módon bejárva kiíratjuk a fa elemeit és azok mélységét. Majd a végén felszabadútjuk a memóriát, amelyet elemenként kell elvégeznünk.
+        </para>
+        <programlisting><![CDATA[  printf ("\n");
+  kiir (gyoker);
+  extern int max_melyseg;
+  printf ("melyseg=%d", max_melyseg);
+  szabadit (gyoker);
+}
+
+static int melyseg = 0;
+int max_melyseg = 0;
+
+void
+kiir (BINFA_PTR elem)
+{
+  if (elem != NULL)
+    {
+      ++melyseg;
+      if (melyseg > max_melyseg)
+	       max_melyseg = melyseg;
+      
+      kiir (elem->jobb_egy);
+      for (int i = 0; i < melyseg; ++i)
+	       printf ("---");
+
+      printf ("%c(%d)\n", elem->ertek < 2 ? '0' + elem->ertek : elem->ertek, melyseg);
+      kiir (elem->bal_nulla);
+      --melyseg;
+    }
+}
+
+void
+szabadit (BINFA_PTR elem)
+{
+  if (elem != NULL)
+    {
+      szabadit (elem->jobb_egy);
+      szabadit (elem->bal_nulla);
+      free (elem);
+    }
+}]]>
+        </programlisting>
+
     </section>        
         
     <section>
@@ -47,7 +226,8 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tamop425/0005_22_algoritmizalas_alapjai_scorm_11/1135_fa.html">https://www.tankonyvtar.hu/hu/tartalom/tamop425/0005_22_algoritmizalas_alapjai_scorm_11/1135_fa.html</link>
         </para>
     </section>        
                         
