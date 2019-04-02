@@ -120,12 +120,70 @@ free (tm);]]>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="caesar/ExorTitkosító.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/caesar/ExorTitkosító.java</filename>
+            </link>
         </para>
+        <programlisting><![CDATA[public class ExorTitkosító {
+    
+    public ExorTitkosító(String kulcsSzöveg,
+            java.io.InputStream bejövőCsatorna,
+            java.io.OutputStream kimenőCsatorna)
+            throws java.io.IOException {
+        
+        byte [] kulcs = kulcsSzöveg.getBytes();
+        byte [] buffer = new byte[256];
+        int kulcsIndex = 0;
+        int olvasottBájtok = 0;
+
+        while((olvasottBájtok =
+                bejövőCsatorna.read(buffer)) != -1) {
+            
+            for(int i=0; i<olvasottBájtok; ++i) {
+                
+                buffer[i] = (byte)(buffer[i] ^ kulcs[kulcsIndex]);
+                kulcsIndex = (kulcsIndex+1) % kulcs.length;
+                
+            }
+            
+            kimenőCsatorna.write(buffer, 0, olvasottBájtok);
+            
+        }
+        
+    }
+    
+    public static void main(String[] args) {
+        
+        try {
+            
+            new ExorTitkosító(args[0], System.in, System.out);
+            
+        } catch(java.io.IOException e) {
+            
+            e.printStackTrace();
+            
+        }
+        
+    }
+    
+}]]>
+        </programlisting>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
+            A programkód átírása során néhány változó deklarálása feleslegessé vált. Ilyen például a MAX_KULCS állandó. Míg a c verzióban előre deklaráltuk a kulcs tömböt és csak azután adtunk neki értéket, így volt haszna. Itt viszont a kulcs tömb megfelelő méretűre deklarálódik. A BUFFER_MERET változót is elhagytuk, bár az az előző kódban sem volt szükséges.
+        </para>
+        <programlisting><![CDATA[byte [] kulcs = kulcsSzöveg.getBytes();
+byte [] buffer = new byte[256];]]>
+        </programlisting>
+        <para>
+            A kulcs_meret változót is elhagytuk, mivel azt bármikor lekérhetjük, mint egy tömb méretét:
+        </para>
+        <programlisting><![CDATA[kulcsIndex = (kulcsIndex+1) % kulcs.length;]]>
+        </programlisting>
+         
+
+    </section> 
+
     <section>
         <title>C EXOR törő</title>
         <para>

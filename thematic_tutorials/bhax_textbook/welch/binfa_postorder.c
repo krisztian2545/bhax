@@ -86,15 +86,19 @@ kiir (BINFA_PTR elem)
       ++melyseg;
       if (melyseg > max_melyseg)
 	       max_melyseg = melyseg;
-      
+
+      // baloldali reszfa preorder bejarasa
+      kiir (elem->bal_nulla);
+
+      // jobboldali reszfa preorder bejarasa
       kiir (elem->jobb_egy);
 
+      // gyokerelem feldolgozasa
       for (int i = 0; i < melyseg; ++i)
-	       printf ("---");
+         printf ("---");
 
       printf ("%c(%d)\n", elem->ertek < 2 ? '0' + elem->ertek : elem->ertek, melyseg);
-      
-      kiir (elem->bal_nulla);
+
       --melyseg;
     }
 }

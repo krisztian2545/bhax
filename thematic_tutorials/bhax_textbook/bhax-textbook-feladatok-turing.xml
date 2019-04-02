@@ -529,7 +529,7 @@ plot(x,y,type="b")
             </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            A probléma szemlélteséként tegyük fel, hogy az előtted levő 3 láda közül az egyikbe kincs van a másik kettő üres. A játék elején választasz egyet, de mielőtt kinyithatnád, a játékvezető kinyitja az egyik üres ládát (természetesen sose nemazt, amelyiket kivalasztottad). Ezután újra meggondolhatod, hogy a maradék 2 láda közül melyiket akarod kinyitni. Bárnmennyire is hihetetlennek tűnik, de nagyobb a valószínűsége, hogy a másikat választva megkapod a kincset, ellenben azzal, ha kitartasz az első döntésed mellett.
         </para>
         <programlisting><![CDATA[#   An illustration written in R for the Monty Hall Problem 
 #   Copyright (C) 2019  Dr. Norbert Bátfai, nbatfai@gmail.com
