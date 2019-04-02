@@ -512,6 +512,45 @@ main ( int argc, char *argv[] )
         <para>
             Megoldás forrása:  
         </para>
+        <para>
+            A feladat megoldásában tutorált engem: Tóth Balázs.
+        </para>
+        <para>
+            Ehhez a feladathoz szükséges a QT telepítése:
+        </para>
+        <para>
+            <command>sudo apt-get install qt5-default</command>
+        </para>
+        <para>
+            Ezután érdemes az összes forráskódot elkülöníteni egy mappába, ahol a <command>qmake -project</command> paranccsal létrehozzuk a valami.pro fájlt, majd a <command>qmake valami.pro</command> paranccsal a MakeFile-t. A futtatáshoz ki kell egészetünk a valami.pro fájlt a következő sorokkal:
+        </para>
+        <programlisting><![CDATA[QT += widgets
+CONFIG += c++11]]>
+        </programlisting>
+        <para>
+            Egy make paranccs után már futtatható is a program.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/nagyito_1.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/nagyito_2.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/nagyito_3.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/nagyito_4.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        
     </section>                     
                                                                                                                                                                             
     <section>

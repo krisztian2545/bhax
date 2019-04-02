@@ -26,9 +26,8 @@
         <para>
             Tanulságok, tapasztalatok, magyarázat... térj ki arra is, hogy a JDK forrásaiban a Sun programozói
             pont úgy csinálták meg ahogyan te is, azaz az OO nemhogy nem nehéz, hanem éppen természetes neked!
-        </para>                
-        <programlisting>
-        <![CDATA[public class PolárGenerátor {
+        </para>
+        <programlisting><![CDATA[public class PolárGenerátor {
     
     boolean nincsTárolt = true;
     double tárolt;
@@ -77,6 +76,71 @@
         
     }
     
+}]]>
+        </programlisting>
+        <para>
+            Ha eltekintünk attól, hogy a logikai változót fordítva használták, a kód tényleg ugyanúgy van megírva, ahhogy azt mi tettük.
+        </para>
+        <programlisting><![CDATA[    synchronized public double nextGaussian() {
+        // See Knuth, ACP, Section 3.4.1 Algorithm C.
+        if (haveNextNextGaussian) {
+            haveNextNextGaussian = false;
+            return nextNextGaussian;
+        } else {
+            double v1, v2, s;
+            do {
+                v1 = 2 * nextDouble() - 1; // between -1 and 1
+                v2 = 2 * nextDouble() - 1; // between -1 and 1
+                s = v1 * v1 + v2 * v2;
+            } while (s >= 1 || s == 0);
+            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s)/s);
+            nextNextGaussian = v2 * multiplier;
+            haveNextNextGaussian = true;
+            return v1 * multiplier;
+        }
+    }]]>
+        </programlisting>
+        <para>
+            Most hogy önbizalmat kaptunk, csináljuk me a c++ verziót is:
+        </para>
+        <programlisting><![CDATA[#include "std_lib_facilities.h" 
+class PolarGenerator{
+bool nincsTarolt=true;
+double tarolt;
+ public :
+double kovetkezo()
+ {
+	
+	if(nincsTarolt)
+	{
+	double u1,u2,v1,v2,w;
+	u1= ((double) rand() / (double)(RAND_MAX));
+	u2= ((double) rand() / (double)(RAND_MAX));
+	v1=(2*u1)-1;
+	v2=(2*u2)-1;
+	
+	w=(v1*v1)+(v2*v2);
+	 while(w>1)
+	 {double r = sqrt((-2*log(w))/w);
+	  tarolt=r*v2;
+	  nincsTarolt=!nincsTarolt;
+	  return r*v1;
+	 }
+	}
+	else
+	{
+	 nincsTarolt=!nincsTarolt;
+	return tarolt;
+	}
+ };
+};
+int main()
+{
+std::srand(std::time(0));
+PolarGenerator g;
+for(int i=0; i<10; ++i)
+	std::cout<<g.kovetkezo()<<std::endl;
+return 0;
 }]]>
         </programlisting>
     </section>        
@@ -457,8 +521,29 @@ main (int argc, char *argv[])
             Megoldás videó: 
         </para>
         <para>
-            Megoldás forrása:  
+            Megoldás forrása:
+            <link xlink:href="welch/binfa_gyoker.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/welch/binfa_gyoker.cpp</filename>
+            </link>
         </para>
+            
+        <para>
+            Ha a diff paranccsal megvizsgáljuk a 2 kódot, gyoker értékének átadása referenciahivatkozás nékül történik.
+        </para>
+        <programlisting><![CDATA[128c135
+<                 fa = &gyoker;
+---
+>                 fa = gyoker;
+]]>
+        </programlisting>
+        <para>
+            Ez azért van, mert mostmár a gyoker is egy mutató és így egyenesen a memóriacímet adjuk át a fa mutatónak. Emiatt a fa konstruktora a következő verzióra fejlődött:
+        </para>
+        <programlisting><![CDATA[LZWBinFa ():fa (gyoker = new Csomopont('/'))
+    {
+    }]]>
+        </programlisting>
+
     </section>                     
 
     <section>
@@ -473,6 +558,15 @@ main (int argc, char *argv[])
         <para>
             Megoldás forrása:  
         </para>
+        <para>
+            A mozgató szemantika azért lesz hasznos, mert amíg a másloló konstruktor a másoláskor megduplázza a lefoglalt memóriát, addig ezt a mozgatással elkerülhetjük a mutatók használatával.
+        </para>
+        <programlisting><![CDATA[LZWBinFa ( LZWBinFa && regi ) {
+          std::cout << "LZWBinFa move ctor" << std::endl;
+          gyoker = regi.gyoker;
+          regi.gyoker = nullptr
+     }]]>
+        </programlisting>
     </section>                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                
