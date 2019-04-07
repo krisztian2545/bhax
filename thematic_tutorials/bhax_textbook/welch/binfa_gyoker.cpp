@@ -86,14 +86,14 @@ public:
      konstruktora előbb lefut, mint a tagot tartalmazó LZWBinFa osztály konstruktora, éppen a
      következő, azaz a fa=&gyoker OK.)
    */
-    LZWBinFa ():fa (gyoker = new Csomopont('/'))
+    LZWBinFa ()
     {
+        //gyoker = new Csomopont();
+        fa = gyoker;
     }
     ~LZWBinFa ()
     {
-        szabadit (gyoker->egyesGyermek ());
-        szabadit (gyoker->nullasGyermek ());
-	delete gyoker;
+        szabadit (gyoker);
     }
 
     /* Tagfüggvényként túlterheljük a << operátort, ezzel a célunk, hogy felkeltsük a
@@ -304,7 +304,7 @@ private:
             // 1-el nagyobb mélység, ezért -1
             for (int i = 0; i < melyseg; ++i)
                 os << "---";
-            os << elem->getBetu () << "(" << melyseg - 1 << ")" << std::endl;
+            os << elem->getBetu () << "(" << melyseg << ")" << std::endl;
             kiir (elem->nullasGyermek (), os);
             --melyseg;
         }
@@ -344,7 +344,7 @@ protected:			// ha esetleg egyszer majd kiterjesztjük az osztályt, mert
     // akkor ezek látszanak majd a gyerek osztályban is
 
     /* A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér: */
-    Csomopont *gyoker=new Csomopont;
+    Csomopont *gyoker = new Csomopont();
     int maxMelyseg;
     double atlag, szoras;
 
@@ -366,7 +366,7 @@ LZWBinFa::getMelyseg (void)
 {
     melyseg = maxMelyseg = 0;
     rmelyseg (gyoker);
-    return maxMelyseg - 1;
+    return maxMelyseg;
 }
 
 double
@@ -520,6 +520,7 @@ main (int argc, char *argv[])
 
     // "Megjegyezzük" a bemenő fájl nevét
     char *inFile = argv[1];
+    std::cout << argv[1];
 
     // a -o kapcsoló jön?
     if (argv[2][1] != 'o')
@@ -541,28 +542,29 @@ main (int argc, char *argv[])
 
     std::fstream kiFile (argv[3], std::ios_base::out);
 
-    unsigned char b;		// ide olvassik majd a bejövő fájl bájtjait
+    char b;		// ide olvassik majd a bejövő fájl bájtjait
     LZWBinFa binFa;		// s nyomjuk majd be az LZW fa objektumunkba
 
     // a bemenetet binárisan olvassuk, de a kimenő fájlt már karakteresen írjuk, hogy meg tudjuk
     // majd nézni... :) l. az említett 5. ea. C -> C++ gyökkettes átírási példáit
 
-    while (beFile.read ((char *) &b, sizeof (unsigned char)))
-        if (b == 0x0a)
-            break;
+    /*while (beFile.read ((char *) &b, sizeof (unsigned char)))
+        if (b == '\n')
+            break;*/
 
     bool kommentben = false;
 
     while (beFile.read ((char *) &b, sizeof (unsigned char)))
     {
+        std::cout << b << ',';
 
-        if (b == 0x3e)
+        if (b == '>')
         {			// > karakter
             kommentben = true;
             continue;
         }
 
-        if (b == 0x0a)
+        if (b == '\n')
         {			// újsor
             kommentben = false;
             continue;
@@ -571,7 +573,7 @@ main (int argc, char *argv[])
         if (kommentben)
             continue;
 
-        if (b == 0x4e)		// N betű
+        if (b == 'N')		// N betű
             continue;
 
         // egyszerűen a korábbi d.c kódját bemásoljuk
@@ -581,13 +583,13 @@ main (int argc, char *argv[])
         {
             // maszkolunk eddig..., most már simán írjuk az if fejébe a legmagasabb helyiértékű bit vizsgálatát
             // csupa 0 lesz benne a végén pedig a vizsgált 0 vagy 1, az if megmondja melyik:
-            if (b & 0x80)
+            if (b == '1')
                 // ha a vizsgált bit 1, akkor az '1' betűt nyomjuk az LZW fa objektumunkba
                 binFa << '1';
-            else
+            else if(b == '0')
                 // különben meg a '0' betűt:
                 binFa << '0';
-            b <<= 1;
+            //b <<= 1;
         }
 
     }

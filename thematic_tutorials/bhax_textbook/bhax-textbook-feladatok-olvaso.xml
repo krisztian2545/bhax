@@ -1,0 +1,65 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Olvasónapló!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+<section>
+<title>Juhász István féle könyv</title>
+<para>Egy számítógép programozására három nyelvi szintet különböztetünk meg:</para>
+<para>-Gépi kód</para>
+<para>-assembly szint</para>
+<para>-Magas szint</para>
+<para>A magas szintű nyelveken megírt algoritmusokat forráskódoknak nevezzük.
+A forráskódok nyelvtani szabályi a szintaktikai szabályok, míg a jelentésbeli, tartalmi szabályzat a szemantika.
+Ezeket a kódokat interpreterrel, vagy fordítóprogrammal gépi kóddá kell konvertálni, hogy a processor értelmezni tudja.
+Egy fordítóprogram tetszőleges nyelvről tetszőleges nyelvre fordít.Amíg ez az egész kódból egy tárgyprogramot készít, addig az interpreter értelezi és rögtön lefuttatja a kódot, programfájl nélkül.</para>
+</section>
+
+<section>
+<title>FerSML Prog1_1</title>
+<para>A híres legelső program 3 típusban:
+1. könyvtári hívással:</para>
+<programlisting language="c"><![CDATA[#include <stdio.h>
+int main(){
+printf("Helló, olvasónapló!\n");
+return 0;
+}]]></programlisting>
+<para>2. rendszer hívással:</para>
+<programlisting language="c"><![CDATA[#include <unistd.h>
+int main(){
+write (1, "Helló megint!\n",16);
+return 0;
+}
+]]></programlisting>
+<para>3. assembly kóddal:</para>
+<programlisting language="c"><![CDATA[.data
+hello:
+	.ascii "hello, olvasonaplo!\n"
+.text
+	.global _start
+_start:
+	movl $4, %eax
+	movl $1, %ebx
+	movl $hello, %ecx
+	movl $22, %edx
+	
+	int $0x80
+	
+	movl $1, %eax
+	movl $0, %ebx
+	int $0x80]]></programlisting>
+    <para>itt a _start parancs hasonló feladatot lát el, mint a C típusú nyelveknél a main() függvény
+    az int $0x80 kéri a processor megszakítást.
+    Maga a 0x80 a megszakítás vektor, amely a rendszerhívást végzi a kernelből.</para>
+    <para>A könyvben említésre kerülnek a turing gépek is.</para>
+</section>
+
+<section>
+<title>FerSML Prog1_2</title>
+<para>A google által tervezett és kivitelezett PageRank algoritmusról szól a fejezet.
+Ez az algoritmus arra hivatott, hogy a weblapok minőségét rangsorolja.
+The PageRank Citation Ranking: Bringing Order to the Web.<link xlink:href="http://dbpubs.stanford.edu:8090/pub/1999-66/"></link></para>
+</section>
+</chapter>

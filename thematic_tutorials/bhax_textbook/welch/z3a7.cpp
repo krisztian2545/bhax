@@ -53,21 +53,23 @@
 // 0.0.6.4      SVN-beli, http://www.inf.unideb.hu/~nbatfai/p1/forrasok-SVN/bevezetes/vedes/
 // 0.0.6.5      2012.03.20, z3a4.cpp: N betűk (hiányok), sorvégek, vezető komment figyelmen kívül: http://progpater.blog.hu/2012/03/20/a_vedes_elokeszitese
 // 0.0.6.6      z3a5.cpp: mamenyaka kolléga észrevételére a több komment sor figyelmen kívül hagyása
-//		http://progpater.blog.hu/2012/03/20/a_vedes_elokeszitese/fullcommentlist/1#c16150365
-// 0.0.6.7	Javaslom ezt a verziót választani védendő programnak
-// 0.0.6.8	z3a7.cpp: pár kisebb javítás, illetve a védések támogatásához további komment a <<
-// 		eltoló operátort tagfüggvényként, illetve globális függvényként túlterhelő részekhez.
-//		http://progpater.blog.hu/2012/04/10/imadni_fogjak_a_c_t_egy_emberkent_tiszta_szivbol_4/fullcommentlist/1#c16341099
+//      http://progpater.blog.hu/2012/03/20/a_vedes_elokeszitese/fullcommentlist/1#c16150365
+// 0.0.6.7  Javaslom ezt a verziót választani védendő programnak
+// 0.0.6.8  z3a7.cpp: pár kisebb javítás, illetve a védések támogatásához további komment a <<
+//      eltoló operátort tagfüggvényként, illetve globális függvényként túlterhelő részekhez.
+//      http://progpater.blog.hu/2012/04/10/imadni_fogjak_a_c_t_egy_emberkent_tiszta_szivbol_4/fullcommentlist/1#c16341099
 //
 
-#include <iostream>		// mert olvassuk a std::cin, írjuk a std::cout csatornákat
-#include <cmath>		// mert vonunk gyököt a szóráshoz: std::sqrt
-#include <fstream>		// fájlból olvasunk, írunk majd
+#include <iostream>     // mert olvassuk a std::cin, írjuk a std::cout csatornákat
+#include <cmath>        // mert vonunk gyököt a szóráshoz: std::sqrt
+#include <fstream>      // fájlból olvasunk, írunk majd
 
 /* Az LZWBinFa osztályban absztraháljuk az LZW algoritmus bináris fa építését. Az osztály
  definíciójába beágyazzuk a fa egy csomópontjának az absztrakt jellemzését, ez lesz a
  beágyazott Csomopont osztály. Miért ágyazzuk be? Mert külön nem szánunk neki szerepet, ezzel
  is jelezzük, hogy csak a fa részeként számiolunk vele.*/
+
+/*osztályon belűl csak prototípusok legyenek,<<operátor kiiktatása,szeggyük külön a programot 3 részre*/
 
 class LZWBinFa
 {
@@ -84,13 +86,14 @@ public:
      konstruktora előbb lefut, mint a tagot tartalmazó LZWBinFa osztály konstruktora, éppen a
      következő, azaz a fa=&gyoker OK.)
    */
-    LZWBinFa ():fa (&gyoker)
+    LZWBinFa ():fa (gyoker = new Csomopont('/'))
     {
     }
     ~LZWBinFa ()
     {
-        szabadit (gyoker.egyesGyermek ());
-        szabadit (gyoker.nullasGyermek ());
+        szabadit (gyoker->egyesGyermek ());
+        szabadit (gyoker->nullasGyermek ());
+    delete gyoker;
     }
 
     /* Tagfüggvényként túlterheljük a << operátort, ezzel a célunk, hogy felkeltsük a
@@ -104,11 +107,14 @@ public:
      http://progpater.blog.hu/2011/02/19/gyonyor_a_tomor
 
      a b formális param az a betű, amit éppen be kell nyomni a fába.
-
+     
      a binFa << b (ahol a b majd a végén látszik, hogy már az '1' vagy a '0') azt jelenti
      tagfüggvényként, hogy binFa.operator<<(b) (globálisként így festene: operator<<(binFa, b) )
 
      */
+
+
+
     void operator<< (char b)
     {
         // Mit kell betenni éppen, '0'-t?
@@ -116,21 +122,23 @@ public:
         {
             /* Van '0'-s gyermeke az aktuális csomópontnak?
            megkérdezzük Tőle, a "fa" mutató éppen reá mutat */
-            if (!fa->nullasGyermek ())	// ha nincs, hát akkor csinálunk
+            if (!fa->nullasGyermek ())  // ha nincs, hát akkor csinálunk
             {
                 // elkészítjük, azaz páldányosítunk a '0' betű akt. parammal
                 Csomopont *uj = new Csomopont ('0');
+        nincsn=nincsn+1;
                 // az aktuális csomópontnak, ahol állunk azt üzenjük, hogy
                 // jegyezze már be magának, hogy nullás gyereke mostantól van
                 // küldjük is Neki a gyerek címét:
                 fa->ujNullasGyermek (uj);
                 // és visszaállunk a gyökérre (mert ezt diktálja az alg.)
-                fa = &gyoker;
+                fa = gyoker;
             }
-            else			// ha van, arra rálépünk
+            else            // ha van, arra rálépünk
             {
                 // azaz a "fa" pointer már majd a szóban forgó gyermekre mutat:
                 fa = fa->nullasGyermek ();
+        vann=vann+1;
             }
         }
         // Mit kell betenni éppen, vagy '1'-et?
@@ -139,12 +147,14 @@ public:
             if (!fa->egyesGyermek ())
             {
                 Csomopont *uj = new Csomopont ('1');
+        nincse=nincse+1;
                 fa->ujEgyesGyermek (uj);
-                fa = &gyoker;
+                fa = gyoker;
             }
             else
             {
                 fa = fa->egyesGyermek ();
+        vane=vane+1;
             }
         }
     }
@@ -164,7 +174,7 @@ public:
         melyseg = 0;
         // ha nem mondta meg a hívó az üzenetben, hogy hova írjuk ki a fát, akkor a
         // sztenderd out-ra nyomjuk
-        kiir (&gyoker, std::cout);
+        kiir (gyoker, std::cout);
     }
     /* már nem használjuk, tartalmát a dtor hívja
   void szabadit (void)
@@ -187,13 +197,13 @@ public:
      fordul le (B&L könyv 185. o. teteje) ám itt nem az a lényeg, hanem, hogy a cout ostream
      osztálybeli, így abban az osztályban kéne módosítani, hogy tudjon kiírni LZWBinFa osztálybelieket...
      e helyett a globális << operátort terheljük túl,
-
+     
      a kiFile << binFa azt jelenti, hogy
-
+     
       - tagfüggvényként: kiFile.operator<<(binFa) de ehhez a kiFile valamilyen
       std::ostream stream osztály forrásába kellene beleírni ezt a tagfüggvényt,
       amely ismeri a mi LZW binfánkat...
-
+      
       - globális függvényként: operator<<(kiFile, binFa) és pont ez látszik a következő sorban:
 
      */
@@ -205,8 +215,15 @@ public:
     void kiir (std::ostream & os)
     {
         melyseg = 0;
-        kiir (&gyoker, os);
+        kiir (gyoker, os);
     }
+
+private:
+int vann=0; //van nulla
+int nincsn=0; //nincs nulla
+int vane=0; //van egy
+int nincse=0; //nincs egy
+
 
 private:
     class Csomopont
@@ -291,7 +308,24 @@ private:
             kiir (elem->nullasGyermek (), os);
             --melyseg;
         }
+
     }
+    public :
+    void ki(){
+    
+    std::cout << "nullák száma = " << vann << std::endl;
+        
+            
+        std::cout << "új nullák száma = " << nincsn << std::endl;
+        
+    
+    std::cout << "egyesek száma száma = " << vane << std::endl;
+        
+    
+        std::cout << "új egyesek száma = " << nincse << std::endl;
+        
+          }
+
     void szabadit (Csomopont * elem)
     {
         // Nem létező csomóponttal nem foglalkozunk... azaz ez a rekurzió leállítása
@@ -305,12 +339,12 @@ private:
         }
     }
 
-protected:			// ha esetleg egyszer majd kiterjesztjük az osztályt, mert
+protected:          // ha esetleg egyszer majd kiterjesztjük az osztályt, mert
     // akarunk benne valami újdonságot csinálni, vagy meglévő tevékenységet máshogy... stb.
     // akkor ezek látszanak majd a gyerek osztályban is
 
     /* A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér: */
-    Csomopont gyoker;
+    Csomopont *gyoker=new Csomopont;
     int maxMelyseg;
     double atlag, szoras;
 
@@ -331,7 +365,7 @@ int
 LZWBinFa::getMelyseg (void)
 {
     melyseg = maxMelyseg = 0;
-    rmelyseg (&gyoker);
+    rmelyseg (gyoker);
     return maxMelyseg - 1;
 }
 
@@ -339,7 +373,7 @@ double
 LZWBinFa::getAtlag (void)
 {
     melyseg = atlagosszeg = atlagdb = 0;
-    ratlag (&gyoker);
+    ratlag (gyoker);
     atlag = ((double) atlagosszeg) / atlagdb;
     return atlag;
 }
@@ -351,7 +385,7 @@ LZWBinFa::getSzoras (void)
     szorasosszeg = 0.0;
     melyseg = atlagdb = 0;
 
-    rszoras (&gyoker);
+    rszoras (gyoker);
 
     if (atlagdb - 1 > 0)
         szoras = std::sqrt (szorasosszeg / (atlagdb - 1));
@@ -410,6 +444,7 @@ LZWBinFa::rszoras (Csomopont * elem)
         }
     }
 }
+
 
 // teszt pl.: http://progpater.blog.hu/2011/03/05/labormeres_otthon_avagy_hogyan_dolgozok_fel_egy_pedat
 // [norbi@sgu ~]$ echo "01111001001001000111"|./z3a2
@@ -484,10 +519,10 @@ main (int argc, char *argv[])
     }
 
     // "Megjegyezzük" a bemenő fájl nevét
-    char *inFile = *++argv;
+    char *inFile = argv[1];
 
     // a -o kapcsoló jön?
-    if (*((*++argv) + 1) != 'o')
+    if (argv[2][1] != 'o')
     {
         usage ();
         return -2;
@@ -497,21 +532,17 @@ main (int argc, char *argv[])
     std::fstream beFile (inFile, std::ios_base::in);
 
     // fejlesztgetjük a forrást: http://progpater.blog.hu/2011/04/17/a_tizedik_tizenegyedik_labor
-    /*if (!beFile)
+    if (!beFile)
     {
         std::cout << inFile << " nem letezik..." << std::endl;
         usage ();
         return -3;
-    }*/
+    }
 
-   try{
-	if(!beFile) throw std::invalid_argument("hiba");
+    std::fstream kiFile (argv[3], std::ios_base::out);
 
-
-    std::fstream kiFile (*++argv, std::ios_base::out);
-
-    unsigned char b;		// ide olvassik majd a bejövő fájl bájtjait
-    LZWBinFa binFa;		// s nyomjuk majd be az LZW fa objektumunkba
+    unsigned char b;        // ide olvassik majd a bejövő fájl bájtjait
+    LZWBinFa binFa;     // s nyomjuk majd be az LZW fa objektumunkba
 
     // a bemenetet binárisan olvassuk, de a kimenő fájlt már karakteresen írjuk, hogy meg tudjuk
     // majd nézni... :) l. az említett 5. ea. C -> C++ gyökkettes átírási példáit
@@ -526,13 +557,13 @@ main (int argc, char *argv[])
     {
 
         if (b == 0x3e)
-        {			// > karakter
+        {           // > karakter
             kommentben = true;
             continue;
         }
 
         if (b == 0x0a)
-        {			// újsor
+        {           // újsor
             kommentben = false;
             continue;
         }
@@ -540,7 +571,7 @@ main (int argc, char *argv[])
         if (kommentben)
             continue;
 
-        if (b == 0x4e)		// N betű
+        if (b == 0x4e)      // N betű
             continue;
 
         // egyszerűen a korábbi d.c kódját bemásoljuk
@@ -564,20 +595,20 @@ main (int argc, char *argv[])
     //std::cout << binFa.kiir (); // így rajzolt ki a fát a korábbi verziókban de, hogy izgalmasabb legyen
     // a példa, azaz ki lehessen tolni az LZWBinFa-t kimeneti csatornára:
 
-    kiFile << binFa;		// ehhez kell a globális operator<< túlterhelése, lásd fentebb
+    kiFile << binFa;        // ehhez kell a globális operator<< túlterhelése, lásd fentebb
     // (jó ez az OO, mert mi ugye nem igazán erre gondoltunk, amikor írtuk, mégis megy, hurrá)
 
     kiFile << "depth = " << binFa.getMelyseg () << std::endl;
     kiFile << "mean = " << binFa.getAtlag () << std::endl;
     kiFile << "var = " << binFa.getSzoras () << std::endl;
-
+   /* kiFile << std::endl << "nullák száma = " << LZWBinFa::vann << std::endl;
+    kiFile << "új nullák száma = " << LZWBinFa::nincsn << std::endl;
+    kiFile << "egyesek száma száma = " << LZWBinFa::vane << std::endl;
+    kiFile << "új egyesek száma = " << LZWBinFa::nincse << std::endl;*/
+    binFa.ki();
     kiFile.close ();
     beFile.close ();
 
-    } catch(std::invalid_argument){
-	     std::cout << inFile << " nem letezik..." << std::endl;
-       usage ();
-    }
-
     return 0;
 }
+
