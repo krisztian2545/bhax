@@ -11,55 +11,44 @@
 <para>-Gépi kód</para>
 <para>-assembly szint</para>
 <para>-Magas szint</para>
-<para>A magas szintű nyelveken megírt algoritmusokat forráskódoknak nevezzük.
-A forráskódok nyelvtani szabályi a szintaktikai szabályok, míg a jelentésbeli, tartalmi szabályzat a szemantika.
-Ezeket a kódokat interpreterrel, vagy fordítóprogrammal gépi kóddá kell konvertálni, hogy a processor értelmezni tudja.
-Egy fordítóprogram tetszőleges nyelvről tetszőleges nyelvre fordít.Amíg ez az egész kódból egy tárgyprogramot készít, addig az interpreter értelezi és rögtön lefuttatja a kódot, programfájl nélkül.</para>
+<para>Mink a magas szintű programozási nyelvekkel foglalkozunk. A magas szintű nyelven megírt forrásszöveg helyesírását szintaktikának, jelentését szemantikának nevezzük. Egy magas szintű programozási nyelvet ez a kettő határoz meg. A processzor csak a gépi kódot érti, ezért a gépi kód előállításához vagy fordítót vagy interpretert kell használnunk. A fordítóprogram a lexikális elemzés, szintaktikai elemzés, szemantikai elemzés és kódgenerálás lépések végrehajtásával állítja elő a forrásszövegből a tárgyprogramot. Az interpreteres módszer is elvégzi az első 3 lépést, viszont tárgyprogramot nem készít, ehelyett soronként értelmezi és végrehajtja az utasításokat. A programnyelv szabványát hivatkozási nyelvnek hivjuk, ahol a szintaktikai és szemantikai szabályok vannak részletezve. A programok írásához leggyakrabban integrált fejlesztői környezetet (IDE - Integrated Development Enviroment) használunk, amelyek nagyban megkönnyítik a nagyobb projektek kezelését. Ezek tartalmazzák a szövegszerkesztőt, fordítót / interpretert és futtató rendszert. Az imperatív nyelvek algoritmusokból állnak. Ezek lehetnek eljárásorientált vagy objektumorientált nyelvek. És vannak a deklaratív nyelvek. Ezek nem algoritmikusak és a programozó csak a problémát adja meg, a nyelvi implementációba van beépítve a megoldás módja.</para>
+
+<para>
+</para>
 </section>
 
 <section>
-<title>FerSML Prog1_1</title>
-<para>A híres legelső program 3 típusban:
-1. könyvtári hívással:</para>
-<programlisting language="c"><![CDATA[#include <stdio.h>
-int main(){
-printf("Helló, olvasónapló!\n");
-return 0;
-}]]></programlisting>
-<para>2. rendszer hívással:</para>
-<programlisting language="c"><![CDATA[#include <unistd.h>
-int main(){
-write (1, "Helló megint!\n",16);
-return 0;
-}
-]]></programlisting>
-<para>3. assembly kóddal:</para>
-<programlisting language="c"><![CDATA[.data
-hello:
-	.ascii "hello, olvasonaplo!\n"
-.text
-	.global _start
-_start:
-	movl $4, %eax
-	movl $1, %ebx
-	movl $hello, %ecx
-	movl $22, %edx
-	
-	int $0x80
-	
-	movl $1, %eax
-	movl $0, %ebx
-	int $0x80]]></programlisting>
-    <para>itt a _start parancs hasonló feladatot lát el, mint a C típusú nyelveknél a main() függvény
-    az int $0x80 kéri a processor megszakítást.
-    Maga a 0x80 a megszakítás vektor, amely a rendszerhívást végzi a kernelből.</para>
-    <para>A könyvben említésre kerülnek a turing gépek is.</para>
+<title>K &amp; R, A C programozási nyelv</title>
+<para>A változók és az állandók a programok alapvető részei. A deklaŕalásuk során megadjuk a nevüket, típusukat és esetleg a kezdeti értéküket. A nevekre nézve vannak némi megkötések, pl.: nem tartalmazhat pontot, nem lehetnek kulcsszavak (mint if, else, int), stb.</para>
+<para>A c-ben csak néhány alapvető adattípus van:
+</para>
+<itemizedlist>
+            <listitem>
+                <para>
+                    int - egész szám
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    float - egyszeres pontosságú lebegőpontos szám
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    double - kétszeres pontosságú lebegőpontos szám
+                </para>
+            </listitem>
+        </itemizedlist>
+    <para>Ezt kiegészíthetjük a <function>short</function>, <function>long</function> és <function>unsigned</function> minősítő szimbólumokkal. A <function>short</function> és a <function>long</function> a méretét szabályozza.  Az <function>unsigned</function>(előjel nélküli) számokra a modulo 2n aritmetika szabályai vonatkoznak, ahol n az int típust ábrázolóbit-ek száma; az unsigned számok mindig pozitívak. 
+    </para>
+    <programlisting><![CDATA[   short int x;
+    long int y;
+    unsigned int z;]]>
+    </programlisting>
 </section>
 
 <section>
-<title>FerSML Prog1_2</title>
-<para>A google által tervezett és kivitelezett PageRank algoritmusról szól a fejezet.
-Ez az algoritmus arra hivatott, hogy a weblapok minőségét rangsorolja.
-The PageRank Citation Ranking: Bringing Order to the Web.<link xlink:href="http://dbpubs.stanford.edu:8090/pub/1999-66/"></link></para>
+<title></title>
+<para></para>
 </section>
 </chapter>

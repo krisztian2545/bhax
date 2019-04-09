@@ -583,15 +583,14 @@ main (int argc, char *argv[])
         {
             // maszkolunk eddig..., most már simán írjuk az if fejébe a legmagasabb helyiértékű bit vizsgálatát
             // csupa 0 lesz benne a végén pedig a vizsgált 0 vagy 1, az if megmondja melyik:
-            if (b == '1')
+            if (b & 0x80)
                 // ha a vizsgált bit 1, akkor az '1' betűt nyomjuk az LZW fa objektumunkba
                 binFa << '1';
-            else if(b == '0')
+            else
                 // különben meg a '0' betűt:
                 binFa << '0';
-            //b <<= 1;
+            b <<= 1;
         }
-
     }
 
     //std::cout << binFa.kiir (); // így rajzolt ki a fát a korábbi verziókban de, hogy izgalmasabb legyen
