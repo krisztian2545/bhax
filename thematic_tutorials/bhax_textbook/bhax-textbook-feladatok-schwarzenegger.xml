@@ -11,31 +11,19 @@
             Python
         </para>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://youtu.be/j7f9SkJR3oc">https://youtu.be/j7f9SkJR3oc</link>
         </para>
         <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-
-    <section>
-        <title>Szoftmax R MNIST</title>
-        <para>
-            R            
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
+            Megoldás forrása:   
+            <link xlink:href="schwarzenegger/mnist_softmax.py">
+            <filename>bhax/thematic_tutorials/bhax_textbook/schwarzenegger/mnist_softmax.py</filename>
+            </link>             
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
     </section>        
+     
 
     <section>
         <title>Mély MNIST</title>
@@ -53,35 +41,6 @@
         </para>
     </section>        
 
-    <section>
-        <title>Deep dream</title>
-        <para>
-            Keras            
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-                  
-    <section>
-        <title>Robotpszichológia</title>
-        <para>
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
+          
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 </chapter>                

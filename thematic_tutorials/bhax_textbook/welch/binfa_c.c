@@ -30,8 +30,12 @@ int
 main (int argc, char **argv)
 {
   char b;
+  int meret = 0;
 
   BINFA_PTR gyoker = uj_elem ();
+
+  meret++;
+
   gyoker->ertek = '/';
   BINFA_PTR fa = gyoker;
 
@@ -46,6 +50,9 @@ main (int argc, char **argv)
 	        fa->bal_nulla->ertek = 0;
 	        fa->bal_nulla->bal_nulla = fa->bal_nulla->jobb_egy = NULL;
 	        fa = gyoker;
+
+          meret++;
+
 	      }
 	      else
 	      {
@@ -60,6 +67,9 @@ main (int argc, char **argv)
 	        fa->jobb_egy->ertek = 1;
 	        fa->jobb_egy->bal_nulla = fa->jobb_egy->jobb_egy = NULL;
 	        fa = gyoker;
+
+          meret++;
+
 	      }
 	      else
 	      {
@@ -68,10 +78,17 @@ main (int argc, char **argv)
 	    }
     }
 
+  printf("struktura meret = %d\n", sizeof(BINFA));
+  printf("jobb mutato meret = %d\n", sizeof(fa->jobb_egy));
+  printf("bal mutato meret = %d\n", sizeof(fa->bal_nulla));
+  printf("ertek meret = %d\n", sizeof(fa->ertek));
+
+  printf("strukturak szama = %d", meret);
+
   printf ("\n");
   kiir (gyoker);
   extern int max_melyseg;
-  printf ("melyseg=%d", max_melyseg);
+  printf ("melyseg=%d\n", max_melyseg);
   szabadit (gyoker);
 }
 
