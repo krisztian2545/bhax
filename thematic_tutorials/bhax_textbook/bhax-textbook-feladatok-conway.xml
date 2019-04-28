@@ -51,7 +51,11 @@
 
   ./myrmecologist -w 250 -m 150 -n 400 -t 10 -p 5 -f 80 -d 0 -a 255 -i 3 -s 3  -c 22
         </programlisting>
-        
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/uml.png" scale="40"/>
+            </imageobject>
+        </mediaobject>
         <para>
             Minden egyes hangyának van pozíciója és iránya. A számításokhoz 2 rácsot használunk - egyik tartalmazza a jelenlegi állapotot, a másik pedig az újat - , így olyan, mintha mind egyszerre mozognának. 
         </para>
@@ -59,7 +63,10 @@
             <imageobject>
                 <imagedata fileref="images/hangya.png" scale="30"/>
             </imageobject>
-        </mediaobject>           
+        </mediaobject>
+        <para>
+
+        </para>           
     </section>        
     <section>
         <title>Java életjáték</title>
