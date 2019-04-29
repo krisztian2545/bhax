@@ -17,10 +17,24 @@
             </link>
         </para>
         <para>
-            
+            A feladat megoldásához a <link xlink:href="https://portacle.github.io/">portacle</link> fejlesztői környezetet használtam, így nem szükséges a Lisp könyvtárak instalálása. 
+        </para>
+        <para>
+            Általában ha egy számunkra új programozási nyelvvel találkozunk nagyjából ki tudjuk következtetni, hogy mit is akar az a program csinálni. Ez a Lisp-nél ritkaság, legalábbis számomra. Az egészben a legfurcsább a prefix alak, amit hát nincs más választás mint megszokni. Az iterációs megoldás <function>do</function> segítségével a következőképpen néz ki:
+        </para>
+        <programlisting><![CDATA[(do ((n 1 (1+ n)) ; n kezdeti erteke 1, ciklusonkent 1-el noveeljuk
+     (l 1 (* n l))) ; l kezdeti erteke 1, ciklusonkent megszorozzuk az n-el addig, ...
+    ((= 6 n) ; ... amig az n nem egyenlo 6-al
+     l) ; visszatérünk az l ertekevel
+  )]]>
+        </programlisting>
+        <para>
+            A <function>do</function> kulcsszó utáni zárójelben dekláráljuk a ciklusváltozókat. Ezeknek először megadjuk a nevét majd a kezdő értékét és a kifejezést ami szerint az változni fog a ciklusok során. Ezt követi az iterációs feltétel és a visszatérési érték. A ciklus fő blokkját most üresen hagytuk.
+        </para>
+        <para>
+            A rekurziós verzió sokkal átláthatóbb és ez már urahasznosítható. Ennél a syntax-nál már egyszerűbb megállapítani, hogy miről is van szó. A <function>defun</function> kulcsszó után függvénynév és változó a zárójelben. Az if-el végetvetünk az önhivatkozásnak ha az <function>N</function> értéke 1, ellenben megszorozzuk az <function>N</function>-t az eggyel kisebb szám faktoriálisával. Az utolsó sor már a kész függvény használatát mutatja be.
         </para>
         <programlisting><![CDATA[(defun factorial (N)
-  "Compute the factorial of N."
   (if (= N 1)
       1
     (* N (factorial (- N 1)))))
