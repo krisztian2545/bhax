@@ -53,7 +53,13 @@
             Megoldás videó: <link xlink:href="https://youtu.be/OKdAkI_c7Sc">https://youtu.be/OKdAkI_c7Sc</link>      
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/GIMP_Lisp/Chrome">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/GIMP_Lisp/Chrome</link>               
+            Megoldás forrása:
+            <link xlink:href="chaitin/chrome/bhax_chrome3.scm">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chaitin/chrome/bhax_chrome3.scm</filename>
+            </link>
+            <link xlink:href="chaitin/chrome/bhax_chrome3_border2.scm">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chaitin/chrome/bhax_chrome3_border2.scm</filename>
+            </link>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
