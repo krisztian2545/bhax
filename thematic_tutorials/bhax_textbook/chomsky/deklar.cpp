@@ -4,11 +4,11 @@ int main(){
 
 	int *b = &a;
 
-	//int &r = a; ilyen nincs c-ben
+	int &r = a;
 
 	int c[5];
 
-	//int (&tr)[5] = c; ilyen nincs c-ben
+	int (&tr)[5] = c;
 
 	int *d[5];
 

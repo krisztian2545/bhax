@@ -49,6 +49,11 @@ int main()
     
 }]]>
         </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/turing.png" scale="100"/>
+            </imageobject>
+        </mediaobject>
     </section>        
         
     <section>
@@ -522,13 +527,38 @@ $(\exists y \forall x (x \text{ prím}) \supset (x<y)) $
 $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
 ]]></programlisting>        
         <para>
-            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/MatLog_LaTeX">https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/MatLog_LaTeX</link>
+            Megoldás forrása: <link xlink:href="chomsky/matlog.tex">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/matlog.tex</filename>
+            </link>
+            <link xlink:href="chomsky/logikus.tex">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/logikus.tex</filename>
+            </link>
         </para>
 
         <para>
             Megoldás videó: <link xlink:href="https://youtu.be/ZexiPy3ZxsA">https://youtu.be/ZexiPy3ZxsA</link>, <link xlink:href="https://youtu.be/AJSXOQFF_wk">https://youtu.be/AJSXOQFF_wk</link>
         </para>
 
+        <para>
+            A szöveg megértéséhez szükségesek a következő információk:
+            A <function>\forall</function> a univerzális kvantornak felel meg, a <function>\exists</function> pedig az egzisztenciális kvantornak. A <function>\wedge</function> az és logikai jelet, a <function>\supset</function> pedig a implikáció logikai jelet szimbolizálja.
+        </para>        
+        <programlisting><![CDATA[\item
+Bármely x szám esetén létezik nála nagyobb y prím szám.\\
+$(\forall x \exists y ((x<y) \wedge (y \text{ prím})))$
+
+\item
+Bármely x szám esetén léteznek nála nagyobb ikerprímek.\\
+$(\forall x \exists y ((x<y) \wedge (y \text{ prím}) \wedge (SSy \text{ prím})))$
+
+\item
+Létezik olyan y, hogy minden prím szám kisebb nála.\\
+$(\exists y \forall x (x \text{ prím}) \supset (x<y))$
+
+\item
+Létezik olyan y, aminél nincs nagyobb prím szám.\\
+$(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$]]>
+        </programlisting>
         <para>
             A matematikai logikai (matlog) nyelv a beszélt nyelvnél pontosabb kifejező eszköz. A beszélt nyelv szavakból és mondatokból épül, még a matlog nyelv termekből és formulákból. A termek változókból és függvényekből épülnek. Term például az az x változó, ami befutotta az embereket. A formulák termekből és prédikátumokból épülnek. Formula például a Szeret(x, y) két változós prédikátum. Illetve a logikai jelekkel a formulákból további formulák építhetőek fel.
         </para>
@@ -639,8 +669,6 @@ $ \forall x \exists y Szeret(x, y) \vee \exists x \forall y  Szeret(x, y)$
  
 \subsection{A matlog nyelv}
 
-A matematikai logikai (matlog) nyelv a beszélt nyelvnél pontosabb kifejező eszköz. A beszélt nyelv szavakból és mondatokból épül, még a matlog nyelv termekből és formulákból. A termek változókból és függvényekből épülnek.Term például az az x változó, ami befutotta az embereket. A formulák termekből és prédikátumokból épülnek. Formula például a korábban használt Szeret(x, y) két változós prédikátum. Illetve a logikai jelekkel a formulákból további formulák építhetőek fel. Ha A és B formula, akkor a
-\begin{itemize}
 \item
 $(A \wedge B)$ is az,  olvasva "A és B", \LaTeX -ben leírva: \verb!$(A \wedge B)$!
 
@@ -816,7 +844,7 @@ Tagadjuk az egyik végességet kifejező formulánkat!
             <listitem>
                 <programlisting><![CDATA[int &r = a;]]></programlisting> 
                 <para>
-                    Ilyen nincs a C nyelvben. A "&amp;"-jellel csak átadni tudjuk egy változó referenciáját, de így deklarálni egy referenciát nem lehet.
+                    Egy egész referenciája.
                 </para>           
             </listitem>
             <listitem>
@@ -827,7 +855,7 @@ Tagadjuk az egyik végességet kifejező formulánkat!
             </listitem>
             <listitem>
                 <programlisting><![CDATA[int (&tr)[5] = c;]]></programlisting>           <para>
-                    Még mindíg nem lehet így változót deklarálni C-ben.
+                    Egészek tömgjének referenciája.
                 </para>
             </listitem>
             <listitem>
@@ -862,16 +890,19 @@ Tagadjuk az egyik végességet kifejező formulánkat!
             </listitem>            
         </itemizedlist>       
 
-
-        <para>
-            Megoldás videó: 
-        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/deklaracio.png" scale="65"/>
+            </imageobject>
+        </mediaobject>
+        
         <para>
             Megoldás forrása:  
+            <link xlink:href="chomsky/deklar.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky/deklar.cpp</filename>
+            </link>
         </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
+        
     </section>                     
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

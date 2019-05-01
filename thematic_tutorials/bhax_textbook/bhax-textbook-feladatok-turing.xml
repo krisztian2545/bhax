@@ -240,6 +240,9 @@ false]]></screen>
             </link>
         </para>
         <para>
+            A feladat megoldásában tutorált: Tóth Balázs.
+        </para>
+        <para>
             Ez a feladat sokkal egyszerűbb, mint az ember gondolná, legalábbis ha használhatunk <function>if</function>-eket. Csak annyit kell csinálni, hogy ciklusonként növeljük a labda pozícióját és ha elérjük az ablak kereteit, megfordítjuk a labda irányát. Ezután már csak meg kell jeleníteni a labdát. 
         </para>
         <programlisting language="c"><![CDATA[#include <stdio.h>
