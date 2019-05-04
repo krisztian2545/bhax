@@ -20,7 +20,7 @@
             </link>
         </para>
         <para>
-            Míg a 10-es számrendszerben 10 számjegyünk van, az unárisban csak egy, az 1. Éppen ezért az átalakítás nagyon egyszerű lesz, hiszen csak annyi 1-est kell kiíratni, amennyi a megadott szám.
+            Míg a 10-es számrendszerben 10 számjegyünk van, az unárisban csak egy, az 1. Éppen ezért az átalakítás nagyon egyszerű lesz, hiszen csak annyi 1-est kell kiíratni, amennyi a megadott szám. Ehhez az átláthatóság kedvéért írunk egy függvényt, átadjuk neki a bekért számot és egy for ciklussal annyiszor iratunk ki egy 1-est, amennyi az bekért változó értéke.
         </para>
         <programlisting><![CDATA[#include <iostream>
 #include <limits>

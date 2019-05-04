@@ -67,7 +67,8 @@
         <para>
 
         </para>           
-    </section>        
+    </section>    
+
     <section>
         <title>Java életjáték</title>
         <para>
@@ -78,12 +79,159 @@
             Megoldás videó: 
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása:
+            <link xlink:href="conway/eletjatek/java/Sejtautomata.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/eletjatek/java/Sejtautomata.java</filename>
+            </link>
         </para>
         <para>
             A feladat megoldásában tutorált: Tóth Balázs.
-        </para>            
-    </section>        
+        </para>
+        <para>
+            A kód elején definiáljuk a <function>Sejtautomata</function> osztályt a <function>java.awt.Frame</function> gyermekeként hogy használni tudjuk az ablakkezelő parancsokat. Mivel ez a verzió főleg a megjelenítésben és az input kezelésében tér el a c++-ostól, nézzük hát meg ezeket.
+        </para>
+        <para>
+            A konstruktornak átadjuk az ablak méretét. Ezután jönnek a Listenerek, amelyek biztosítják az ablak interaktivitását. Az <function>addKeyListener()</function> függvényben a <function>getKeyCode()</function> adja vissza a leütött billentyű értékét:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para><function>N</function> billentyűzet esetén nagyít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>K</function> billentyűzet esetén kicsinyít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>g</function> billentyűzet esetén gyorsít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>N</function> billentyűzet esetén lassít.</para>                        
+            </listitem>
+        </itemizedlist>
+        <programlisting><![CDATA[public class Sejtautomata extends java.awt.Frame implements Runnable {
+    public static final boolean ÉLŐ = true;
+    public static final boolean HALOTT = false;
+    protected boolean [][][] rácsok = new boolean [2][][];
+    protected boolean [][] rács;
+    protected int rácsIndex = 0;
+    protected int cellaSzélesség = 20;
+    protected int cellaMagasság = 20;
+    protected int szélesség = 20;
+    protected int magasság = 10;
+    protected int várakozás = 1000;
+    private java.awt.Robot robot;
+    private boolean pillanatfelvétel = false;
+    private static int pillanatfelvételSzámláló = 0;
+
+    public Sejtautomata(int szélesség, int magasság) {
+        this.szélesség = szélesség;
+        this.magasság = magasság;
+        rácsok[0] = new boolean[magasság][szélesség];
+        rácsok[1] = new boolean[magasság][szélesség];
+        rácsIndex = 0;
+        rács = rácsok[rácsIndex];
+        for(int i=0; i<rács.length; ++i)
+            for(int j=0; j<rács[0].length; ++j)
+                rács[i][j] = HALOTT;
+        siklóKilövő(rács, 5, 60);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                setVisible(false);
+                System.exit(0);
+            }
+        });
+addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                if(e.getKeyCode() == java.awt.event.KeyEvent.VK_K) {
+                    cellaSzélesség /= 2;
+                    cellaMagasság /= 2;
+                    setSize(Sejtautomata.this.szélesség*cellaSzélesség,
+                            Sejtautomata.this.magasság*cellaMagasság);
+                    validate();
+                } else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_N) {
+                    cellaSzélesség *= 2;
+                    cellaMagasság *= 2;
+                    setSize(Sejtautomata.this.szélesség*cellaSzélesség,
+                            Sejtautomata.this.magasság*cellaMagasság);
+                    validate();
+                } else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_S)
+                    pillanatfelvétel = !pillanatfelvétel;
+                else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_G)
+                    várakozás /= 2;
+                else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_L)
+                    várakozás *= 2;
+                repaint();
+            }
+        });]]>
+        </programlisting>
+        <para>
+            Az egérgomb lenyomásával életre kelthetünk vagy éppen megölhetjük a sejteket. A <function>robot</function> objektumot itt még csak létrehozzuk és majd a <function>paint()</function> függvényben használjuk pillanatfelvétel készítésére.
+        </para>
+        <programlisting><![CDATA[        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent m) {
+                int x = m.getX()/cellaSzélesség;
+                int y = m.getY()/cellaMagasság;
+                rácsok[rácsIndex][y][x] = !rácsok[rácsIndex][y][x];
+                repaint();
+            }
+        });
+
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent m) {
+                int x = m.getX()/cellaSzélesség;
+                int y = m.getY()/cellaMagasság;
+                rácsok[rácsIndex][y][x] = ÉLŐ;
+                repaint();
+            }
+        });
+ cellaSzélesség = 10;
+        cellaMagasság = 10;
+        try {
+            robot = new java.awt.Robot(
+                    java.awt.GraphicsEnvironment.
+                    getLocalGraphicsEnvironment().
+                    getDefaultScreenDevice());
+        } catch(java.awt.AWTException e) {
+            e.printStackTrace();
+        }
+
+        setTitle("Sejtautomata");
+        setResizable(false);
+        setSize(szélesség*cellaSzélesség,
+                magasság*cellaMagasság);
+        setVisible(true);
+        new Thread(this).start();
+ }
+
+
+public void paint(java.awt.Graphics g) {
+        boolean [][] rács = rácsok[rácsIndex];
+        for(int i=0; i<rács.length; ++i) {
+            for(int j=0; j<rács[0].length; ++j) {
+                if(rács[i][j] == ÉLŐ)
+                    g.setColor(java.awt.Color.BLACK);
+                else
+                    g.setColor(java.awt.Color.WHITE);
+                g.fillRect(j*cellaSzélesség, i*cellaMagasság,
+                        cellaSzélesség, cellaMagasság);
+                g.setColor(java.awt.Color.LIGHT_GRAY);
+                g.drawRect(j*cellaSzélesség, i*cellaMagasság,
+                        cellaSzélesség, cellaMagasság);
+            }
+        }
+
+        if(pillanatfelvétel) {
+            pillanatfelvétel = false;
+            pillanatfelvétel(robot.createScreenCapture
+                    (new java.awt.Rectangle
+                    (getLocation().x, getLocation().y,
+                    szélesség*cellaSzélesség,
+                    magasság*cellaMagasság)));
+        }
+    }]]>
+        </programlisting>
+
+    </section> 
+
     <section>
         <title>Qt C++ életjáték</title>
         <para>

@@ -528,20 +528,18 @@ main (int argc, char *argv[])
         </para>
             
         <para>
-            Ha a diff paranccsal megvizsgáljuk a 2 kódot, gyoker értékének átadása referenciahivatkozás nékül történik.
+            A gyoker értékének átadása a program minden részén mostmár referenciahivatkozás nékül történik.
         </para>
         <programlisting><![CDATA[128c135
-<                 fa = &gyoker;
+<                 //fa = &gyoker; e helyett
 ---
->                 fa = gyoker;
+>                 fa = gyoker; // lett ez
 ]]>
         </programlisting>
         <para>
-            Ez azért van, mert mostmár a gyoker is egy mutató és így egyenesen a memóriacímet adjuk át a fa mutatónak. Emiatt a fa konstruktora a következő verzióra fejlődött:
+            Ez azért van, mert mostmár a gyoker egy mutató és így egyenesen a memóriacímet adjuk át a fa változónak, ami szintén egy mutató. Ahhoz hogy ez működjön a gyoker deklarációját is módosítanunk kell a következő módon:
         </para>
-        <programlisting><![CDATA[LZWBinFa ():fa (gyoker = new Csomopont('/'))
-    {
-    }]]>
+        <programlisting><![CDATA[Csomopont *gyoker = new Csomopont();]]>
         </programlisting>
 
     </section>                     

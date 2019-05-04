@@ -556,7 +556,7 @@ main (int argc, char *argv[])
 
     while (beFile.read ((char *) &b, sizeof (unsigned char)))
     {
-        std::cout << b << ',';
+        //std::cout << b << ',';
 
         if (b == '>')
         {			// > karakter
