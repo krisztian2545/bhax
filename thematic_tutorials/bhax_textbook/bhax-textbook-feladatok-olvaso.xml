@@ -20,7 +20,7 @@
         * a zárójelben levő típusnevek a C nyelvből vannak.
     </para>
     <para>
-        Az utasításoknak 2 nagy csoportja van: deklarációs és végrehajtható. A deklarációs utasítások a fordítóprogramnak szólnak. Ezek az utasítások nem fordulnak, de befolyásolják a tárgykódot. A tárgykód a végrehajtható utasításokból (pl.: értékadó utasítás, üres u., ugró u., elágaztató u., ciklusszervező u., hívó u., vezérlésátadó u., i/o és egyéb utasítások) generálódik. 
+        Az utasításoknak 2 nagy csoportja van: deklarációs és végrehajtható. A deklarációs utasítások a fordítóprogramnak szólnak. Ezek az utasítások nem fordulnak, de befolyásolják a tárgykódot. A tárgykód a végrehajtható utasításokból (pl.: értékadó utasítás, üres u. (continue), ugró u. (GOTO), elágaztató u., ciklusszervező u., hívó u., vezérlésátadó u., i/o és egyéb utasítások) generálódik. 
     </para>
 </section>
 
@@ -77,7 +77,12 @@
         </listitem>
         <listitem>
             <para>
-                Ciklusszervező utasítások: lehetővé teszik valamennyi utasítás többszöri megismétlését. Előre meghatározott ismétlésszám esetén <function>for</function> ciklust, egyébként pedig while ciklust ajánlott használni. Az utóbbinál válszthatunk hogy az utasítások végrehajtása előtt vagy után akarjuk kiértékelni az iteráció folytatását meghatározó feltételt.
+                Ciklusszervező utasítások: lehetővé teszik valamennyi utasítás többszöri megismétlését. Előre meghatározott ismétlésszám esetén <function>for</function> ciklust, egyébként pedig while ciklust ajánlott használni. Az utóbbinál válszthatunk hogy az utasítások végrehajtása előtt vagy után akarjuk kiértékelni az iteráció folytatását meghatározó feltételt. Ez akkor hasznos, ha az utasításokat legalább egyszer le akarjuk futtatni.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                Vezérlő utasítások: a <function>break</function> utasítással azonnal kilépünk abból a ciklusból vagy elágaztatásból, amelyből ezt meghívtuk. Leggyakrabban a <function>switch</function> elágaztatásnál használjuk, hogy elkerüljük az egyes ágak egymás utáni végrehajtását. A <function>return</function> utasítás megszakítja a függvény futását és a neki átadott kifejezés értékét függvényértékként visszaadja.
             </para>
         </listitem>
     </itemizedlist>
@@ -86,7 +91,100 @@
 
 <section>
     <title>BME: Szoftverfejlesztés C++ nyelven / Benedek Zoltán, Levendovszky Tihamér</title>
-    <para></para>
+    <para>
+        C vs C++: 
+    </para>
+    <para>
+        Függvényparaméterek és viiszatérési értékeik:  A következő C kódban a az üres paraméterlista azt jelenti, hogy a függvény akármennyi paraméterrel hívható.
+    </para>
+    <programlisting><![CDATA[void f () 
+        {
+        }]]>
+    </programlisting>
+    <para>
+        Ezzel ellentétben az üres paraméterlistát a C++-ban a <function>void</function> kulcsszó jelenti, így viszont már csak paraméter nélkül hívható a függvény. Ha tetszőleges számú paramétert akarunk, akkor a <function>void</function> helyett 3 pontot kell írni.
+    </para>
+    <programlisting><![CDATA[void f(void)
+        {
+        }]]>
+    </programlisting>
+    <para>
+        Main függvény: A C++ nyelvben a ha nem írunk <function>return</function>-t a függvénybe, akkor a fordító automatikusan sikeres lefutásjelzőt rak oda. 
+    </para>
+    <para>
+        A bool típus: A C++-ba bevezették a logikai típust, amelynek értékei a <function>true</function> és a <function>false</function>, amelyek a nyelv kulcsszavai közé tartoznak.
+    </para>
+    <programlisting><![CDATA[bool negyesjegymegajanlo = true;]]>
+    </programlisting>
+    <para>
+        Függvények túlterhelése: Míg C-ben a függvényeket csak a nevük, C++-ban a nevük és az argumentumlistájuk azonosítják. Ez lehetővé teszi, hogy elkerüljük az azonos céllal rendelkező metódusok erőltett neveit.
+    </para>
+    <programlisting><![CDATA[void drawLine(int x, int y, int x2, int y2)
+{
+    ...
+}
+
+void drawLine(int x, int y, int x2, int y2, string color)
+{
+    ...
+}
+
+void main()
+{
+    ...
+    drawLine(0, 0, 100, 50);
+    drawLine(10, 10, 500, 600, "white");
+}]]>
+    </programlisting>
+    <para>
+        Alapértelmezett függvényargumentumok bevezetése a C++-ba:
+    </para>
+    <programlisting><![CDATA[void drawLine(int x, int y, int x2, int y2, string color = "black")
+{
+    ...
+}
+
+void main()
+{
+    ...
+    drawLine(0, 0, 100, 50);
+    drawLine(10, 10, 500, 600, "white");
+}]]>
+    </programlisting>
+    <para>
+        Paraméterátadás referenciatípussal: A kóvetkező C programtól valószínülg azt várnánk, hogy az <function>a</function> értékét megnöveljük 2-vel. Ez azonban nem fog megtörténni, mert amikor átadjuk az <function>a</function> értékét, akkor az lemásolódik az <function>i</function> változóba ahol módosul is, de ez semmilyen hatással nincs az <function>a</function> értékére. 
+    </para>
+    <programlisting><![CDATA[#include<stdio.h>
+
+void f(int i)
+{
+    i = i + 2; 
+}
+
+int main(void)
+{
+    int a = 0;
+    f(a);
+    printf("%d\n", a);
+}]]>
+    </programlisting>
+    <para>
+        A várt eredmény eléréséhez létrehozunk egy mutatót, amely a referenciatípusként átadott memóriacímre fog mutatni. 
+    </para>
+    <programlisting><![CDATA[#include<stdio.h>
+
+void f(int* i)
+{
+    (*i) = (*i) + 2; 
+}
+
+int main(void)
+{
+    int a = 0;
+    f(&a);
+    printf("%d\n", a);
+}]]>
+    </programlisting>
 
 </section>
 
