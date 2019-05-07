@@ -88,11 +88,11 @@ public:
    */
     LZWBinFa ()
     {
-        //gyoker = new Csomopont();
         fa = gyoker;
     }
     LZWBinFa (LZWBinFa && regi)
     {
+
         gyoker = regi.gyoker;
         regi.gyoker = nullptr;
         fa = gyoker;
@@ -601,7 +601,7 @@ main (int argc, char *argv[])
     //std::cout << binFa.kiir (); // így rajzolt ki a fát a korábbi verziókban de, hogy izgalmasabb legyen
     // a példa, azaz ki lehessen tolni az LZWBinFa-t kimeneti csatornára:
 
-    //LZWBinFa binFa2 = new LZWBinFa(binFa);
+    LZWBinFa* binFa2 = new LZWBinFa(binFa);
 
     kiFile << binFa;        // ehhez kell a globális operator<< túlterhelése, lásd fentebb
     // (jó ez az OO, mert mi ugye nem igazán erre gondoltunk, amikor írtuk, mégis megy, hurrá)
