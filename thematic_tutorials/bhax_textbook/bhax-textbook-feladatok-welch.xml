@@ -8,7 +8,7 @@
     <section>
         <title>Első osztályom</title>
         <para>
-            Valósítsd meg C++-ban és Java-ban az módosított polártranszformációs algoritmust! A matek háttér 
+            Valósítsd meg C++-ban és Java-ban a módosított polártranszformációs algoritmust! A matek háttér 
             teljesen irreleváns, csak annyiban érdekes, hogy az algoritmus egy számítása során két normálist
             számol ki, az egyiket elspájzolod és egy további logikai taggal az osztályban jelzed, hogy van vagy
             nincs eltéve kiszámolt szám.
@@ -555,16 +555,59 @@ main (int argc, char *argv[])
         </para>
         <para>
             Megoldás forrása:  
+            <link xlink:href="welch/binfa_mozgato.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/welch/binfa_mozgato.cpp</filename>
+            </link>
         </para>
         <para>
             A mozgató szemantika azért lesz hasznos, mert amíg a másloló konstruktor a másoláskor megduplázza a lefoglalt memóriát, addig ezt a mozgatással elkerülhetjük a mutatók használatával.
         </para>
-        <programlisting><![CDATA[LZWBinFa ( LZWBinFa && regi ) {
-          std::cout << "LZWBinFa move ctor" << std::endl;
-          gyoker = regi.gyoker;
-          regi.gyoker = nullptr
-     }]]>
+        <para>
+            Létrehozzuk a <function>binFa2</function> objektumot és az <function>std::move()</function> függvénnyel "átmozgatjuk" a régi fa tartalmát az újba. Az <function>std::move()</function> valójában nem mozgat semmit, hanem az eredeti fából jobbérték referenciát készít (lásd: <link xlink:href="https://en.cppreference.com/w/cpp/utility/move">https://en.cppreference.com/w/cpp/utility/move</link>).
+        </para>
+        <programlisting><![CDATA[LZWBinFa binFa2 = std::move(binFa);]]>
         </programlisting>
+        <para>
+            Szóval ahhoz hogy ez működjön, át kell írnunk az egyenlőség operátort és meg kell írni a mozgató konstruktort. Az <function>std::swap</function> segítségével megcseréljük a két fa mutatóit, így az új fa a régire, míg a régi a semmibe fog mutatni.
+        </para>
+        <programlisting><![CDATA[LZWBinFa (LZWBinFa&& regi)
+    {
+
+        gyoker = nullptr;
+        *this = std::move(regi);
+    }
+    
+    LZWBinFa& operator=(LZWBinFa&& regi)
+    {
+        std::swap(gyoker, regi.gyoker);
+        std::swap(fa, regi.fa);
+        return *this;
+    }]]>
+        </programlisting>
+        <para>
+            A kiíratásnál láthatjuk, hogy a mozgatás után már csak a <function>binFa2</function>-ben vannka meg az adatok. 
+        </para>
+        <programlisting><![CDATA[/bhax_textbook/welch$ ./binfa_mozgato fa.txt -o ki.txt 
+Az eredeti fa mozgatás előtt:
+------1(1)
+---------0(2)
+---/(0)
+---------1(2)
+------0(1)
+---------0(2)
+
+Az eredeti fa mozgatás után:
+
+A binFa2 fa mozgatás után:
+------1(1)
+---------0(2)
+---/(0)
+---------1(2)
+------0(1)
+---------0(2)
+]]>
+        </programlisting>
+
     </section>                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                

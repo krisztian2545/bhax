@@ -259,6 +259,9 @@ public void paint(java.awt.Graphics g) {
             </link>
         </para>
         <para>
+            A feladat megoldásában tutorált: Schachinger Zsolt.
+        </para>
+        <para>
             Ez az ún. játék valójában egy sejtszimulátor, amit John Horton Conway talált ki 1970-ben. A játék lényege, hogy az előre elhelyezett selytek mivé formálódnak vagy hogy életben maradnak e egyáltalán. 
         </para>
         <para>

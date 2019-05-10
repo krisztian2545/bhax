@@ -90,16 +90,23 @@ public:
     {
         fa = gyoker;
     }
-    LZWBinFa (LZWBinFa && regi)
-    {
-
-        gyoker = regi.gyoker;
-        regi.gyoker = nullptr;
-        fa = gyoker;
-    }
     ~LZWBinFa ()
     {
         szabadit (gyoker);
+    }
+
+    LZWBinFa (LZWBinFa&& regi)
+    {
+
+        gyoker = nullptr;
+        *this = std::move(regi);
+    }
+    
+    LZWBinFa& operator=(LZWBinFa&& regi)
+    {
+        std::swap(gyoker, regi.gyoker);
+        std::swap(fa, regi.fa);
+        return *this;
     }
 
     /* Tagfüggvényként túlterheljük a << operátort, ezzel a célunk, hogy felkeltsük a
@@ -350,7 +357,7 @@ protected:          // ha esetleg egyszer majd kiterjesztjük az osztályt, mert
     // akkor ezek látszanak majd a gyerek osztályban is
 
     /* A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér: */
-    Csomopont *gyoker=new Csomopont;
+    Csomopont *gyoker = new Csomopont();
     int maxMelyseg;
     double atlag, szoras;
 
@@ -600,23 +607,32 @@ main (int argc, char *argv[])
 
     //std::cout << binFa.kiir (); // így rajzolt ki a fát a korábbi verziókban de, hogy izgalmasabb legyen
     // a példa, azaz ki lehessen tolni az LZWBinFa-t kimeneti csatornára:
+    
+    std::cout << "Az eredeti fa mozgatás előtt:" << std::endl;
+    std::cout << binFa << std::endl;
+    
+    LZWBinFa binFa2 = std::move(binFa);
+    kiFile << binFa2; 
 
-    LZWBinFa* binFa2 = new LZWBinFa(binFa);
-
-    kiFile << binFa;        // ehhez kell a globális operator<< túlterhelése, lásd fentebb
+           // ehhez kell a globális operator<< túlterhelése, lásd fentebb
     // (jó ez az OO, mert mi ugye nem igazán erre gondoltunk, amikor írtuk, mégis megy, hurrá)
 
-    kiFile << "depth = " << binFa.getMelyseg () << std::endl;
-    kiFile << "mean = " << binFa.getAtlag () << std::endl;
-    kiFile << "var = " << binFa.getSzoras () << std::endl;
+    /*kiFile << "depth = " << binFa2.getMelyseg () << std::endl;
+    kiFile << "mean = " << binFa2.getAtlag () << std::endl;
+    kiFile << "var = " << binFa2.getSzoras () << std::endl;*/
    /* kiFile << std::endl << "nullák száma = " << LZWBinFa::vann << std::endl;
     kiFile << "új nullák száma = " << LZWBinFa::nincsn << std::endl;
     kiFile << "egyesek száma száma = " << LZWBinFa::vane << std::endl;
     kiFile << "új egyesek száma = " << LZWBinFa::nincse << std::endl;*/
-    binFa.ki();
+    std::cout << "Az eredeti fa mozgatás után:" << std::endl;
+    std::cout << binFa << std::endl;
+    std::cout << "A binFa2 fa mozgatás után:" << std::endl;
+    std::cout << binFa2 << std::endl;
+
     kiFile.close ();
     beFile.close ();
 
     return 0;
 }
+
 
