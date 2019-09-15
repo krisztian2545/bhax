@@ -18,6 +18,24 @@
                     <para>Nyékyné Dr. Gaizler Judit et al. Java 2 útikalauz programozóknak 5.0 I-II.</para>
                 </listitem>
         </itemizedlist>
+        <para>
+          "A Java nyelv teljesen objektumorientált." Ezzel a kijelentéssel kezdődik a Java 2 útikalauz könyvünk 1.1-es szekciója. Ha már van egy kis tapasztalatunk a c++ nyelvvel bizonyára nem ijedünk meg az objektumorientált szemléletmódtól, viszont a Javában ez nem csupán lehetőségként tárul elénk, hanem akár a legegyszerűbb programunk (mint pl. a "Hello world") is egy osztály része kell hogy legyen.
+        </para>
+        <para>
+          A forráskód lefordításából egy ún. Java bájtkódot generál le nekünk, amelyet a JVM (Java Virtuális Gép) interpreter kezel. Ennek köszönhető a Java platformfüggetlensége, amely a c++-al szemben hatalmas segítség legfőképpen a kezdő programozóknak. Ezért viszont a Java hatalmas árat kellett hogy fizessen a sebesség terén, aminek eredményeként a játékfejlesztők szívesebben választják a sebességet a platformfüggetlenséggel kapcsolatos bajlódás helyett, aminek minden gamer nagyon örül. A JVM ezt azzal igyekszik kompenzálni, hogy közvetlenül futtatás előtt platformfüggő gépi kódra fordítja (<link xlink:href="https://en.wikipedia.org/wiki/Just-in-time_compilation">JIT</link>) a bájtkódot, ezzel búcsút mondva az interpretálásból adódó időveszteségnek.
+        </para>
+        <programlisting><![CDATA[public class HelloWorld{
+          public static void main(String[] args){
+            System.out.println("Hello world!");
+          }
+        }]]>
+        </programlisting>
+        <para>
+          Ez a nagyon egyszerű és rövid kód elárul néhány fontos követelményt a c++-al szemben. Abban megegyeznek, hogy a <function>main</function> metódus fut le először, de mivel minden osztály és objektum, így a <function>main</function> metódus hívásához szükség lenne először a <function>HelloWorld</function> osztály egy példányának létrehozására. Hogy ezt elkerüljük, a <function>main</function> metódust minden esetben a <function>static</function> kulcsszóval egészítjük ki. C++-ban elegendő volt a <function>main</function> kulcsszóval megkezdeni a programot, ami alapértelmezetten <function>int</function> visszatérési típust kapott, ezzel ellentétben a Javában minden metódusnak kötelező megadnunk a visszatérési típusát, ami esetünkben a <function>void</function> típus lesz. A következő szabály a <function>String[] args</function> argumentumok megadása, amely a program paramétereinek használatát teszi lehetővé. Ami a kódból nem adódik, de mégis fontos tudnivaló, hogy a Java forráskódunk neve jó ha megegyezik az osztályunk nevével. 
+        </para>
+        <!--
+          metódus visszatérési érték kötelező
+        -->
 
     </section>
 
@@ -46,7 +64,7 @@
 tuples('abc') #ugyanaz mint az előző]]>
         </programlisting>
         <para>
-          
+
         </para>
     </section>
 
