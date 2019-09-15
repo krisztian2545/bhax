@@ -31,10 +31,30 @@
         }]]>
         </programlisting>
         <para>
-          Ez a nagyon egyszerű és rövid kód elárul néhány fontos követelményt a c++-al szemben. Abban megegyeznek, hogy a <function>main</function> metódus fut le először, de mivel minden osztály és objektum, így a <function>main</function> metódus hívásához szükség lenne először a <function>HelloWorld</function> osztály egy példányának létrehozására. Hogy ezt elkerüljük, a <function>main</function> metódust minden esetben a <function>static</function> kulcsszóval egészítjük ki. C++-ban elegendő volt a <function>main</function> kulcsszóval megkezdeni a programot, ami alapértelmezetten <function>int</function> visszatérési típust kapott, ezzel ellentétben a Javában minden metódusnak kötelező megadnunk a visszatérési típusát, ami esetünkben a <function>void</function> típus lesz. A következő szabály a <function>String[] args</function> argumentumok megadása, amely a program paramétereinek használatát teszi lehetővé. Ami a kódból nem adódik, de mégis fontos tudnivaló, hogy a Java forráskódunk neve jó ha megegyezik az osztályunk nevével. 
+          Ez a nagyon egyszerű és rövid kód elárul néhány fontos követelményt a c++-al szemben. Abban megegyeznek, hogy a <function>main</function> metódus fut le először, de mivel minden osztály és objektum, így a <function>main</function> metódus hívásához szükség lenne először a <function>HelloWorld</function> osztály egy példányának létrehozására. Hogy ezt elkerüljük, a <function>main</function> metódust minden esetben a <function>static</function> kulcsszóval egészítjük ki. C++-ban elegendő volt a <function>main</function> kulcsszóval megkezdeni a programot, ami alapértelmezetten <function>int</function> visszatérési típust kapott, ezzel ellentétben a Javában minden metódusnak kötelező megadnunk a visszatérési típusát, ami esetünkben a <function>void</function> típus lesz. A következő szabály a <function>String[] args</function> argumentumok megadása, amely a program paramétereinek használatát teszi lehetővé. Ami a kódból nem adódik, de mégis fontos tudnivaló, hogy a Java forráskódunk neve jó ha megegyezik az osztályunk nevével.
+        </para>
+        <para>
+          A metódusnév túlterhelésének a metódusnév többszörös használatát nevezzük, amelynek segítségével egy metódusnév eltérő számú és/vagy típusú paraméterekkel is meghívható. Erre Javában és c++-ban egyaránt van lehetőség. Példák:
+        </para>
+        <programlisting><![CDATA[public class Vet{
+      void Cure(Dog d){...}
+      void Cure(Cat c){...}
+      void Cure(Cat c, String symptom){...}
+      ...
+}
+...
+myDog = new Dog(); myCat = new Cat();
+myVet = new Vet();
+...
+myVet.Cure(myDog); myVet.Cure(myCat);
+myVet.Cure(myCat, "coughing");
+...]]>
+        </programlisting>
+        <para>
+          
         </para>
         <!--
-          metódus visszatérési érték kötelező
+          c++-ban nem túlterhelhető a ?: :: . .* sizeof typeid
         -->
 
     </section>
