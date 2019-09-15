@@ -20,7 +20,7 @@
         * a zárójelben levő típusnevek a C nyelvből vannak.
     </para>
     <para>
-        Az utasításoknak 2 nagy csoportja van: deklarációs és végrehajtható. A deklarációs utasítások a fordítóprogramnak szólnak. Ezek az utasítások nem fordulnak, de befolyásolják a tárgykódot. A tárgykód a végrehajtható utasításokból (pl.: értékadó utasítás, üres u. (continue), ugró u. (GOTO), elágaztató u., ciklusszervező u., hívó u., vezérlésátadó u., i/o és egyéb utasítások) generálódik. 
+        Az utasításoknak 2 nagy csoportja van: deklarációs és végrehajtható. A deklarációs utasítások a fordítóprogramnak szólnak. Ezek az utasítások nem fordulnak, de befolyásolják a tárgykódot. A tárgykód a végrehajtható utasításokból (pl.: értékadó utasítás, üres u. (continue), ugró u. (GOTO), elágaztató u., ciklusszervező u., hívó u., vezérlésátadó u., i/o és egyéb utasítások) generálódik.
     </para>
 </section>
 
@@ -50,7 +50,7 @@
         </listitem>
     </itemizedlist>
     <para>
-        Ezt kiegészíthetjük a <function>short</function>, <function>long</function> és <function>unsigned</function> minősítő szimbólumokkal. A <function>short</function> és a <function>long</function> a méretét szabályozza.  Az <function>unsigned</function>(előjel nélküli) számokra a modulo 2n aritmetika szabályai vonatkoznak, ahol n az int típust ábrázolóbit-ek száma; az unsigned számok mindig pozitívak. 
+        Ezt kiegészíthetjük a <function>short</function>, <function>long</function> és <function>unsigned</function> minősítő szimbólumokkal. A <function>short</function> és a <function>long</function> a méretét szabályozza.  Az <function>unsigned</function>(előjel nélküli) számokra a modulo 2n aritmetika szabályai vonatkoznak, ahol n az int típust ábrázolóbit-ek száma; az unsigned számok mindig pozitívak.
     </para>
     <programlisting><![CDATA[   short int x;
     long int y;
@@ -72,7 +72,7 @@
         </listitem>
         <listitem>
             <para>
-                Elágaztató utasítás: az <function>if</function> és <function>else</function> utasításokkal eldönthetjük hogy a megadott kifejezés logikai értékétől függően mely utasítások hajtódjanak végre. Többirányú elágaztatás a <function>switch</function> utasítással érhető el, ahol az elágazás már nem logikai érték alapján történik. 
+                Elágaztató utasítás: az <function>if</function> és <function>else</function> utasításokkal eldönthetjük hogy a megadott kifejezés logikai értékétől függően mely utasítások hajtódjanak végre. Többirányú elágaztatás a <function>switch</function> utasítással érhető el, ahol az elágazás már nem logikai érték alapján történik.
             </para>
         </listitem>
         <listitem>
@@ -92,12 +92,12 @@
 <section>
     <title>BME: Szoftverfejlesztés C++ nyelven / Benedek Zoltán, Levendovszky Tihamér</title>
     <para>
-        C vs C++: 
+        C vs C++:
     </para>
     <para>
         Függvényparaméterek és viiszatérési értékeik:  A következő C kódban a az üres paraméterlista azt jelenti, hogy a függvény akármennyi paraméterrel hívható.
     </para>
-    <programlisting><![CDATA[void f () 
+    <programlisting><![CDATA[void f ()
         {
         }]]>
     </programlisting>
@@ -109,7 +109,7 @@
         }]]>
     </programlisting>
     <para>
-        Main függvény: A C++ nyelvben a ha nem írunk <function>return</function>-t a függvénybe, akkor a fordító automatikusan sikeres lefutásjelzőt rak oda. 
+        Main függvény: A C++ nyelvben a ha nem írunk <function>return</function>-t a függvénybe, akkor a fordító automatikusan sikeres lefutásjelzőt rak oda.
     </para>
     <para>
         A bool típus: A C++-ba bevezették a logikai típust, amelynek értékei a <function>true</function> és a <function>false</function>, amelyek a nyelv kulcsszavai közé tartoznak.
@@ -152,13 +152,13 @@ void main()
 }]]>
     </programlisting>
     <para>
-        Paraméterátadás referenciatípussal: A kóvetkező C programtól valószínülg azt várnánk, hogy az <function>a</function> értékét megnöveljük 2-vel. Ez azonban nem fog megtörténni, mert amikor átadjuk az <function>a</function> értékét, akkor az lemásolódik az <function>i</function> változóba ahol módosul is, de ez semmilyen hatással nincs az <function>a</function> értékére. 
+        Paraméterátadás referenciatípussal: A kóvetkező C programtól valószínülg azt várnánk, hogy az <function>a</function> értékét megnöveljük 2-vel. Ez azonban nem fog megtörténni, mert amikor átadjuk az <function>a</function> értékét, akkor az lemásolódik az <function>i</function> változóba ahol módosul is, de ez semmilyen hatással nincs az <function>a</function> értékére.
     </para>
     <programlisting><![CDATA[#include<stdio.h>
 
 void f(int i)
 {
-    i = i + 2; 
+    i = i + 2;
 }
 
 int main(void)
@@ -169,13 +169,13 @@ int main(void)
 }]]>
     </programlisting>
     <para>
-        A várt eredmény eléréséhez létrehozunk egy mutatót, amely a referenciatípusként átadott memóriacímre fog mutatni. 
+        A várt eredmény eléréséhez létrehozunk egy mutatót, amely a referenciatípusként átadott memóriacímre fog mutatni.
     </para>
     <programlisting><![CDATA[#include<stdio.h>
 
 void f(int* i)
 {
-    (*i) = (*i) + 2; 
+    (*i) = (*i) + 2;
 }
 
 int main(void)
