@@ -1,0 +1,599 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Turing!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title>Végtelen ciklus</title>
+        <para>
+            Írj olyan C végtelen ciklusokat, amelyek 0 illetve 100 százalékban dolgoztatnak egy magot és egy olyat, amely  
+            100 százalékban minden magot!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="turing/inf_sleep.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/inf_sleep.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="turing/infinite_single.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/infinite_single.c</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="turing/infinite_multi.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/infinite_multi.c</filename>
+            </link>
+        </para>
+        <para>
+            A végtelen ciklusok nagyon hasznosak tudnak lenni például ha egy menüt akarunk írni ahol semmi mást nem csinálunk, csak várunk valamilyen bemenetre és az alapján végrehajtunk valamit, majd újra várakozunk. C-ben 2 féle módon írhatunk végtelen ciklust:
+        </para>  
+        <itemizedlist>
+                <listitem>
+                    <para>for ciklussal</para>     
+                    <programlisting language="c"><![CDATA[
+            for(;;){
+            //infinite loop
+            }]]>
+                    </programlisting>
+                </listitem>
+                <listitem>
+                    <para>while ciklussal</para>    
+                    <programlisting language="c"><![CDATA[
+            while(1){
+            //infinite loop
+            }]]>
+                    </programlisting>
+                </listitem>
+        </itemizedlist>   
+        
+        <para>
+            Először nézzük meg a processzort 100%-on futtató programot. A könnyebb olvashatóság érdekében a while ciklust használtam és az "1"-es értékkel (amit a fordító logikai igaz értékként értelmez ebben az esetben) a ciklus soha nem ér véget. Mivel a ciklusba nem írtunk semmit, a program a while ciklus feltételének vizsgálásával tölti minden idejét, ami a processzor 100% leterheltségét eredményezi.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf.jpg" scale="65"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Ahhoz hogy az összes magot 100%-on pörgessük, csak 1 sorral kell kibővítenünk a programot, de ehhez szükségünk lesz az <function>omp.h</function> könyvtár implementálására és fordításkor a "-fopenmp" kapcsolóra.
+        </para>
+        <programlisting language="c"><![CDATA[#include <omp.h>
+
+int main(){
+
+	#pragma omp parallel
+	while(1){}
+
+	return 0;
+}]]>
+        </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf2.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Ha 0%-os terhelést akarunk, akkor csökkenteni kell a feltételvizsgálat gyakoriságát. Vagyis a <function>sleep(seconds)</function> paranccsal várakozásra utasítjuk a processzort.
+        </para>
+        <programlisting language="c"><![CDATA[#include <unistd.h>
+
+int main(){
+
+	while(1) sleep(1);
+
+	return 0;
+}]]>
+        </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/inf3.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        
+    </section>        
+        
+    <section>
+        <title>Lefagyott, nem fagyott, akkor most mi van?</title>
+        <para>
+            Mutasd meg, hogy nem lehet olyan programot írni, amely bármely más programról eldönti, hogy le fog-e fagyni vagy sem!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:  tegyük fel, hogy akkora haxorok vagyunk, hogy meg tudjuk írni a <function>Lefagy</function>
+            függvényt, amely tetszőleges programról el tudja dönteni, hogy van-e benne vlgtelen ciklus:              
+        </para>
+        <programlisting language="c"><![CDATA[Program T100
+{
+
+	boolean Lefagy(Program P)
+	{
+		 if(P-ben van végtelen ciklus)
+			return true;
+		 else
+			return false; 
+	}
+
+	main(Input Q)
+	{
+		Lefagy(Q)
+	}
+}]]></programlisting>            
+        <para>
+            A program futtatása, például akár az előző <filename>v.c</filename> ilyen pszeudókódjára:
+            <screen><![CDATA[T100(t.c.pseudo)
+true]]></screen>            
+            akár önmagára
+            <screen><![CDATA[T100(T100)
+false]]></screen>  
+            ezt a kimenetet adja.          
+        </para>
+        <para>
+            A T100-as programot felhasználva készítsük most el az alábbi T1000-set, amelyben a
+            Lefagy-ra épőlő Lefagy2 már nem tartalmaz feltételezett, csak csak konkrét kódot:
+        </para>
+        <programlisting language="c"><![CDATA[Program T1000
+{
+
+	boolean Lefagy(Program P)
+	{
+		 if(P-ben van végtelen ciklus)
+			return true;
+		 else
+			return false; 
+	}
+
+	boolean Lefagy2(Program P)
+	{
+		 if(Lefagy(P))
+			return true;
+		 else
+			for(;;); 
+	}
+
+	main(Input Q)
+	{
+		Lefagy2(Q)
+	}
+
+}]]></programlisting>            
+        <programlisting><![CDATA[]]></programlisting>            
+        <para>
+            Mit for kiírni erre a <computeroutput>T1000(T1000)</computeroutput> futtatásra?
+                                
+            <itemizedlist>
+                <listitem>
+                    <para>Ha T1000 lefagyó, akkor nem fog lefagyni, kiírja, hogy true</para>                        
+                </listitem>
+                <listitem>
+                    <para>Ha T1000 nem fagyó, akkor pedig le fog fagyni...</para>                        
+                </listitem>
+            </itemizedlist>
+            akkor most hogy fog működni? Sehogy, mert ilyen <function>Lefagy</function>
+            függvényt, azaz a T100 program nem is létezik.                
+        </para>
+        <para>
+            Nézzünk erre egy másik példát: 
+            Tegyük fel, hogy Lajos bárkiről megtudja mondani, hogy csődbe fog-e menni vagy sem (Lefagy fv.). A fia, Szabolcs ugyanazt csinálja, de ő már egy kicsit másképp csinálja (Lefagy2 fv.). 
+            Egyszer, amikor Szabolcs a saját pénzügyeit vizsgálta, válaszát apja válaszára építette. 
+            Ekkor 2 lehetőség merül fel. Egy, hogy ha Lajos azt mondja, hogy Szabolcs csődbe megy, akkor annak ellenére, hogy igazat ad apjának, nem megy csődbe, ha nemmel válszol, akkor viszont csődbe megy.
+            Amint láthatjuk, ellentmondásba ütköztünk, vagyis ez a módszer így nem fog működni.
+        </para>
+    </section>        
+                
+    <section>
+        <title>Változók értékének felcserélése</title>
+        <para>
+            Írj olyan C programot, amely felcseréli két változó értékét, bármiféle logikai utasítás vagy kifejezés
+            nasználata nélkül!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/08/28/10_begin_goto_20_avagy_elindulunk">https://bhaxor.blog.hu/2018/08/28/10_begin_goto_20_avagy_elindulunk</link>
+        </para>
+        <para>
+            Megoldás forrása:  
+            <link xlink:href="turing/valtcsere.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/valtcsere.c</filename>
+            </link>
+        </para>
+        <para>
+            Változók értékének felcserélésére leggyakrabban a rendezési algoritmusoknál van szükség. Ilyenkor a legegyszerűbb módszer jut az eszembe, miszerint veszek egy harmadik, úgymond segédváltozót, amiben ideiglenesen eltárolom az egyik változó értékét, hogy azt majd a másik változó kaphassa meg.
+        </para>
+        <programlisting language="c"><![CDATA[int c = a;
+	  a = b;
+	  b = c;]]>
+        </programlisting>
+        <para>
+            Ha segédváltozó nélkül szeretnénk megoldani a problémát, akkor kénytelenek vagyunk valamilyen műveleteket alkalmazni. Nem kell sokáig keresgélni, mivel az összeadás és kivonás tökéletesen megfelel erre a feladatra. Ehhez először összeadjuk őket az <function>a</function> változóba, majd abból kivonva a <function>b</function>-t megkapjuk először a  <function>b</function>, majd az <function>a</function> értékét, ahogy azt a programkód szemlélteti:
+        </para>
+        <programlisting language="c"><![CDATA[  a = a + b;
+	b = a - b;
+	a = a - b;]]>
+        </programlisting>
+        
+    </section>                     
+
+    <section>
+        <title>Labdapattogás</title>
+        <para>
+            Először if-ekkel, majd bármiféle logikai utasítás vagy kifejezés
+            nasználata nélkül írj egy olyan programot, ami egy labdát pattogtat a karakteres konzolon! (Hogy mit értek
+            pattogtatás alatt, alább láthatod a videókon.)
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/08/28/labdapattogas">https://bhaxor.blog.hu/2018/08/28/labdapattogas</link>
+        </para>
+        <para>
+            Megoldás forrása:  
+            <link xlink:href="turing/labdaIf.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/labdaIf.c</filename>
+            </link>
+            <link xlink:href="turing/labdaIfNelkul.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/labdaIfNelkul.c</filename>
+            </link>
+        </para>
+        <para>
+            A feladat megoldásában tutorált: Tóth Balázs.
+        </para>
+        <para>
+            Ez a feladat sokkal egyszerűbb, mint az ember gondolná, legalábbis ha használhatunk <function>if</function>-eket. Csak annyit kell csinálni, hogy ciklusonként növeljük a labda pozícióját és ha elérjük az ablak kereteit, megfordítjuk a labda irányát. Ezután már csak meg kell jeleníteni a labdát. 
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+
+#define width 80
+#define height 24
+
+void draw(int x, int y){
+
+	for(int i = 0; i < y; i++) printf("\n");
+	for(int k = 0; k < x; k++) printf(" ");
+	printf("@\n");
+
+}
+
+int main(){
+
+	int x = 1;
+	int y = 1;
+	int a = 1;
+	int b = 1;
+
+	while(1){
+
+		system("clear");
+
+		if(x >= width  || x <= 0) a *= -1;
+		if(y >= height || y <= 0) b *= -1;
+
+		draw(x, y);
+		x += a;
+		y += b;
+
+		usleep(15000);
+		
+	}
+
+	return 0;
+}]]>        
+        </programlisting>
+        <para>
+            If-ek nélkül azonban már kicsit nehezebb a dolgunk, ugyanis egy kicsit gondolkodni kell. De ekkor se kell kétségbe esni, mert ugyebár a matematika a "barátunk" és mindíg nyújt számunkra egy bonyolultnak látszó képletet, hogy azt egyszer bepötyögve örökre megszabaduljunk tőle. Most mi is ezt tesszük és még egy magyarázatot is csatolok hozzá. 
+        </para>
+        <programlisting language="c"><![CDATA[draw(abs(width-(x++%(width*2))), abs(height-(y++%(height*2))));]]>
+        </programlisting>
+        <para>
+            Tegyük fel hogy az <function>x</function> értéke 1 és a <function>width</function> értéke pedig 5. Ha az 1-et elosztjuk maradékos osztással a <function>width</function> kétszeresével, akkor 1-et kapunk, amit kivonunk a szélességből. Ennek eredményeként a labda pattogása az ablak jobb alsó sarkából indul.
+        </para>
+        <programlisting>    x = 1; width = 5;
+    |5 - ( 1 % ( 5 * 2 ) )| = 
+    |5 - ( 1 % 10 )| = 
+    |5 - 1| = 4
+        </programlisting>
+        <para>
+            Ha az <function>x</function> eléri a 6-ot, az abszolútérték miatt a végeredmény növekedni kezd, egészen amíg el nem éri a <function>width</function> kétszeresét, amikoris újra csökkenni kezd és ez így megy körbe-körbe. A <function>++</function> az <function>x</function> után a számolások után megnöveli 1-el az <function>x</function>-et. 
+        </para>
+    </section>                     
+
+    <section>
+        <title>Szóhossz és a Linus Torvalds féle BogoMIPS</title>
+        <para>
+            Írj egy programot, ami megnézi, hogy hány bites a szó a gépeden, azaz mekkora az <type>int</type> mérete.
+            Használd ugyanazt a while ciklus fejet, amit Linus Torvalds a BogoMIPS rutinjában! 
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása: 
+            <link xlink:href="turing/bogomips.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/bogomips.c</filename>
+            </link>
+        </para>
+        <para>
+            Mi is ez a BogoMips valójában? Megméri, hogy 1 másodperc alatt hányszor fut le a programunk egy ciklusa. Sokan abba a hibába esnek, hogy ez alapján hasonlítják össze a gépüket, hogy kié gyorsabb. Egyedül a linux bootolásakor érdemes odafigyelni rá, hogy a processzor és a cache rendben van-e.
+        </para>
+        <para>
+            A <function>ticks</function> változóba elmentjük a jelenlegi processzoridőt, majd a for ciklus egy bizonyos számú lefutása után a jelenlegi processzoridőből kivonjuk a <function>ticks</function> értékét, így megkapjuk hogy mennyi ideig tartott a ciklus x-szeri lefutása.
+        </para>
+        <programlisting language="c"><![CDATA[    while ((loops_per_sec <<= 1))
+    {
+        ticks = clock ();
+        delay (loops_per_sec);
+        ticks = clock () - ticks;]]>
+        ...
+    }
+        </programlisting>
+        <para>
+            Ha ez az idő kisebb mint 1 másodperc, akkor legközelebb többször futtatjuk le a for ciklust, ellenben viszont némi átalakításokkal kiírjuk a gépünk BogoMips értékét.
+        </para>
+        <programlisting>    Calibrating delay loop..ok - 690.00 BogoMIPS
+        </programlisting>
+        <para>
+            A BogoMips while ciklus fejét használva mostmár könnyen megkapjuk szóhosszt. Konkrétan itt az történik, hogy az <function>int</function> típusú változó elején levő bitet ciklusonként eltoljuk és hozzáadunk egyet a szóhosszt tároló <function>length</function> változóhoz.
+        </para>
+        <programlisting language="c"><![CDATA[	int x = 1;
+	int length = 0;
+
+	do
+		length++;
+	while((x <<= 1));]]>
+        </programlisting>
+        <para>
+            Az én gépemen a szóhossz mérete 32.
+        </para>
+        <programlisting>$ ./szohossz 
+A szóhossz mérete: 32
+        </programlisting>
+    </section>                     
+
+    <section>
+        <title>Helló, Google!</title>
+        <para>
+            Írj olyan C programot, amely egy 4 honlapból álló hálózatra kiszámolja a négy lap Page-Rank 
+            értékét!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href=""></link>
+        </para>
+        <para>
+            Megoldás forrása: 
+            <link xlink:href="turing/helloGoogle.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/helloGoogle.c</filename>
+            </link>
+        </para>
+        <para>
+            Most megvizsgáljuk a PageRank algoritmust, ami hatalmas fellendülést hozott a Google-nek. 
+        </para>
+        <para>
+            Egy oldal PageRankját az határozza meg, hogy mennyi oldal hivatkozik rá. Mivel ez így magába nem lesz elég, mert az algoritmus azt is figyelembe veszi, hogy mekkora a PageRankjuk a rá hivatkozó oldalaknak. Például ha a Facebook hivatkozik a te oldaladra, akkor az sokkal többet jelent, mintha csak valami ismeretlen oldal hivatkozna rá, még akkor is ha több van belőlük.
+        </para>
+        <para>
+            A program elején létrehozunk egy kétdimenziós tömböt, ami meghatározza, hogy melyik mire hivatkozik. Ezután egy végtelen ciklusba bizonyos számításokkal addig finomítgatjuk az oldalak PR értékét, amíg már nincs értelme tovább számolgatni.
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+#include <math.h>
+
+void
+kiir (double tomb[], int db)
+{
+int i;
+for (i=0; i<db; i++)
+printf("PageRank [%d]: %lf\n", i, tomb[i]);
+}
+
+double tavolsag(double pagerank[],double pagerank_temp[],int db)
+{
+double tav = 0.0;
+int i;
+for(i=0;i<db;i++)
+	tav += (pagerank_temp[i] - pagerank[i]) * (pagerank_temp[i] - pagerank[i]);
+return sqrt(tav);
+}
+
+int main(void)
+{
+double L[4][4] = {
+{0.0, 0.0, 1.0 / 3.0, 0.0},
+{1.0, 1.0 / 2.0, 1.0 / 3.0, 1.0},
+{0.0, 1.0 / 2.0, 0.0, 0.0},
+{0.0, 0.0, 1.0 / 3.0, 0.0}
+};
+
+double PR[4] = {0.0, 0.0, 0.0, 0.0};
+double PRv[4] = {1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0};
+
+long int i,j,h;
+i=0; j=0; h=5;
+
+for (;;)
+{
+for(i=0;i<4;i++)
+PR[i] = PRv[i];
+for (i=0;i<4;i++)
+{
+double temp=0;
+for (j=0;j<4;j++)
+temp+=L[i][j]*PR[j];
+PRv[i]=temp;
+}
+
+if ( tavolsag(PR,PRv, 4) < 0.00001)
+break;
+}
+kiir (PR,4);
+return 0;
+
+}]]>
+        </programlisting>
+    </section>
+
+    <section xml:id="Brun">
+        <title>100 éves a Brun tétel</title>
+        <para>
+            Írj R szimulációt a Brun tétel demonstrálására!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/xbYhp9G6VqQ">https://youtu.be/xbYhp9G6VqQ</link>
+        </para>
+        <para>
+            Megoldás forrása: 
+            <link xlink:href="turing/brun.r">bhax/thematic_tutorials/bhax_textbook/turing/brun.r</link>
+        </para>
+        <programlisting><![CDATA[#   Copyright (C) 2019  Dr. Norbert Bátfai, nbatfai@gmail.com
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+library(matlab)
+
+stp <- function(x){
+
+    primes = primes(x)
+    diff = primes[2:length(primes)]-primes[1:length(primes)-1]
+    idx = which(diff==2)
+    t1primes = primes[idx]
+    t2primes = primes[idx]+2
+    rt1plust2 = 1/t1primes+1/t2primes
+    return(sum(rt1plust2))
+}
+
+x=seq(13, 1000000, by=10000)
+y=sapply(x, FUN = stp)
+plot(x,y,type="b")
+]]>
+        </programlisting>
+        <para>
+            A Brun tétel szerint ha az ikerprímek reciprokát összeadjuk, akkor ez az összeg egy konkrét szám, ún. Brun-konstans. Hogy az ikerprímek száma véges vagy végtelen azt senki se tudja.
+        </para>
+        <para>
+            Az R nyelv használatához szükségünk lesz az R-base szoftverkörnyezet telepítésére, amit az Ubuntu Software programon keresztül tehetünk meg a legegyszerűbben.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Ezután a terminálba megnyitjuk az R környezetét (az <command>R</command> paranccsal) és telepítjük a <function>matlab</function> csomagot, hogy kezelni tudjuk a prímeket. (Majd a <command>library(matlab)</command> paranccsal betöltjük a csomagot)
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun2.jpg" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            A <function>primes( meggig )</function> függvénnyel lekérhetjük a prím számokat és a <function>primes[ hanyadiktól : hanyadikig ]</function> módon lekérhetjük annak tetszőleges intervallumát (Arra vigyázzunk, hogy amíg a <function>primes</function> először függvényként, másodszor viszont már azonosítóként szerepel). Az egymás mellet levő prímek egymásból való kivonásával megkapjuk azok különbségét. Ahol a különbség 2, ott ikerprímekről beszélünk és a <function>which()</function> függvénny visszaadja, hogy hanyadik hellyen találjuk őket.
+        </para>
+        <programlisting><![CDATA[
+    primes = primes(x)
+    diff = primes[2:length(primes)]-primes[1:length(primes)-1]
+    idx = which(diff==2)]]>
+        </programlisting>
+        <para>
+            Ezután 2 vektorba párhuzamosan eltároljuk ezeket az ikerprímeket és összeadjuk azok reciprokát. A <function>plot()</function> paranccsal megjelenítjük az összeget és láthatjuk, hogy ez a függvény egy konkrét számhoz divergál.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brun3.jpg" scale="35"/>
+            </imageobject>
+        </mediaobject>
+
+    </section>
+    
+    <section xml:id="bhax-textbook-feladatok-turing.MontyHall">
+        <title>A Monty Hall probléma</title>
+        <para>
+            Írj R szimulációt a Monty Hall problémára!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan">https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan</link>
+        </para>
+        <para>
+            Megoldás forrása: 
+            <link xlink:href="turing/monty.r">
+            <filename>bhax/thematic_tutorials/bhax_textbook/turing/monty.r</filename>
+            </link>
+        </para>
+        <para>
+            A probléma szemlélteséként tegyük fel, hogy az előtted levő 3 láda közül az egyikbe kincs van a másik kettő üres. A játék elején választasz egyet, de mielőtt kinyithatnád, a játékvezető kinyitja az egyik üres ládát (természetesen sose nemazt, amelyiket kivalasztottad). Ezután újra meggondolhatod, hogy a maradék 2 láda közül melyiket akarod kinyitni. Bárnmennyire is hihetetlennek tűnik, de nagyobb a valószínűsége, hogy a másikat választva megkapod a kincset, ellenben azzal, ha kitartasz az első döntésed mellett.
+        </para>
+        <programlisting><![CDATA[#   An illustration written in R for the Monty Hall Problem 
+#   Copyright (C) 2019  Dr. Norbert Bátfai, nbatfai@gmail.com
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>
+#
+#   https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan
+# 
+
+kiserletek_szama=10000000
+kiserlet = sample(1:3, kiserletek_szama, replace=T)
+jatekos = sample(1:3, kiserletek_szama, replace=T)
+musorvezeto=vector(length = kiserletek_szama)
+
+for (i in 1:kiserletek_szama) {
+
+    if(kiserlet[i]==jatekos[i]){
+    
+        mibol=setdiff(c(1,2,3), kiserlet[i])
+    
+    }else{
+    
+        mibol=setdiff(c(1,2,3), c(kiserlet[i], jatekos[i]))
+    
+    }
+
+    musorvezeto[i] = mibol[sample(1:length(mibol),1)]
+
+}
+
+nemvaltoztatesnyer= which(kiserlet==jatekos)
+valtoztat=vector(length = kiserletek_szama)
+
+for (i in 1:kiserletek_szama) {
+
+    holvalt = setdiff(c(1,2,3), c(musorvezeto[i], jatekos[i]))
+    valtoztat[i] = holvalt[sample(1:length(holvalt),1)]
+    
+}
+
+valtoztatesnyer = which(kiserlet==valtoztat)
+
+
+sprintf("Kiserletek szama: %i", kiserletek_szama)
+length(nemvaltoztatesnyer)
+length(valtoztatesnyer)
+length(nemvaltoztatesnyer)/length(valtoztatesnyer)
+length(nemvaltoztatesnyer)+length(valtoztatesnyer)
+]]>
+        </programlisting>
+    </section>
+
+</chapter>                

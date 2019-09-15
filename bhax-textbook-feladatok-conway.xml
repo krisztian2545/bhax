@@ -1,0 +1,437 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Conway!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title>Hangyaszimulációk</title>
+        <para>
+            Írj Qt C++-ban egy hangyaszimulációs programot, a forrásaidról utólag reverse engineering jelleggel
+            készíts UML osztálydiagramot is!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/10/10/myrmecologist">https://bhaxor.blog.hu/2018/10/10/myrmecologist</link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="conway/hangya/main.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/hangya/main.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/hangya/antwin.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/hangya/antwin.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/hangya/antthread.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/hangya/antthread.cpp</filename>
+            </link>
+        </para>
+
+        <para>
+            A mostani Qt projektünkkel a hangyák útvonalait fogjuk szimlálni. A hangyák igyekeznek egymás szaga alapján közlekedni, ha viszont nem éreznek maguk körül feromont, akkor az irány véletlenszerű. A hangyák számát, a feromon párolgását, a szimuláció sebességét és egyéb paramétereket parancssori argumentumként adjuk meg futtatáskor.
+        </para>
+        <programlisting>Options:
+  -h, --help                     Displays this help.
+  -v, --version                  Displays version information.
+  -w, --szelesseg &lt;szelesseg&gt;    Oszlopok (cellakban) szama.
+  -m, --magassag &lt;magassag&gt;      Sorok (cellakban) szama.
+  -n, --hangyaszam &lt;hangyaszam&gt;  Hangyak szama.
+  -t, --sebesseg &lt;sebesseg&gt;      2 lepes kozotti ido (millisec-ben).
+  -p, --parolgas &lt;parolgas&gt;      A parolgas erteke.
+  -f, --feromon &lt;feromon&gt;        A hagyott nyom erteke.
+  -s, --szomszed &lt;szomszed&gt;      A hagyott nyom erteke a szomszedokban.
+  -d, --alapertek &lt;alapertek&gt;    Indulo ertek a cellakban.
+  -a, --maxcella &lt;maxcella&gt;      Cella max erteke.
+  -i, --mincella &lt;mincella&gt;      Cella min erteke.
+  -c, --cellameret &lt;cellameret&gt;  Hany hangya fer egy cellaba.
+
+  ./myrmecologist -w 250 -m 150 -n 400 -t 10 -p 5 -f 80 -d 0 -a 255 -i 3 -s 3  -c 22
+        </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/uml.png" scale="40"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Minden egyes hangyának van pozíciója és iránya. A számításokhoz 2 rácsot használunk - egyik tartalmazza a jelenlegi állapotot, a másik pedig az újat - , így olyan, mintha mind egyszerre mozognának. 
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/hangya.png" scale="30"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+
+        </para>           
+    </section>    
+
+    <section>
+        <title>Java életjáték</title>
+        <para>
+            Írd meg Java-ban a John Horton Conway-féle életjátékot, 
+            valósítsa meg a sikló-kilövőt!
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="conway/eletjatek/java/Sejtautomata.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/eletjatek/java/Sejtautomata.java</filename>
+            </link>
+        </para>
+        <para>
+            A feladat megoldásában tutorált: Tóth Balázs.
+        </para>
+        <para>
+            A kód elején definiáljuk a <function>Sejtautomata</function> osztályt a <function>java.awt.Frame</function> gyermekeként hogy használni tudjuk az ablakkezelő parancsokat. Mivel ez a verzió főleg a megjelenítésben és az input kezelésében tér el a c++-ostól, nézzük hát meg ezeket.
+        </para>
+        <para>
+            A konstruktornak átadjuk az ablak méretét. Ezután jönnek a Listenerek, amelyek biztosítják az ablak interaktivitását. Az <function>addKeyListener()</function> függvényben a <function>getKeyCode()</function> adja vissza a leütött billentyű értékét:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para><function>N</function> billentyűzet esetén nagyít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>K</function> billentyűzet esetén kicsinyít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>g</function> billentyűzet esetén gyorsít,</para>                        
+            </listitem>
+            <listitem>
+                <para><function>N</function> billentyűzet esetén lassít.</para>                        
+            </listitem>
+        </itemizedlist>
+        <programlisting><![CDATA[public class Sejtautomata extends java.awt.Frame implements Runnable {
+    public static final boolean ÉLŐ = true;
+    public static final boolean HALOTT = false;
+    protected boolean [][][] rácsok = new boolean [2][][];
+    protected boolean [][] rács;
+    protected int rácsIndex = 0;
+    protected int cellaSzélesség = 20;
+    protected int cellaMagasság = 20;
+    protected int szélesség = 20;
+    protected int magasság = 10;
+    protected int várakozás = 1000;
+    private java.awt.Robot robot;
+    private boolean pillanatfelvétel = false;
+    private static int pillanatfelvételSzámláló = 0;
+
+    public Sejtautomata(int szélesség, int magasság) {
+        this.szélesség = szélesség;
+        this.magasság = magasság;
+        rácsok[0] = new boolean[magasság][szélesség];
+        rácsok[1] = new boolean[magasság][szélesség];
+        rácsIndex = 0;
+        rács = rácsok[rácsIndex];
+        for(int i=0; i<rács.length; ++i)
+            for(int j=0; j<rács[0].length; ++j)
+                rács[i][j] = HALOTT;
+        siklóKilövő(rács, 5, 60);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                setVisible(false);
+                System.exit(0);
+            }
+        });
+addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                if(e.getKeyCode() == java.awt.event.KeyEvent.VK_K) {
+                    cellaSzélesség /= 2;
+                    cellaMagasság /= 2;
+                    setSize(Sejtautomata.this.szélesség*cellaSzélesség,
+                            Sejtautomata.this.magasság*cellaMagasság);
+                    validate();
+                } else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_N) {
+                    cellaSzélesség *= 2;
+                    cellaMagasság *= 2;
+                    setSize(Sejtautomata.this.szélesség*cellaSzélesség,
+                            Sejtautomata.this.magasság*cellaMagasság);
+                    validate();
+                } else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_S)
+                    pillanatfelvétel = !pillanatfelvétel;
+                else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_G)
+                    várakozás /= 2;
+                else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_L)
+                    várakozás *= 2;
+                repaint();
+            }
+        });]]>
+        </programlisting>
+        <para>
+            Az egérgomb lenyomásával életre kelthetünk vagy éppen megölhetjük a sejteket. A <function>robot</function> objektumot itt még csak létrehozzuk és majd a <function>paint()</function> függvényben használjuk pillanatfelvétel készítésére.
+        </para>
+        <programlisting><![CDATA[        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent m) {
+                int x = m.getX()/cellaSzélesség;
+                int y = m.getY()/cellaMagasság;
+                rácsok[rácsIndex][y][x] = !rácsok[rácsIndex][y][x];
+                repaint();
+            }
+        });
+
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent m) {
+                int x = m.getX()/cellaSzélesség;
+                int y = m.getY()/cellaMagasság;
+                rácsok[rácsIndex][y][x] = ÉLŐ;
+                repaint();
+            }
+        });
+ cellaSzélesség = 10;
+        cellaMagasság = 10;
+        try {
+            robot = new java.awt.Robot(
+                    java.awt.GraphicsEnvironment.
+                    getLocalGraphicsEnvironment().
+                    getDefaultScreenDevice());
+        } catch(java.awt.AWTException e) {
+            e.printStackTrace();
+        }
+
+        setTitle("Sejtautomata");
+        setResizable(false);
+        setSize(szélesség*cellaSzélesség,
+                magasság*cellaMagasság);
+        setVisible(true);
+        new Thread(this).start();
+ }
+
+
+public void paint(java.awt.Graphics g) {
+        boolean [][] rács = rácsok[rácsIndex];
+        for(int i=0; i<rács.length; ++i) {
+            for(int j=0; j<rács[0].length; ++j) {
+                if(rács[i][j] == ÉLŐ)
+                    g.setColor(java.awt.Color.BLACK);
+                else
+                    g.setColor(java.awt.Color.WHITE);
+                g.fillRect(j*cellaSzélesség, i*cellaMagasság,
+                        cellaSzélesség, cellaMagasság);
+                g.setColor(java.awt.Color.LIGHT_GRAY);
+                g.drawRect(j*cellaSzélesség, i*cellaMagasság,
+                        cellaSzélesség, cellaMagasság);
+            }
+        }
+
+        if(pillanatfelvétel) {
+            pillanatfelvétel = false;
+            pillanatfelvétel(robot.createScreenCapture
+                    (new java.awt.Rectangle
+                    (getLocation().x, getLocation().y,
+                    szélesség*cellaSzélesség,
+                    magasság*cellaMagasság)));
+        }
+    }]]>
+        </programlisting>
+
+    </section> 
+
+    <section>
+        <title>Qt C++ életjáték</title>
+        <para>
+            Most Qt C++-ban!
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>
+            Megoldás forrása:              
+        </para>
+        <para>
+            <link xlink:href="conway/eletjatek/main.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/eletjatek/main.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/eletjatek/sejtablak.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/eletjatek/sejtablak.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/eletjatek/sejtszal.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/eletjatek/sejtszal.cpp</filename>
+            </link>
+        </para>
+        <para>
+            A feladat megoldásában tutorált: Schachinger Zsolt.
+        </para>
+        <para>
+            Ez az ún. játék valójában egy sejtszimulátor, amit John Horton Conway talált ki 1970-ben. A játék lényege, hogy az előre elhelyezett selytek mivé formálódnak vagy hogy életben maradnak e egyáltalán. 
+        </para>
+        <para>
+            A sejtek alakulását a következő szbályok irányítják:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Minden sejtnek 2 állapota lehet: élő vagy halott.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Ha egy sejtnek kevesebb mint 2 élő szomszédja van, az meghal.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Ha egy sejtnek 2 vagy 3 élő szomszédja van, az életben marad.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Ha egy sejtnek több mint 3 élő szomszédja van, az meghal.
+                </para>
+            </listitem><listitem>
+                <para>
+                    Ha egy halott sejtnek pontosan 3 élő szomszédja van, az életre kel.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <programlisting><![CDATA[int SejtSzal::szomszedokSzama(bool **racs,
+                              int sor, int oszlop, bool allapot) {
+    int allapotuSzomszed = 0;
+    // A nyolcszomszdok vgigzongorzsa:
+    for(int i=-1; i<2; ++i)
+        for(int j=-1; j<2; ++j)
+            // A vizsglt sejtet magt kihagyva:
+            if(!((i==0) && (j==0))) {
+        // A sejttrbl szlnek szomszdai
+        // a szembe oldalakon ("peridikus hatrfelttel")
+        int o = oszlop + j;
+        if(o < 0)
+            o = szelesseg-1;
+        else if(o >= szelesseg)
+            o = 0;
+
+        int s = sor + i;
+        if(s < 0)
+            s = magassag-1;
+        else if(s >= magassag)
+            s = 0;
+
+        if(racs[s][o] == allapot)
+            ++allapotuSzomszed;
+    }
+
+    return allapotuSzomszed;
+}
+
+/**
+ * A sejttr idbeli fejldse a John H. Conway fle
+ * letjtk sejtautomata szablyai alapjn trtnik.
+ * A szablyok rszletes ismertetst lsd pldul a
+ * [MATEK JTK] hivatkozsban (Cskny Bla: Diszkrt
+ * matematikai jtkok. Polygon, Szeged 1998. 171. oldal.)
+ */
+void SejtSzal::idoFejlodes() {
+
+    bool **racsElotte = racsok[racsIndex];
+    bool **racsUtana = racsok[(racsIndex+1)%2];
+
+    for(int i=0; i<magassag; ++i) { // sorok
+        for(int j=0; j<szelesseg; ++j) { // oszlopok
+
+            int elok = szomszedokSzama(racsElotte, i, j, SejtAblak::ELO);
+
+            if(racsElotte[i][j] == SejtAblak::ELO) {
+                /* l l marad, ha kett vagy hrom l
+             szomszedja van, klnben halott lesz. */
+                if(elok==2 || elok==3)
+                    racsUtana[i][j] = SejtAblak::ELO;
+                else
+                    racsUtana[i][j] = SejtAblak::HALOTT;
+            }  else {
+                /* Halott halott marad, ha hrom l
+             szomszedja van, klnben l lesz. */
+                if(elok==3)
+                    racsUtana[i][j] = SejtAblak::ELO;
+                else
+                    racsUtana[i][j] = SejtAblak::HALOTT;
+            }
+        }
+    }
+    racsIndex = (racsIndex+1)%2;
+}]]>
+        </programlisting>
+        <para>
+            A sikló-kilövő egy olyan alakzat, amelyben 2 ide-oda pattogó alakzat minden 15. ciklusban egy harmadikat produkál és "kilövi" azt.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/eletjatek.png" scale="50"/>
+            </imageobject>
+        </mediaobject> 
+
+    </section>   
+
+
+    <section>
+        <title>BrainB Benchmark</title>
+        <para>
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>
+            Megoldás forrása:               
+        </para>
+        <para>
+            <link xlink:href="conway/brainb/main.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/brainb/main.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/brainb/BrainBWin.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/brainb/BrainBWin.cpp</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="conway/brainb/BrainBThread.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/conway/brainb/BrainBThread.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Ehhez a programhoz szükséges az opencv telepítése: <command>sudo apt-get install libopencv-dev</command>
+        </para>            
+        <para>
+            Az esport kezd egyre inkább elterjedni. Ez a program az esportolóknak nyújt lehetőséget arra, hogy lemérjék teljesítményüket, pontosabban hogy menyire képesek a zavaró tényezők mellet a kijelölt célra koncentrálni. Az méréshez 10 percig kell követni a kijelölt négyzetet lenyomott egérgombbal.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/brainb.png" scale="35"/>
+            </imageobject>
+        </mediaobject> 
+        <para>
+            Ha végeztünk, akkor az eredményt kiírja nekünk egy fájlba.
+        </para>
+        <programlisting><![CDATA[NEMESPOR BrainB Test 6.0.3
+time      : 6000
+bps       : 59860
+noc       : 49
+nop       : 0
+lost      : 
+2230 820 3380 2260 61370 34150 23480 4850 0 21450 38690 30700 17570 15690 9910 29510 20380 25880 42260 43430 54240 73360 49950 59940 55620 
+mean      : 28844
+var       : 21808.5
+found     : 0 12400 15360 18040 40460 32870 20320 38910 39440 37640 31740 48490 49680 44280 57730 33190 16150 11870 19730 7320 8540 9720 14310 31040 48770 23730 20870 0 0 5950 19370 12320 11440 14170 24210 12440 23500 18670 25330 15740 8890 29860 23810 45750 39770 37730 41060 24600 22720 30870 27360 28220 42620 27790 36650 48690 39250 61970 51660 58200 54050 66020 61920 54830 64910 61410 45240 47300 49080 
+mean      : 31130
+var       : 17635.2
+lost2found: 0 49680 48770 0 0 12320 11440 15740 22720 48690 39250 54050 54830 45240 
+mean      : 28766
+var       : 21827.6
+found2lost: 61370 34150 23480 0 21450 30700 17570 29510 42260 43430 54240 73360 59940 
+mean      : 37804
+var       : 20565
+mean(lost2found) < mean(found2lost)
+time      : 10:0
+U R about 4.06311 Kilobytes]]>
+        </programlisting>
+    </section>
+    
+</chapter>

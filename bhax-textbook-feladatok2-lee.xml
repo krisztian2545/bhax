@@ -1,0 +1,53 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Berners-Lee!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title>C++ vs Java</title>
+        <para>
+          Ez a szekció a következő 2 könyv összehasonlítását tartalmazza:
+        </para>
+        <itemizedlist>
+                <listitem>
+                    <para>Benedek Zoltán, Levendovszky Tihamér Szoftverfejlesztés C++ nyelven</para>
+                </listitem>
+                <listitem>
+                    <para>Nyékyné Dr. Gaizler Judit et al. Java 2 útikalauz programozóknak 5.0 I-II.</para>
+                </listitem>
+        </itemizedlist>
+
+    </section>
+
+    <section>
+        <title>Python: Forstner Bertalan, Ekler Péter, Kelényi Imre: Bevezetés a mobilprogramozásba:
+          Gyors prototípus-fejlesztés Python és Java nyelven (35-51 oldal)</title>
+        <para>
+          A Python egy magas szintű, általános célú, dinamikus, objektumorientált és platformfüggetlen szkriptnyelv, amely 1990-ben alakult. A program futtatásához interpretert használ megspórólva nekünk a forráskód fordításának idejét. Az interpreter a PC-s rendszereken kívül - Windows, Unix, MacOS - az iPhone mobil operációs rendszeren is elérhető.
+        </para>
+        <para>
+          A fordítóprogramon kívül a zárójeleket és pontosvesszőket is elhagyja a nyelv, ezek helyett a behúzások jelölik a parancsok helyét, így a forráskód átláthatóbb és rövidebb, mint ha azt c++-ban vagy Java-ban írtuk volna. Viszont érdemes észben tartani, hogy ebből kifolyólag a kód nem kezdődhet behúzással. Az interpreter ún. tokenekre bontva értelmezi a sorokat, amelyek között tetszőleges mennyiségű szóköz (whitespace) lehet. A token lehet azonosító, kulcsszó, operátor, delimeter vagy literál. Azonosítók használatakor figyeljünk oda arra, hogy a Python nagybetűérzékeny. Ezen kívül számokat és alulvonásokat (_) is használhatunk.
+        </para>
+        <para>
+          Pythonban a változók objektumokként vannak kezelve. A változó típusát a benne tárolt adat típusa határozza meg, amelyet az interpreter állapít meg futás közben. Így lehetőség van arra, hogy egy változóhoz idővel különböző típusú adatokat rendeljünk. A lehetséges adattípusok: számok, sztringek, ennesek (tuples, n-es), listák, szótárak (dictionaries).
+        </para>
+        <para>
+          A számok 3 nagy típusa az egészek, lebegőpontosak és a komplex számok. Az egészek tovább bonthatók decimálisakra, oktálisakra (0-val kezdődik) és hexadecimálisokra (0x-el kezdődik). A lebegőpontos számok az x.yEz formulát követik. A szekvenciatípusok közétartoznak a sztringek, ennesek és a listák, de lehetőség van saját szekvenciatípus létrtehozására is. Sztringek megadásánál az idézőjel és az aposztróf egyaránt működik, az "u" betű segítségével pedig Unicode szöveggel bővíthetjük a sztringünket:
+        </para>
+        <programlisting><![CDATA[print u"Hello %s, kedves %s!" ("Pisti", "barátunk")
+# A kimeneten: "Hello Pisti, kedves barátunk!"]]>
+        </programlisting>
+        <para>
+          Megjegyzés készítéséhez a # jelet használja, amely a sor végéig érvényes. A megjegyzésblokk viszont 3 egymás utáni idézőjelel kezdődik és végződik. Az ennesek (tuples) objektumok halmaza, egymástól vesszővel elválasztva zárójelbe írjuk. A benne szereplő objektumok típusa eltérő is lehet. Példa:
+        </para>
+        <programlisting><![CDATA[('a', 'b', 'c')
+tuples('abc') #ugyanaz mint az előző]]>
+        </programlisting>
+        <para>
+          
+        </para>
+    </section>
+
+</chapter>
