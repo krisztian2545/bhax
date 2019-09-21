@@ -7,35 +7,172 @@
     </info>
 
     <section>
-        <title>A BPP algoritmus Java megvalósítása</title>
+        <title>OO szemlélet</title>
         <para>
+          A módosított polártranszformációs normális generátor beprogramozása Java nyelven. Mutassunk rá,
+hogy a mi természetes saját megoldásunk (az algoritmus egyszerre két normálist állít elő, kell egy
+példánytag, amely a nem visszaadottat tárolja és egy logikai tag, hogy van-e tárolt vagy futtatni kell
+az algot.) és az OpenJDK, Oracle JDK-ban a Sun által adott OO szervezés ua.!
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_5.pdf (16-22 fólia)
+Ugyanezt írjuk meg C++ nyelven is! (lásd még UDPROG repó: source/labor/polargen)
         </para>
         <para>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="arroway/PolárGenerátor.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/PolárGenerátor.java</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+            <link xlink:href="arroway/polargen.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/polargen.cpp</filename>
+            </link>
         </para>
-    </section>        
+        <para>
+          Ennek a feladatnak a megoldásához nincs szükségünk a matematikai háttérre, mivel csak egy osztályt kell írnunk, amely képes kezelni a már megtervezett számításokat.
+          A feladatunk egyszerű: van egy számítás - amivel igázából nem sokat kell foglalkoznunk, mert csak lemásoljuk az okos emberek által kitalált képleteket - , amihez írnunk kell egy osztályt, amely képes azt kezelni.
+        </para>
+        <programlisting language="c"><![CDATA[
+        boolean nincsTárolt = true;
+        double tárolt;
+
+        public double következő() {
+
+            if(nincsTárolt) {
+
+                // számítások
+                ...
+
+                tárolt = egyik_eredmény;
+                nincsTárolt = !nincsTárolt;
+
+                return másik_eredmény;
+
+            } else {
+                nincsTárolt = !nincsTárolt;
+                return tárolt;
+            }
+        }]]>
+        </programlisting>
+        <para>
+          A legfontosabb rész el is készült. Ez az egész egy osztályban lesz, ezért definiáljuk a <function>nincsTárolt</function> és <function>tárolt</function> mezőket, hogy azok a metódusunkon kívül is megtartsák értéküket. A függvényünk első hívásával, mivel még nincs egy tárolt érték se, generálunk 2 értéket és az egyiket eltároljuk, a másikat pedig visszaadjuk. A függvény második hívásakor viszont már nem generálunk semmit, csak visszaadjuk az eltárolt értéket és a <function>nincsTárolt</function> változót újra hamisra állítjuk.
+        </para>
+        <para>
+          A <function>main</function> függvényben az osztály példányosítása után a tesztelés és demonstráció kedvéért meghívjuk 10-szer a metódusunkat, ami ugyebár csak 5-ször (minden második ciklusban, kezdve az elsőtől) fog számításokat végezni és szintén 5-ször visszaadja az eltárolt eredményeket.
+        </para>
+        <programlisting language="c"><![CDATA[public static void main(String[] args) {
+
+            PolárGenerátor g = new PolárGenerátor();
+
+            for(int i=0; i<10; ++i)
+                System.out.println(g.következő());
+
+        }]]>
+        </programlisting>
+        <para>
+          A teljes java forráskódot megleled a "megoldás forrása"-inál. Most inkább nézzük meg ennek a c++-os verzióját. Amint láthatjuk, lényegében ugyanaz, csupán a kiíratáshoz és a randomizáláshoz szükséges részek térnek el, meg abban, hogy a <function>main</function> az osztályon kívül van, mivel ez c++, és nem java.
+        </para>
+        <programlisting language="c"><![CDATA[#include <ctime>
+        #include <cmath>
+        #include <iostream>
+
+        class PolarGenerator{
+
+          bool nincsTarolt = true;
+          double tarolt;
+
+          public :
+          double kovetkezo()
+          {
+
+        	   if(nincsTarolt)
+        	    {
+
+                double u1,u2,v1,v2,w;
+                do{
+
+        	       u1= ((double) rand() / (double)(RAND_MAX));
+        	       u2= ((double) rand() / (double)(RAND_MAX));
+        	       v1=(2*u1)-1;
+        	       v2=(2*u2)-1;
+
+        	       w=(v1*v1)+(v2*v2);
+                }while(w>1);
+
+                   double r = sqrt((-2*log(w))/w);
+        	         tarolt = r * v2;
+        	         nincsTarolt =! nincsTarolt;
+        	         return r * v1;
+
+        	     }
+        	     elsepublic static void main(String[] args) {
+
+            PolárGenerátor g = new PolárGenerátor();
+
+            for(int i=0; i<10; ++i)
+                System.out.println(g.következő());
+
+        }
+        	     {
+        	        nincsTarolt =! nincsTarolt;
+        	        return tarolt;
+        	     }
+          };
+        };
+
+        int main()
+        {
+          std::srand(std::time(0));
+
+          PolarGenerator g;
+
+          for(int i=0; i<10; ++i)
+        	   std::cout<<g.kovetkezo()<<std::endl;
+
+          return 0;
+        }
+]]>
+        </programlisting>
+    </section>
 
     <section>
-        <title>Java osztályok a Pi-ben</title>
+        <title>Homokózó</title>
         <para>
-            Az előző feladat kódját fejleszd tovább: vizsgáld, hogy Vannak-e Java osztályok a Pi hexadecimális kifejtésében!
+          Írjuk át az első védési programot (LZW binfa) C++ nyelvről Java nyelvre, ugyanúgy működjön!
+Mutassunk rá, hogy gyakorlatilag a pointereket és referenciákat kell kiirtani és minden máris működik
+(erre utal a feladat neve, hogy Java-ban minden referencia, nincs választás, hogy mondjuk egy
+attribútum pointer, referencia vagy tagként tartalmazott legyen).
+Miután már áttettük Java nyelvre, tegyük be egy Java Servletbe és a böngészőből GET-es kéréssel
+(például a böngésző címsorából) kapja meg azt a mintát, amelynek kiszámolja az LZW binfáját!
         </para>
         <para>
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
+            <link xlink:href="arroway/BinfaServlet.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/BinfaServlet.java</filename>
+            </link>
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat...
+          A java nyelvnek van egy olyan tulajdonsága, miszerint minden referencia és így nem kell azon gondolkodnunk, hogy most pointert vagy referenciát használjunk. Ennek köszönhetően a c++-os verzióból nyugodtan eltávolíthatjuk a pointereket jelző "*"-ot és a program ugyanúgy fog működni.
         </para>
-    </section>        
-        
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-</chapter>                
+        <programlisting language="c"><![CDATA[
+          ...
+          private Csomopont balNulla = null;
+          private Csomopont jobbEgy = null;
+          ...
+          private Csomopont fa = null;
+          ...
+          protected Csomopont gyoker = new Csomopont('/');
+          ...]]>
+        </programlisting>
+        <para>
+
+        </para>
+
+    </section>
+
+
+</chapter>
