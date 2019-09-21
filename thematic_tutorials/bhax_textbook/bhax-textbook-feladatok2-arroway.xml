@@ -156,21 +156,102 @@ Miután már áttettük Java nyelvre, tegyük be egy Java Servletbe és a böng�
             </link>
         </para>
         <para>
+          <link xlink:href="arroway/Lzw.java">
+          <filename>bhax/thematic_tutorials/bhax_textbook/arroway/Lzw.java</filename>
+          </link>
+        </para>
+        <para>
           A java nyelvnek van egy olyan tulajdonsága, miszerint minden referencia és így nem kell azon gondolkodnunk, hogy most pointert vagy referenciát használjunk. Ennek köszönhetően a c++-os verzióból nyugodtan eltávolíthatjuk a pointereket jelző "*"-ot és a program ugyanúgy fog működni.
         </para>
         <programlisting language="c"><![CDATA[
-          ...
-          private Csomopont balNulla = null;
-          private Csomopont jobbEgy = null;
-          ...
-          private Csomopont fa = null;
-          ...
-          protected Csomopont gyoker = new Csomopont('/');
-          ...]]>
+...
+private Csomopont balNulla = null;
+private Csomopont jobbEgy = null;
+...
+private Csomopont fa = null;
+...
+protected Csomopont gyoker = new Csomopont('/');
+...]]>
         </programlisting>
         <para>
-
+          A fejfájás elkerülése érdekében a következő lépés lehet a ";"-k eltávolítása az osztályok és metódusaik végéről. Ezután a kiíratásokhoz, valamint a fájlkezeléshez szükséges metódus / típus cserék elvégeztével kész is a javás verzió (lásd: Lzw.java a megoldás forrásánál)
         </para>
+        <para>
+          A Servletbe való beépítéshez szükségünk lesz egy szerver létrehozására a saját gépünkön. Ezt a Tomcat tette lehetővé számomra. A telepítéshez segítséget talász <link xlink:href="https://linuxize.com/post/how-to-install-tomcat-9-on-ubuntu-18-04/">itt</link>.
+        </para>
+        <para>
+          Mivel a programung jelenleg fájlból olvassa be az adatokat és a végeredményt is egy fájlba menti, a kód ezen részét elhagyjuk és csupán a <function>LZWBinFa</function> osztályt hagyjuk meg, amelyet egy Servletbe fogunk beilleszteni.
+        </para>
+        <programlisting language="c"><![CDATA[
+        import javax.servlet.*;
+        import javax.servlet.http.*;
+        import java.io.*;
+        import java.util.*;
+
+        public class BinfaServlet extends HttpServlet {
+
+          public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+            String fa = request.getParameter("fa");
+
+
+        	  LZWBinFa binFa = new LZWBinFa();
+
+        	  boolean kommentben = false;
+        	  byte[] bFa = fa.getBytes();
+            for (int i = 0; i < bFa.length; i++) {
+
+                	if (bFa[i] == 0x3e) {
+                  		kommentben = true;
+                  		continue;
+                	}
+
+                	if (bFa[i] == 0x0a) {
+                 		kommentben = false;
+                  		continue;
+                	}
+
+                	if (kommentben) {
+                  		continue;
+                	}
+
+                	if (bFa[i] == 0x4e) {
+                  		continue;
+                	}
+
+                	for (int j = 0; j < 8; ++j) {
+
+                  		if ((bFa[i] & 0x80) != 0) {
+                    			binFa.egyBitFeldolg('1');
+                  		} else {
+                    			binFa.egyBitFeldolg('0');
+                  		}
+                  		bFa[i] <<= 1;
+
+                	}
+
+            }
+
+
+          	PrintWriter out = response.getWriter();
+          	out.println("<HTML>");
+          	out.println("<HEAD>");
+          	out.println("<TITLE>Servlet Testing</TITLE>");
+          	out.println("</HEAD>");
+          	out.println("<BODY>");
+          	out.println("<p>");
+          	out.println("fa = " + fa);
+         	  out.println("</p>");
+          	out.println("<pre>");
+          	binFa.kiir(out);
+          	out.println("depth = " + binFa.getMelyseg());
+          	out.println("mean = " + binFa.getAtlag());
+          	out.println("var = " + binFa.getSzoras());
+          	out.println("</pre>");
+          	out.println("</BODY>");
+          	out.println("</HTML>");
+          }
+        }]]></programlisting>
 
     </section>
 

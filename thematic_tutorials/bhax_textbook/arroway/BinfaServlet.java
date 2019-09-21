@@ -5,18 +5,16 @@ import java.util.*;
 
 public class BinfaServlet extends HttpServlet {
 
- public void doGet(HttpServletRequest request,
-  	HttpServletResponse response)
-  	throws ServletException, IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-  	String fa = request.getParameter("fa");
+    String fa = request.getParameter("fa");
 
 
-	LZWBinFa binFa = new LZWBinFa();
+	  LZWBinFa binFa = new LZWBinFa();
 
-	boolean kommentben = false;
-	byte[] bFa = fa.getBytes();
-      	for (int i = 0; i < bFa.length; i++) {
+	  boolean kommentben = false;
+	  byte[] bFa = fa.getBytes();
+    for (int i = 0; i < bFa.length; i++) {
 
         	if (bFa[i] == 0x3e) {
           		kommentben = true;
@@ -47,7 +45,7 @@ public class BinfaServlet extends HttpServlet {
 
         	}
 
-      	}
+    }
 
 
   	PrintWriter out = response.getWriter();
@@ -58,7 +56,7 @@ public class BinfaServlet extends HttpServlet {
   	out.println("<BODY>");
   	out.println("<p>");
   	out.println("fa = " + fa);
- 	out.println("</p>");
+ 	  out.println("</p>");
   	out.println("<pre>");
   	binFa.kiir(out);
   	out.println("depth = " + binFa.getMelyseg());
@@ -67,7 +65,7 @@ public class BinfaServlet extends HttpServlet {
   	out.println("</pre>");
   	out.println("</BODY>");
   	out.println("</HTML>");
- }
+  }
 }
 
 class LZWBinFa {
