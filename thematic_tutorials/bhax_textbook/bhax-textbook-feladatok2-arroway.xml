@@ -368,25 +368,58 @@ példányokat poolozza!
     <section>
         <title>Yoda</title>
         <para>
-
+          Írjunk olyan Java programot, ami java.lang.NullPointerEx-el leáll, ha nem követjük a Yoda
+conditions-t! https://en.wikipedia.org/wiki/Yoda_conditions
         </para>
         <para>
             Megoldás videó:
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="arroway/BinfaServlet.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/BinfaServlet.java</filename>
+            <link xlink:href="arroway/Yoda.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/Yoda.java</filename>
             </link>
         </para>
         <para>
-          <link xlink:href="arroway/Lzw.java">
-          <filename>bhax/thematic_tutorials/bhax_textbook/arroway/Lzw.java</filename>
-          </link>
+          A Yoda condition egy programozási stílus, aminek az elnevezését Yoda nem hagyományos szórendje ihletett. Ez a programozásban úgy nyilvánul meg, hogy a feltételek írásakor a konstans értéket írjuk a feltétel bal oldalára.
         </para>
-        <para>
+        <programlisting language="c"><![CDATA[
+          // with Yoda condition (const, variable)
+          if(36 = x){} // syntax error
 
+          //without Yoda condition (variable, const)
+          if(x = 36){} // logical error]]>
+        </programlisting>
+        <para>
+         Ennek az az előnye, hogy ezt szokássá alakítva elkerülhetünk néhány logikai hibát, mint pl. ha 2 egyenlőségjel helyett csak 1-et írunk, akkor a fordító nem jelez hibát, viszont a program nem úgy fog működni, ahogy azt mi szeretnénk. Ugyanez igaz akkor is, ha <function>String</function>-eket hasonlítunk össze nem Yoda módszerrel és a változónk <function>null</function> értékű, de mi csak annyiról értesülünk, hogy a két szöveg nem egyezik meg.
         </para>
+        <programlisting language="c"><![CDATA[
+          public class Yoda{
+
+            public static void main(String[] args){
+
+              String yc = null;
+
+              // with Yoda condition
+              /*
+              if( "true".equals(yc) ){
+                System.out.println("Yoda's power!");
+              }*/
+
+              // without Yoda condition
+              if( yc.equals("true") ){}
+
+            }
+
+          }]]>
+        </programlisting>
+        <para>
+          Ha ezt lefordítjuk és futtatjuk, akkor a programunk természetesen <function>java.lang.NullPointerException</function>-el leáll.
+        </para>
+        <programlisting language="c"><![CDATA[$ java Yoda
+Exception in thread "main" java.lang.NullPointerException
+	at Yoda.main(Yoda.java:14)]]>
+        </programlisting>
 
 
     </section>
@@ -394,7 +427,11 @@ példányokat poolozza!
     <section>
         <title>Kódolás from scratch</title>
         <para>
-
+          Induljunk ki ebből a tudományos közleményből: http://crd-legacy.lbl.gov/~dhbailey/dhbpapers/bbp-
+alg.pdf és csak ezt tanulmányozva írjuk meg Java nyelven a BBP algoritmus megvalósítását!
+Ha megakadsz, de csak végső esetben: https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-
+javat/apbs02.html#pi_jegyei (mert ha csak lemásolod, akkor pont az a fejlesztői élmény marad ki,
+melyet szeretném, ha átélnél).
         </para>
         <para>
             Megoldás videó:

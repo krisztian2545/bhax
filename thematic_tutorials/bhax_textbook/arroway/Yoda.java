@@ -1,4 +1,4 @@
-class Yoda{
+public class Yoda{
 
   public static void main(String[] args){
 
