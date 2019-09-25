@@ -1,0 +1,138 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Liskov!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>Liskov helyettesítés sértése</title>
+        <para>
+          Írjunk olyan OO, leforduló Java és C++ kódcsipetet, amely megsérti a Liskov elvet! Mutassunk rá a megoldásra: jobb OO tervezés.
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (93-99 fólia)
+(számos példa szerepel az elv megsértésére az UDPROG repóban, lásd pl. source/binom/Batfai-
+Barki/madarak/)
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="liskov/.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.cpp</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>Szülő-gyerek</title>
+        <para>
+          Írjunk Szülő-gyerek Java és C++ osztálydefiníciót, amelyben demonstrálni tudjuk, hogy az ősön
+keresztül csak az ős üzenetei küldhetőek!
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. fólia)
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            </link>
+        </para>
+        <para>
+          <link xlink:href="liskov/.cpp">
+          <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.cpp</filename>
+          </link>
+        </para>
+        <para>
+
+        </para>
+
+    </section>
+
+    <section>
+        <title>Anti OO</title>
+        <para>
+          A BBP algoritmussal 4 a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10 6, 107, 108 darab
+jegyét határozzuk meg C, C++, Java és C# nyelveken és vessük össze a futási időket!
+https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+        <programlisting language="c"><![CDATA[
+
+          ]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>Hello, Android!</title>
+        <para>
+          Élesszük fel az SMNIST for Humans projektet!
+https://gitlab.com/nbatfai/smnist/tree/master/forHumans/SMNISTforHumansExp3/app/src/main
+Apró módosításokat eszközölj benne, pl. színvilág.
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+
+
+
+    </section>
+
+    <section>
+        <title>Ciklomatikus komplexitás</title>
+        <para>
+          Számoljuk ki valamelyik programunk függvényeinek ciklomatikus komplexitását! Lásd a fogalom
+tekintetében a https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_2.pdf (77-79
+fóliát)!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+
+        </para>
+
+        <para>
+
+        </para>
+
+
+    </section>
+
+
+</chapter>

@@ -1,14 +1,11 @@
 #include <iostream>
 
 class Szulo{
-public:
-  void kiir(){
-    std::cout << "Szulo";
-  }
 };
+
 class Gyerek : public Szulo
 {
-  void kiir2(){
+  void kiir(){
     std::cout << "Gyerek";
   }
 };

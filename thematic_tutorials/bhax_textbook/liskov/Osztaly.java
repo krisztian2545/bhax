@@ -11,7 +11,7 @@ class Szulo{
 }
 
 class Gyerek extends Szulo{
-  void kiir(){
+  public void kiir(){
     System.out.println("Gyerek");
   }
 }
