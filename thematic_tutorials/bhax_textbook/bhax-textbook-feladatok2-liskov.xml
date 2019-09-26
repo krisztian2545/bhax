@@ -46,18 +46,35 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. f�
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            <link xlink:href="liskov/szulo_gyerek/java/Osztaly.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/java/Osztaly.java</filename>
             </link>
         </para>
         <para>
-          <link xlink:href="liskov/.cpp">
-          <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.cpp</filename>
+          <link xlink:href="liskov/szulo_gyerek/c++/szulogyerek.cpp">
+          <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/c++/szulogyerek.cpp</filename>
           </link>
         </para>
         <para>
-
+          Javában ez a feladat nagyon egyszerű: létrehozunk egy osztályt, ami a "szűlő" osztály lesz. Ezt üresen hagyjuk és származtatunk belőle egy "gyerek" osztályt. Itt viszont létrehozunk egy metódust. A tartalma lényegtelen, mivel minket egyedül a metódus elérhetősége érdekel. Ezután jöhet is a tesztelés, ahol létrehozunk egy "gyerek" típusú objektumot, amire egy "szülő" típusú referencia mutat:
         </para>
+        <programlisting language="c"><![CDATA[public class Osztaly{
+
+          public static void main(String[] args){
+            Szulo sz = new Gyerek();
+            sz.kiir();
+          }
+        }
+
+        class Szulo{}
+
+        class Gyerek extends Szulo{
+          public void kiir(){
+            System.out.println("Gyerek");
+          }
+        }]]>
+        </programlisting>
+
 
     </section>
 

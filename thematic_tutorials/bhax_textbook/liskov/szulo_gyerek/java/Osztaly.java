@@ -6,9 +6,7 @@ public class Osztaly{
   }
 }
 
-class Szulo{
-
-}
+class Szulo{}
 
 class Gyerek extends Szulo{
   public void kiir(){
