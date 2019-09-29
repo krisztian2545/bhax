@@ -1,9 +1,9 @@
 /*
- * PiBBPBench.java
+ * fejlesztés alatt
  *
  * DIGIT 2005, Javat tanítok
  * Bátfai Norbert, nbatfai@inf.unideb.hu
- *
+ * A PiBBPBench C++ átírata.
  */
 /**
  * A PiBBP.java-ból kivettük az "objektumorientáltságot", így kaptuk
@@ -18,7 +18,10 @@
  * @author Bátfai Norbert, nbatfai@inf.unideb.hu
  * @version 0.0.1
  */
-public class PiBBPBench {
+ #include <ctime>
+ #include <cmath>
+ #include <iostream>
+class PiBBPBench {
     /**
      * BBP algoritmus a Pi-hez, a [BBP ALGORITMUS] David H. Bailey: The
      * BBP Algorithm for Pi. alapján a {16^d Sj} részlet kiszámítása.
@@ -26,7 +29,8 @@ public class PiBBPBench {
      * @param   d   a d+1. hexa jegytől számoljuk a hexa jegyeket
      * @param   j   Sj indexe
      */
-    public static double d16Sj(int d, int j) {
+public:
+    static double d16Sj(int d, int j) {
 
         double d16Sj = 0.0d;
 
@@ -39,8 +43,8 @@ public class PiBBPBench {
             d16Sj += Math.pow(16.0d, d-k) / (double)(8*k + j);
          */
 
-        return d16Sj - Math.floor(d16Sj);
-    }
+        return d16Sj - floor(d16Sj);
+    };
     /**
      * Bináris hatványozás mod k, a 16^n mod k kiszámítása.
      *
@@ -72,46 +76,49 @@ public class PiBBPBench {
         }
 
         return r;
+    };
+
+};
+
+/**
+ * A [BBP ALGORITMUS] David H. Bailey: The
+ * BBP Algorithm for Pi. alapján a
+ * {16^d Pi} = {4*{16^d S1} - 2*{16^d S4} - {16^d S5} - {16^d S6}}
+ * kiszámítása, a {} a törtrészt jelöli. A Pi hexa kifejtésében a
+ * d+1. hexa jegytől
+ */
+
+main() {
+
+    double d16Pi = 0.0d;
+
+    double d16S1t = 0.0d;
+    double d16S4t = 0.0d;
+    double d16S5t = 0.0d;
+    double d16S6t = 0.0d;
+
+    int jegy = 0;
+
+    long delta = System.currentTimeMillis();
+
+    for(int d=1000000; d<1000001; ++d) {
+
+        d16Pi = 0.0d;
+
+        d16S1t = d16Sj(d, 1);
+        d16S4t = d16Sj(d, 4);
+        d16S5t = d16Sj(d, 5);
+        d16S6t = d16Sj(d, 6);
+
+        d16Pi = 4.0d*d16S1t - 2.0d*d16S4t - d16S5t - d16S6t;
+
+        d16Pi = d16Pi - floor(d16Pi);
+
+        jegy = (int)floor(16.0d*d16Pi);
+
     }
-    /**
-     * A [BBP ALGORITMUS] David H. Bailey: The
-     * BBP Algorithm for Pi. alapján a
-     * {16^d Pi} = {4*{16^d S1} - 2*{16^d S4} - {16^d S5} - {16^d S6}}
-     * kiszámítása, a {} a törtrészt jelöli. A Pi hexa kifejtésében a
-     * d+1. hexa jegytől
-     */
-    public static void main(String args[]) {
 
-        double d16Pi = 0.0d;
-
-        double d16S1t = 0.0d;
-        double d16S4t = 0.0d;
-        double d16S5t = 0.0d;
-        double d16S6t = 0.0d;
-
-        int jegy = 0;
-
-        long delta = System.currentTimeMillis();
-
-        for(int d=100000000; d<100000001; ++d) {
-
-            d16Pi = 0.0d;
-
-            d16S1t = d16Sj(d, 1);
-            d16S4t = d16Sj(d, 4);
-            d16S5t = d16Sj(d, 5);
-            d16S6t = d16Sj(d, 6);
-
-            d16Pi = 4.0d*d16S1t - 2.0d*d16S4t - d16S5t - d16S6t;
-
-            d16Pi = d16Pi - Math.floor(d16Pi);
-
-            jegy = (int)Math.floor(16.0d*d16Pi);
-
-        }
-
-        System.out.println(jegy);
-        delta = System.currentTimeMillis() - delta;
-        System.out.println(delta/1000.0);
-    }
+    std::cout << jegy;
+    delta = System.currentTimeMillis() - delta;
+    std::cout << delta/1000.0;
 }

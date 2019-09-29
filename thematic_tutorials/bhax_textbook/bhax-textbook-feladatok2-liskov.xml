@@ -194,7 +194,7 @@ Gyerek
     <section>
         <title>Anti OO</title>
         <para>
-          A BBP algoritmussal 4 a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10 6, 107, 108 darab
+          A BBP algoritmussal a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10<superscript>6</superscript>, 10<superscript>7</superscript>, 10<superscript>8</superscript> darab
 jegyét határozzuk meg C, C++, Java és C# nyelveken és vessük össze a futási időket!
 https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066
         </para>
@@ -203,10 +203,56 @@ https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            <link xlink:href="liskov/antioo/PiBBPBench.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.java</filename>
             </link>
         </para>
+        <para>
+            <link xlink:href="liskov/antioo/PiBBPBench.cs">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.cs</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/antioo/pi_bbp_bench.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/pi_bbp_bench.c</filename>
+            </link>
+        </para>
+        <para>
+          A BBP algoritmusnak jóvoltából képesek vagyunk másodpercek alatt kiszámoltatni a Pi hexadecimális kifejtésének 0. pozíciótól számított szinte akárhány darab jegyét. Viszont minnél távolabbi értékeket vizsgálunk, annál inkább számít a teljesítmény. Először vizsgáljuk meg a java verziót. A d+1. hexa jegytől számoljuk a hexa jegyeket, amely deklarálása a <function>for</function> ciklus fejlécében szerepel.
+        </para>
+        <programlisting language="c"><![CDATA[
+          ...
+          int jegy = 0;
+
+          long delta = System.currentTimeMillis();
+
+          for(int d=1000000; d<1000001; ++d) {
+
+              d16Pi = 0.0d;
+
+              d16S1t = d16Sj(d, 1);
+          ...
+
+$  java PiBBPBench
+6
+1.803
+
+$ java PiBBPBench
+7
+21.935
+
+$ java PiBBPBench
+12
+243.427
+]]>
+        </programlisting>
+
+        <literallayout>
+* A számításokat az alábbi erőforrásokkal felszerelt gépen végeztem:
+OS: Ubuntu 18.04 Lts
+CPU: intel core i5 6300HQ
+RAM: 8 GB 2133 MT/s DDR4
+        </literallayout>
 
 
 
