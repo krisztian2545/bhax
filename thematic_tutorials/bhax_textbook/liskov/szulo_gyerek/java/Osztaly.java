@@ -6,7 +6,11 @@ public class Osztaly{
   }
 }
 
-class Szulo{}
+class Szulo{
+  public void kiir(){
+    System.out.println("Szulo");
+  }
+}
 
 class Gyerek extends Szulo{
   public void kiir(){

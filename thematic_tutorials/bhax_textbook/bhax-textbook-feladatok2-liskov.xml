@@ -18,18 +18,102 @@ Barki/madarak/)
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="liskov/.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            Megoldás forrása:
+            <link xlink:href="liskov/lisk_hely/LiskSert.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/LiskSert.java</filename>
             </link>
         </para>
         <para>
-            <link xlink:href="liskov/.cpp">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.cpp</filename>
+            Megoldás forrása:
+            <link xlink:href="liskov/lisk_hely/LiskRaFigyel.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/LiskRaFigyel.java</filename>
             </link>
         </para>
         <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/lisk_hely/lisks.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/lisks.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/lisk_hely/liskrf.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/liskrf.cpp</filename>
+            </link>
+        </para>
+        <para>
+          Liskov elve szerint egy típushierarchia szülő osztályokból és származtatott osztályokból áll úgy, hogy a származtatott osztályok rendelkeznek a szülő osztály összes tulajdonságával és viselkedésével plusz valami extrával. Hozzunk létre egy osztályt az autóknak, amely tartalmazza egy autó általános jellemzőit. Ezután származtassuk belőle az Audi osztályt. Ezután a <function>drive</function> metódusnak átadunk egy Car vagy Audi típusú objektumot. Minden jól megy, az autókat tudjuk vezetni, de a gyerekünknek is megtetszik az autózás, ezért a <function>Car</function>-ból származtatva létrehozzunk egy játék autó (<function>ToyBMW</function>) osztályt, hogy legyen mivel játszania. Előbb vagy utóbb észrevesszük, hogy az általunk kreált osztályhierarchia nem reális, hiszen egy játék autót nem lehet vezetni. Megsértettük a Liskov elvet.
+        </para>
+        <programlisting language="c"><![CDATA[public class LiskSert{
 
+          void drive(Car c){
+            c.go();
+            //...
+          }
+
+          public static void main(String[] args){
+
+            Car c = new Car();
+            drive(c);
+
+            Audi a = new Audi();
+            drive(a);
+
+            ToyBMW tbmw = new ToyBMW();
+            drive(tbmw); // this is a problem, because you can't drive drive a toy car
+
+          }
+
+        }
+
+        class Car{
+          void go(){}
+        }
+
+        class Audi extends Car{
+          // no problem, because you can drive a car
+        }
+
+        class ToyBMW extends Car{
+          // but you can't drive a toy car
+        }]]>
+        </programlisting>
+        <para>
+          Hogy helyrehozzuk a hibánkat, beiktatunk egy köztes <function>RealCar</function> osztályt a <function>Car</function> és az <function>Audi</function> és egyéb vezethető autók közé.
         </para>
+        <programlisting language="c"><![CDATA[public class LiskRaFigyel{
+
+          void drive(RealCar rc){
+            rc.go();
+            //...
+          }
+
+          public static void main(String[] args){
+
+            Audi a = new Audi();
+            drive(a);
+
+            //ToyBMW tbmw = new ToyBMW();
+            //drive(tbmw);  this is a problem, because you can't drive drive a toy car
+
+          }
+
+        }
+
+        class Car{}
+
+        class RealCar extends Car{
+          void go(){}
+        }
+
+        class Audi extends RealCar{
+          // no problem, because you can drive a car
+        }
+
+        class ToyBMW extends Car{
+          // but you can't drive a toy car
+        }]]>
+        </programlisting>
 
 
     </section>
@@ -66,7 +150,11 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. f�
           }
         }
 
-        class Szulo{}
+        class Szulo{
+          public void kiir(){
+            System.out.println("Szulo");
+          }
+        }
 
         class Gyerek extends Szulo{
           public void kiir(){
@@ -90,17 +178,11 @@ https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
+            <link xlink:href="liskov/lisk_hely/LiskSert.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/LiskSert.java</filename>
             </link>
         </para>
-        <para>
-
-        </para>
-        <programlisting language="c"><![CDATA[
-
-          ]]>
-        </programlisting>
+        
 
 
     </section>
