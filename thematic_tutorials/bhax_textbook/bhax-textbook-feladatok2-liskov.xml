@@ -140,13 +140,14 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. f�
           </link>
         </para>
         <para>
-          Javában ez a feladat nagyon egyszerű: létrehozunk egy osztályt, ami a "szűlő" osztály lesz. Ezt üresen hagyjuk és származtatunk belőle egy "gyerek" osztályt. Itt viszont létrehozunk egy metódust. A tartalma lényegtelen, mivel minket egyedül a metódus elérhetősége érdekel. Ezután jöhet is a tesztelés, ahol létrehozunk egy "gyerek" típusú objektumot, amire egy "szülő" típusú referencia mutat:
+          Javában: létrehozunk egy osztályt, ami a "szűlő" osztály lesz és létrehozzuk a <function>kiir</function> metódust. Származtatunk belőle egy "gyerek" osztályt. Itt túlterheljük az ősosztály <function>kiir</function> metódusát és létrehozunk egy új (<function>ujKiir</function>) metódust is. A tartalmuk lényegtelen, mivel minket egyedül a metódusok elérhetősége érdekel. Ezután jöhet is a tesztelés, ahol létrehozunk egy "gyerek" típusú objektumot, amire egy "szülő" típusú referencia mutat:
         </para>
         <programlisting language="c"><![CDATA[public class Osztaly{
 
           public static void main(String[] args){
             Szulo sz = new Gyerek();
             sz.kiir();
+            sz.ujKiir();
           }
         }
 
@@ -157,12 +158,36 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. f�
         }
 
         class Gyerek extends Szulo{
+
           public void kiir(){
             System.out.println("Gyerek");
           }
-        }]]>
-        </programlisting>
 
+          public void ujKiir(){
+            System.out.println("uj");
+          }
+
+        }
+
+        $ javac Osztaly.java
+Osztaly.java:6: error: cannot find symbol
+    sz.ujKiir();
+      ^
+  symbol:   method ujKiir()
+  location: variable sz of type Szulo
+1 error
+]]>
+        </programlisting>
+        <para>
+          A fordítás sikertelen, ugyanis a <function>Szulo</function> nem ismeri a <function>Gyerek</function> által létrehozott új metódust. Viszont ha a túlterhelt metódust próbáljuk elérni, akkor az eredmény:
+        </para>
+        <programlisting language="c"><![CDATA[$ java Osztaly
+Gyerek
+]]>
+        </programlisting>
+        <para>
+          Ez a dinamikus kötésnek köszönhető, amely futási időben rendeli hozzá a metódust az objektumhoz. Javában ez alapértelmezett. Statikus kötést (fordítás során történik) is elérhetünk ha a <function>static</function> kulcsszóval deklaráljuk. Ekkor viszont a szülő metódusa fog lefutni.
+        </para>
 
     </section>
 
@@ -178,11 +203,11 @@ https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/lisk_hely/LiskSert.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/lisk_hely/LiskSert.java</filename>
+            <link xlink:href="liskov/.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/.java</filename>
             </link>
         </para>
-        
+
 
 
     </section>
