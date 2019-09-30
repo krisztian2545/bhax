@@ -270,13 +270,92 @@ Apró módosításokat eszközölj benne, pl. színvilág.
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/</filename>
+            <link xlink:href="liskov/smnist3/ScaleAdapter.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/ScaleAdapter.java</filename>
             </link>
         </para>
         <para>
-
+            <link xlink:href="liskov/smnist3/SMNISTE3Activity.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTE3Activity.java</filename>
+            </link>
         </para>
+        <para>
+            <link xlink:href="liskov/smnist3/SMNISTSurfaceView.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTSurfaceView.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/smnist3/SurfaceEvents.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SurfaceEvents.java</filename>
+            </link>
+        </para>
+        <para>
+          A projekt felélesztésében tutorált: Racs Tamás
+        </para>
+        <para>
+          Mivel csupán a forrásfájlokkal rendelkeztünk, létre kellett hoznunk egy üres Android Studio projektet. Egy kis módosítással a <function>AndroidManifest</function> fájlban és a forrásfájlok bemásolásával sikerült feléleszteni a projektet. Ehhez szükség volt az Android Studio és a szükséges Android SDK telepítéséhez, amihez <link xlink:href="https://developer.android.com/studio/install">itt</link> találsz segítséget.
+        </para>
+        <para>
+          A színvilág változtatásához a <function>SMNISTSurfaceView.java</function> fájlt kell átírni. Az eddigi megoldást, ahol 2 háttérszín váltakozott ciklusonként...
+        </para>
+        <programlisting language="c"><![CDATA[
+          /*int[] bgColor =
+                  {
+                          android.graphics.Color.rgb(11, 180, 250),
+                          android.graphics.Color.rgb(11, 250, 180)
+                  };*/
+          //int bgIdx = 0;
+          ...
+          //bgIdx = (bgIdx + 1) % 2;
+          ...
+          //canvas.drawColor(bgColor[bgIdx]);
+]]>
+        </programlisting>
+        <para>
+          ..., mostmár csak 1 szín van, így nem zavar a színek váltakozása. A színeket úgy választottam, hogy az kellemes legyen a szemnek és megőrizze a kontrasztot, hogy az ne akadályozza felhasználót a pontok számának meghatározásában.
+        </para>
+        <programlisting language="c"><![CDATA[
+          public void onDraw(android.graphics.Canvas canvas) {
+              ...
+                  canvas.drawColor(android.graphics.Color.rgb(25, 0, 51)); // háttérszín
+              ...
+          }
+          private void cinit(android.content.Context context) {
+
+              textPaint.setColor(android.graphics.Color.BLACK); // belső kör színe
+              textPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              textPaint.setAntiAlias(true);
+              textPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
+              textPaint.setTextSize(50);
+
+              msgPaint.setColor(android.graphics.Color.rgb(192, 192, 192)); // világosszürke; feliratok színe
+              msgPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              msgPaint.setAntiAlias(true);
+              msgPaint.setTextAlign(android.graphics.Paint.Align.LEFT);
+              msgPaint.setTextSize(40);
+
+              dotPaint.setColor(android.graphics.Color.WHITE); // belső pontok színe
+              dotPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              dotPaint.setAntiAlias(true);
+              dotPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
+              dotPaint.setTextSize(50);
+
+              borderPaint.setStrokeWidth(2);
+              borderPaint.setColor(android.graphics.Color.BLACK); // a naracssárga körökben levő számok színe
+              fillPaint.setStyle(android.graphics.Paint.Style.FILL);
+              fillPaint.setColor(android.graphics.Color.rgb(240, 102, 0)); // narancssárga; a számok háttere
+              ...
+          }
+]]>
+        </programlisting>
+        <para>
+          Végül az app futtatásához szükség van a telefonodra vagy egy emulátorra. Ha a saját telefonod akarod használni, akkor előbb be kell kapcsolnod az USB debugging-ot a fejlesztői beállításokban.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/smnist3.png" scale="25"/>
+            </imageobject>
+        </mediaobject>
 
 
 
