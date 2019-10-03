@@ -1,0 +1,304 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Mandelbrot!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>Reverse engineering UML osztálydiagram</title>
+        <para>
+          UML osztálydiagram rajzolása az első védési C++ programhoz. Az osztálydiagramot a forrásokból
+generáljuk (pl. Argo UML, Umbrello, Eclipse UML) Mutassunk rá a kompozíció és aggregáció
+kapcsolatára a forráskódban és a diagramon, lásd még: https://youtu.be/Td_nlERlEOs.
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_6.pdf (28-32 fólia)
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="">
+            <filename>bhax/thematic_tutorials/bhax_textbook/</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="">
+            <filename>bhax/thematic_tutorials/bhax_textbook/</filename>
+            </link>
+        </para>
+        <para>
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>Forward engineering UML osztálydiagram</title>
+        <para>
+          Írjunk Szülő-gyerek Java és C++ osztálydefiníciót, amelyben demonstrálni tudjuk, hogy az ősön
+keresztül csak az ős üzenetei küldhetőek!
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. fólia)
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/szulo_gyerek/java/Osztaly.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/java/Osztaly.java</filename>
+            </link>
+        </para>
+        <para>
+          <link xlink:href="liskov/szulo_gyerek/c++/szulogyerek.cpp">
+          <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/c++/szulogyerek.cpp</filename>
+          </link>
+        </para>
+        <para>
+          Javában: létrehozunk egy osztályt, ami a "szűlő" osztály lesz és létrehozzuk a <function>kiir</function> metódust. Származtatunk belőle egy "gyerek" osztályt. Itt túlterheljük az ősosztály <function>kiir</function> metódusát és létrehozunk egy új (<function>ujKiir</function>) metódust is. A tartalmuk lényegtelen, mivel minket egyedül a metódusok elérhetősége érdekel. Ezután jöhet is a tesztelés, ahol létrehozunk egy "gyerek" típusú objektumot, amire egy "szülő" típusú referencia mutat:
+        </para>
+        <programlisting language="c"><![CDATA[public class Osztaly{
+
+          public static void main(String[] args){
+            Szulo sz = new Gyerek();
+            sz.kiir();
+            sz.ujKiir();
+          }
+        }
+
+        class Szulo{
+          public void kiir(){
+            System.out.println("Szulo");
+          }
+        }
+
+        class Gyerek extends Szulo{
+
+          public void kiir(){
+            System.out.println("Gyerek");
+          }
+
+          public void ujKiir(){
+            System.out.println("uj");
+          }
+
+        }
+
+        $ javac Osztaly.java
+Osztaly.java:6: error: cannot find symbol
+    sz.ujKiir();
+      ^
+  symbol:   method ujKiir()
+  location: variable sz of type Szulo
+1 error
+]]>
+        </programlisting>
+        <para>
+          A fordítás sikertelen, ugyanis a <function>Szulo</function> nem ismeri a <function>Gyerek</function> által létrehozott új metódust. Viszont ha a túlterhelt metódust próbáljuk elérni, akkor az eredmény:
+        </para>
+        <programlisting language="c"><![CDATA[$ java Osztaly
+Gyerek
+]]>
+        </programlisting>
+        <para>
+          Ez a dinamikus kötésnek köszönhető, amely futási időben rendeli hozzá a metódust az objektumhoz. Javában ez alapértelmezett. Statikus kötést (fordítás során történik) is elérhetünk ha a <function>static</function> kulcsszóval deklaráljuk. Ekkor viszont a szülő metódusa fog lefutni.
+        </para>
+
+    </section>
+
+    <section>
+        <title>Anti OO</title>
+        <para>
+          A BBP algoritmussal a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10<superscript>6</superscript>, 10<superscript>7</superscript>, 10<superscript>8</superscript> darab
+jegyét határozzuk meg C, C++, Java és C# nyelveken és vessük össze a futási időket!
+https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/antioo/PiBBPBench.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/antioo/PiBBPBench.cs">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.cs</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/antioo/pi_bbp_bench.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/pi_bbp_bench.c</filename>
+            </link>
+        </para>
+        <para>
+          A BBP algoritmusnak jóvoltából képesek vagyunk másodpercek alatt kiszámoltatni a Pi hexadecimális kifejtésének 0. pozíciótól számított szinte akárhány darab jegyét. Viszont minnél távolabbi értékeket vizsgálunk, annál inkább számít a teljesítmény. Először vizsgáljuk meg a java verziót. A d+1. hexa jegytől számoljuk a hexa jegyeket, amely deklarálása a <function>for</function> ciklus fejlécében szerepel.
+        </para>
+        <programlisting language="c"><![CDATA[
+          ...
+          int jegy = 0;
+
+          long delta = System.currentTimeMillis();
+
+          for(int d=1000000; d<1000001; ++d) {
+
+              d16Pi = 0.0d;
+
+              d16S1t = d16Sj(d, 1);
+          ...
+
+$  java PiBBPBench
+6
+1.803
+
+$ java PiBBPBench
+7
+21.935
+
+$ java PiBBPBench
+12
+243.427
+]]>
+        </programlisting>
+
+        <literallayout>
+* A számításokat az alábbi erőforrásokkal felszerelt gépen végeztem:
+OS: Ubuntu 18.04 Lts
+CPU: intel core i5 6300HQ
+RAM: 8 GB 2133 MT/s DDR4
+        </literallayout>
+
+
+
+    </section>
+
+    <section>
+        <title>Hello, Android!</title>
+        <para>
+          Élesszük fel az SMNIST for Humans projektet!
+https://gitlab.com/nbatfai/smnist/tree/master/forHumans/SMNISTforHumansExp3/app/src/main
+Apró módosításokat eszközölj benne, pl. színvilág.
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="liskov/smnist3/ScaleAdapter.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/ScaleAdapter.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/smnist3/SMNISTE3Activity.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTE3Activity.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/smnist3/SMNISTSurfaceView.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTSurfaceView.java</filename>
+            </link>
+        </para>
+        <para>
+            <link xlink:href="liskov/smnist3/SurfaceEvents.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SurfaceEvents.java</filename>
+            </link>
+        </para>
+        <para>
+          A projekt felélesztésében tutorált: Racs Tamás
+        </para>
+        <para>
+          Mivel csupán a forrásfájlokkal rendelkeztünk, létre kellett hoznunk egy üres Android Studio projektet. Egy kis módosítással a <function>AndroidManifest</function> fájlban és a forrásfájlok bemásolásával sikerült feléleszteni a projektet. Ehhez szükség volt az Android Studio és a szükséges Android SDK telepítéséhez, amihez <link xlink:href="https://developer.android.com/studio/install">itt</link> találsz segítséget.
+        </para>
+        <para>
+          A színvilág változtatásához a <function>SMNISTSurfaceView.java</function> fájlt kell átírni. Az eddigi megoldást, ahol 2 háttérszín váltakozott ciklusonként...
+        </para>
+        <programlisting language="c"><![CDATA[
+          /*int[] bgColor =
+                  {
+                          android.graphics.Color.rgb(11, 180, 250),
+                          android.graphics.Color.rgb(11, 250, 180)
+                  };*/
+          //int bgIdx = 0;
+          ...
+          //bgIdx = (bgIdx + 1) % 2;
+          ...
+          //canvas.drawColor(bgColor[bgIdx]);
+]]>
+        </programlisting>
+        <para>
+          ..., mostmár csak 1 szín van, így nem zavar a színek váltakozása. A színeket úgy választottam, hogy az kellemes legyen a szemnek és megőrizze a kontrasztot, hogy az ne akadályozza felhasználót a pontok számának meghatározásában.
+        </para>
+        <programlisting language="c"><![CDATA[
+          public void onDraw(android.graphics.Canvas canvas) {
+              ...
+                  canvas.drawColor(android.graphics.Color.rgb(25, 0, 51)); // háttérszín
+              ...
+          }
+          private void cinit(android.content.Context context) {
+
+              textPaint.setColor(android.graphics.Color.BLACK); // belső kör színe
+              textPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              textPaint.setAntiAlias(true);
+              textPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
+              textPaint.setTextSize(50);
+
+              msgPaint.setColor(android.graphics.Color.rgb(192, 192, 192)); // világosszürke; feliratok színe
+              msgPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              msgPaint.setAntiAlias(true);
+              msgPaint.setTextAlign(android.graphics.Paint.Align.LEFT);
+              msgPaint.setTextSize(40);
+
+              dotPaint.setColor(android.graphics.Color.WHITE); // belső pontok színe
+              dotPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+              dotPaint.setAntiAlias(true);
+              dotPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
+              dotPaint.setTextSize(50);
+
+              borderPaint.setStrokeWidth(2);
+              borderPaint.setColor(android.graphics.Color.BLACK); // a naracssárga körökben levő számok színe
+              fillPaint.setStyle(android.graphics.Paint.Style.FILL);
+              fillPaint.setColor(android.graphics.Color.rgb(240, 102, 0)); // narancssárga; a számok háttere
+              ...
+          }
+]]>
+        </programlisting>
+        <para>
+          Végül az app futtatásához szükség van a telefonodra vagy egy emulátorra. Ha a saját telefonod akarod használni, akkor előbb be kell kapcsolnod az USB debugging-ot a fejlesztői beállításokban.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/smnist3.png" scale="25"/>
+            </imageobject>
+        </mediaobject>
+
+
+
+    </section>
+
+    <section>
+        <title>Ciklomatikus komplexitás</title>
+        <para>
+          Számoljuk ki valamelyik programunk függvényeinek ciklomatikus komplexitását! Lásd a fogalom
+tekintetében a https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_2.pdf (77-79
+fóliát)!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:
+
+        </para>
+
+        <para>
+
+        </para>
+
+
+    </section>
+
+
+</chapter>
