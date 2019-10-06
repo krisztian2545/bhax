@@ -15,21 +15,36 @@ kapcsolatára a forráskódban és a diagramon, lásd még: https://youtu.be/Td_
 https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_6.pdf (28-32 fólia)
         </para>
         <para>
-            Megoldás videó:
+          Az Umbrello programot választottam, mivel ingyenes és tökéletesen megfelel a feladat igényeinek. Magunktól is elkészíthetnénk az osztálydiagramot, de minek húznánk ezzel az időt, ha a program meg tudja csináni helyettünk. Nézzük hogyan: A <function>Code</function> menüpont alatt a <function>Code Importing Wizard</function> opcióra kattintva megjelenik számunkra egy ablak, ahol kiválsztjuk az importálandó forráskód nyelvét, odanavigálunk és kiválasztjuk a forrásfájlt.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/umb_step1.png" scale="75"/>
+            </imageobject>
+        </mediaobject>
         <para>
-            Megoldás forrása:
-            <link xlink:href="">
-            <filename>bhax/thematic_tutorials/bhax_textbook/</filename>
-            </link>
+          A következő oldalon rá kell mennünk a <function>Start import</function> gombra és kész is vagyunk az importálással. Mostmár a <function>Tree view</function>-ban megjelent az osztályunk és azt egy sima behúzással megjeleníthetjük, de ne felejtsük el a <function>Csomopont</function> osztályt is behúzni.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/umb_step2-3.png" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/umb_step4.png" scale="75"/>
+            </imageobject>
+        </mediaobject>
         <para>
-            Megoldás forrása:
-            <link xlink:href="">
-            <filename>bhax/thematic_tutorials/bhax_textbook/</filename>
-            </link>
+          A végeredmény:
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/binfa_uml.png" scale="10"/>
+            </imageobject>
+        </mediaobject>
         <para>
+          Amint azt láthatjuk, a <function>Csomopont</function> kompozícióban van az <function>LZWBinFa</function>-val, mivel ha kitörölnénk egy <function>LZWBinFa</function> objektumot, akkor a hozzá tartozó <function>Csomopont</function> objektum is törlődne. Aggregáció esetén ez nem lenne igaz.
         </para>
 
 
