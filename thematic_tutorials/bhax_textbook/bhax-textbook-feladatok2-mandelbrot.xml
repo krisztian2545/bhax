@@ -44,6 +44,7 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_6.pdf (28-32 
             </imageobject>
         </mediaobject>
         <para>
+          A fejléc tartalmazza az osztály nevét, alatta vannak a mezők és úgy a metódusok.
           Amint azt láthatjuk, a <function>Csomopont</function> kompozícióban van az <function>LZWBinFa</function>-val, mivel ha kitörölnénk egy <function>LZWBinFa</function> objektumot, akkor a hozzá tartozó <function>Csomopont</function> objektum is törlődne. Aggregáció esetén ez nem lenne igaz.
         </para>
 
@@ -53,239 +54,521 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_6.pdf (28-32 
     <section>
         <title>Forward engineering UML osztálydiagram</title>
         <para>
-          Írjunk Szülő-gyerek Java és C++ osztálydefiníciót, amelyben demonstrálni tudjuk, hogy az ősön
-keresztül csak az ős üzenetei küldhetőek!
-https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_1.pdf (98. fólia)
-        </para>
-        <para>
-            Megoldás videó:
+          UML-ben tervezzünk osztályokat és generáljunk belőle forrást!
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/szulo_gyerek/java/Osztaly.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/java/Osztaly.java</filename>
+            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.cpp</filename>
             </link>
         </para>
         <para>
-          <link xlink:href="liskov/szulo_gyerek/c++/szulogyerek.cpp">
-          <filename>bhax/thematic_tutorials/bhax_textbook/liskov/szulo_gyerek/c++/szulogyerek.cpp</filename>
-          </link>
+            Megoldás forrása:
+            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.h">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.h</filename>
+            </link>
         </para>
         <para>
-          Javában: létrehozunk egy osztályt, ami a "szűlő" osztály lesz és létrehozzuk a <function>kiir</function> metódust. Származtatunk belőle egy "gyerek" osztályt. Itt túlterheljük az ősosztály <function>kiir</function> metódusát és létrehozunk egy új (<function>ujKiir</function>) metódust is. A tartalmuk lényegtelen, mivel minket egyedül a metódusok elérhetősége érdekel. Ezután jöhet is a tesztelés, ahol létrehozunk egy "gyerek" típusú objektumot, amire egy "szülő" típusú referencia mutat:
+          Most megpróbálunk az előző feladat uml diagramából generálni c++ kódot. Az Umbrello programban a <function>Code</function> menüpont alatt a <function>Code Generating Wizard</function> opcióval megnyílik egy ablak, ahol megadhatjuk a generálandó kód helyét, nyelvét és egyéb formázási beállításokat (pl. akarjuk-e hogy kiegészítse a kódot a kommentjeinkkel vagy sem) hajthatunk végre. Ezután kiválasztjuk legenerálni kívánt osztályokat és egy-két kattintással kész is a forráskód.
         </para>
-        <programlisting language="c"><![CDATA[public class Osztaly{
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/uml_code_gen.png" scale="50"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+          A végeredmény egy .cpp és egy .h fájl. A header tartalmazza a mezőket és metódusokat, ám azok üresek, mivel a diagram csupán a metódus nevét, láthatóságát és argumentumait tartalmazza. Ezeken kívül létrehozott get/set metódusokat is a mezők lekérdezéséhez és módosításához.
+        </para>
+        <programlisting language="c"><![CDATA[#ifndef LZWBINFA_H
+        #define LZWBINFA_H
 
-          public static void main(String[] args){
-            Szulo sz = new Gyerek();
-            sz.kiir();
-            sz.ujKiir();
-          }
-        }
+        #include string
 
-        class Szulo{
-          public void kiir(){
-            System.out.println("Szulo");
-          }
-        }
+        /**
+          * class LZWBinFa
+          * osztályon belűl csak prototípusok legyenek,<<operátor kiiktatása,szeggyük külön
+          * a programot 3 részre
+          */
 
-        class Gyerek extends Szulo{
+        class LZWBinFa
+        {
+        public:
 
-          public void kiir(){
-            System.out.println("Gyerek");
-          }
+         // Constructors/Destructors
+         //
 
-          public void ujKiir(){
-            System.out.println("uj");
-          }
+         /**
+          * Empty Constructor
+          */
+         LZWBinFa ();
 
-        }
+         /**
+          * Empty Destructor
+          */
+         virtual ~LZWBinFa ();
 
-        $ javac Osztaly.java
-Osztaly.java:6: error: cannot find symbol
-    sz.ujKiir();
-      ^
-  symbol:   method ujKiir()
-  location: variable sz of type Szulo
-1 error
+         // Static Public attributes
+         //
+
+         // Public attributes
+         //
+
+         // Public attribute accessor methods
+         //
+
+         // Public attribute accessor methods
+         //
+
+         /**
+          * @param  b
+          */
+         void operator_ (char b)
+         {
+         }
+
+         /**
+          */
+         void kiir ()
+         {
+         }
+
+         /**
+          * A változatosság kedvéért ezeket az osztálydefiníció (class LZWBinFa {...};) után
+          * definiáljuk,
+          * hogy kénytelen légy az LZWBinFa és a :: hatókör operátorral minősítve definiálni
+          * :) l. lentebb
+          * @return int
+          */
+         int getMelyseg ()
+         {
+         }
+
+         /**
+          * @return double
+          */
+         double getAtlag ()
+         {
+         }
+
+         /**
+          * @return double
+          */
+         double getSzoras ()
+         {
+         }
+
+         /**
+          * @return std::ostream&
+          * @param  os
+          * @param  bf
+          */
+         std::ostream& operator_ (std::ostream& os, LZWBinFa& bf)
+         {
+         }
+
+         /**
+          * @param  os
+          */
+         void kiir (std::ostream& os)
+         {
+         }
+
+         /**
+          */
+         void ki ()
+         {
+         }
+
+         /**
+          * @param  elem
+          */
+         void szabadit (Csomopont* elem)
+         {
+         }
+
+        protected:
+
+         // Static Protected attributes
+         //
+
+         // Protected attributes
+         //
+
+         // A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér:
+         Csomopont* gyoker;
+         int maxMelyseg;
+         double atlag;
+         double szoras;
+        public:
+
+         // Protected attribute accessor methods
+         //
+
+        protected:
+
+        public:
+
+         // Protected attribute accessor methods
+         //
+
+         /**
+          * Set the value of gyoker
+          * A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér:
+          * @param new_var the new value of gyoker
+          */
+         void setGyoker (Csomopont* new_var)  {
+           gyoker = new_var;
+         }
+
+         /**
+          * Get the value of gyoker
+          * A fában tagként benne van egy csomópont, ez erősen ki van tüntetve, Ő a gyökér:
+          * @return the value of gyoker
+          */
+         Csomopont* getGyoker ()  {
+          return gyoker;
+         }
+
+         /**
+          * Set the value of maxMelyseg
+          * @param new_var the new value of maxMelyseg
+          */
+         void setMaxMelyseg (int new_var)  {
+           maxMelyseg = new_var;
+         }
+
+         /**
+          * Get the value of maxMelyseg
+          * @return the value of maxMelyseg
+          */
+         int getMaxMelyseg ()  {
+          return maxMelyseg;
+         }
+
+         /**
+          * Set the value of atlag
+          * @param new_var the new value of atlag
+          */
+         void setAtlag (double new_var)  {
+           atlag = new_var;
+         }
+
+         /**
+          * Get the value of atlag
+          * @return the value of atlag
+          */
+         double getAtlag ()  {
+          return atlag;
+         }
+
+         /**
+          * Set the value of szoras
+          * @param new_var the new value of szoras
+          */
+         void setSzoras (double new_var)  {
+           szoras = new_var;
+         }
+
+         /**
+          * Get the value of szoras
+          * @return the value of szoras
+          */
+         double getSzoras ()  {
+          return szoras;
+         }
+        protected:
+
+         /**
+          * @param  elem
+          */
+         void rmelyseg (Csomopont* elem)
+         {
+         }
+
+         /**
+          * @param  elem
+          */
+         void ratlag (Csomopont* elem)
+         {
+         }
+
+         /**
+          * @param  elem
+          */
+         void rszoras (Csomopont* elem)
+         {
+         }
+
+        private:
+
+         // Static Private attributes
+         //
+
+         // Private attributes
+         //
+
+         // van nulla
+         int vann;
+         // nincs nulla
+         int nincsn;
+         // van egy
+         int vane;
+         // nincs egy
+         int nincse;
+         // Mindig a fa "LZW algoritmus logikája szerinti aktuális" csomópontjára mutat
+         Csomopont* fa;
+         // technikai
+         int melyseg;
+         int atlagosszeg;
+         int atlagdb;
+         double szorasosszeg;
+        public:
+
+         // Private attribute accessor methods
+         //
+
+        private:
+
+        public:
+
+         // Private attribute accessor methods
+         //
+
+         /**
+          * Set the value of vann
+          * van nulla
+          * @param new_var the new value of vann
+          */
+         void setVann (int new_var)  {
+           vann = new_var;
+         }
+
+         /**
+          * Get the value of vann
+          * van nulla
+          * @return the value of vann
+          */
+         int getVann ()  {
+          return vann;
+         }
+
+         /**
+          * Set the value of nincsn
+          * nincs nulla
+          * @param new_var the new value of nincsn
+          */
+         void setNincsn (int new_var)  {
+           nincsn = new_var;
+         }
+
+         /**
+          * Get the value of nincsn
+          * nincs nulla
+          * @return the value of nincsn
+          */
+         int getNincsn ()  {
+          return nincsn;
+         }
+
+         /**
+          * Set the value of vane
+          * van egy
+          * @param new_var the new value of vane
+          */
+         void setVane (int new_var)  {
+           vane = new_var;
+         }
+
+         /**
+          * Get the value of vane
+          * van egy
+          * @return the value of vane
+          */
+         int getVane ()  {
+          return vane;
+         }
+
+         /**
+          * Set the value of nincse
+          * nincs egy
+          * @param new_var the new value of nincse
+          */
+         void setNincse (int new_var)  {
+           nincse = new_var;
+         }
+
+         /**
+          * Get the value of nincse
+          * nincs egy
+          * @return the value of nincse
+          */
+         int getNincse ()  {
+          return nincse;
+         }
+
+         /**
+          * Set the value of fa
+          * Mindig a fa "LZW algoritmus logikája szerinti aktuális" csomópontjára mutat
+          * @param new_var the new value of fa
+          */
+         void setFa (Csomopont* new_var)  {
+           fa = new_var;
+         }
+
+         /**
+          * Get the value of fa
+          * Mindig a fa "LZW algoritmus logikája szerinti aktuális" csomópontjára mutat
+          * @return the value of fa
+          */
+         Csomopont* getFa ()  {
+          return fa;
+         }
+
+         /**
+          * Set the value of melyseg
+          * technikai
+          * @param new_var the new value of melyseg
+          */
+         void setMelyseg (int new_var)  {
+           melyseg = new_var;
+         }
+
+         /**
+          * Get the value of melyseg
+          * technikai
+          * @return the value of melyseg
+          */
+         int getMelyseg ()  {
+          return melyseg;
+         }
+
+         /**
+          * Set the value of atlagosszeg
+          * @param new_var the new value of atlagosszeg
+          */
+         void setAtlagosszeg (int new_var)  {
+           atlagosszeg = new_var;
+         }
+
+         /**
+          * Get the value of atlagosszeg
+          * @return the value of atlagosszeg
+          */
+         int getAtlagosszeg ()  {
+          return atlagosszeg;
+         }
+
+         /**
+          * Set the value of atlagdb
+          * @param new_var the new value of atlagdb
+          */
+         void setAtlagdb (int new_var)  {
+           atlagdb = new_var;
+         }
+
+         /**
+          * Get the value of atlagdb
+          * @return the value of atlagdb
+          */
+         int getAtlagdb ()  {
+          return atlagdb;
+         }
+
+         /**
+          * Set the value of szorasosszeg
+          * @param new_var the new value of szorasosszeg
+          */
+         void setSzorasosszeg (double new_var)  {
+           szorasosszeg = new_var;
+         }
+
+         /**
+          * Get the value of szorasosszeg
+          * @return the value of szorasosszeg
+          */
+         double getSzorasosszeg ()  {
+          return szorasosszeg;
+         }
+        private:
+
+         /**
+          * @param
+          */
+          LZWBinFa (const LZWBinFa& )
+         {
+         }
+
+         /**
+          * szokásosan: nocopyable
+          * @return LZWBinFa&
+          * @param
+          */
+         LZWBinFa& operator_ (const LZWBinFa& )
+         {
+         }
+
+         /**
+          * @param  elem
+          * @param  os
+          */
+         void kiir (Csomopont* elem, std::ostream& os)
+         {
+         }
+
+         void initAttributes () ;
+
+        };
+
+        #endif // LZWBINFA_H
 ]]>
         </programlisting>
-        <para>
-          A fordítás sikertelen, ugyanis a <function>Szulo</function> nem ismeri a <function>Gyerek</function> által létrehozott új metódust. Viszont ha a túlterhelt metódust próbáljuk elérni, akkor az eredmény:
-        </para>
-        <programlisting language="c"><![CDATA[$ java Osztaly
-Gyerek
-]]>
-        </programlisting>
-        <para>
-          Ez a dinamikus kötésnek köszönhető, amely futási időben rendeli hozzá a metódust az objektumhoz. Javában ez alapértelmezett. Statikus kötést (fordítás során történik) is elérhetünk ha a <function>static</function> kulcsszóval deklaráljuk. Ekkor viszont a szülő metódusa fog lefutni.
-        </para>
 
     </section>
 
     <section>
-        <title>Anti OO</title>
+        <title>Egy esettan</title>
         <para>
-          A BBP algoritmussal a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10<superscript>6</superscript>, 10<superscript>7</superscript>, 10<superscript>8</superscript> darab
-jegyét határozzuk meg C, C++, Java és C# nyelveken és vessük össze a futási időket!
-https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066
-        </para>
-        <para>
-            Megoldás videó:
+          A BME-s C++ tankönyv 14. fejezetét (427-444 elmélet, 445-469 az esettan) dolgozzuk fel!
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="liskov/antioo/PiBBPBench.java">
+            <link xlink:href="mandelbort2/esettan/PiBBPBench.java">
             <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.java</filename>
             </link>
         </para>
         <para>
-            <link xlink:href="liskov/antioo/PiBBPBench.cs">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.cs</filename>
-            </link>
-        </para>
-        <para>
-            <link xlink:href="liskov/antioo/pi_bbp_bench.c">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/pi_bbp_bench.c</filename>
-            </link>
-        </para>
-        <para>
-          A BBP algoritmusnak jóvoltából képesek vagyunk másodpercek alatt kiszámoltatni a Pi hexadecimális kifejtésének 0. pozíciótól számított szinte akárhány darab jegyét. Viszont minnél távolabbi értékeket vizsgálunk, annál inkább számít a teljesítmény. Először vizsgáljuk meg a java verziót. A d+1. hexa jegytől számoljuk a hexa jegyeket, amely deklarálása a <function>for</function> ciklus fejlécében szerepel.
+
         </para>
         <programlisting language="c"><![CDATA[
-          ...
-          int jegy = 0;
-
-          long delta = System.currentTimeMillis();
-
-          for(int d=1000000; d<1000001; ++d) {
-
-              d16Pi = 0.0d;
-
-              d16S1t = d16Sj(d, 1);
-          ...
-
-$  java PiBBPBench
-6
-1.803
-
-$ java PiBBPBench
-7
-21.935
-
-$ java PiBBPBench
-12
-243.427
 ]]>
         </programlisting>
 
-        <literallayout>
-* A számításokat az alábbi erőforrásokkal felszerelt gépen végeztem:
-OS: Ubuntu 18.04 Lts
-CPU: intel core i5 6300HQ
-RAM: 8 GB 2133 MT/s DDR4
-        </literallayout>
+
 
 
 
     </section>
 
     <section>
-        <title>Hello, Android!</title>
+        <title>BPMN</title>
         <para>
-          Élesszük fel az SMNIST for Humans projektet!
-https://gitlab.com/nbatfai/smnist/tree/master/forHumans/SMNISTforHumansExp3/app/src/main
-Apró módosításokat eszközölj benne, pl. színvilág.
+          Rajzoljunk le egy tevékenységet BPMN-ben!
+https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_7.pdf (34-47 fólia)
         </para>
         <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:
-            <link xlink:href="liskov/smnist3/ScaleAdapter.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/ScaleAdapter.java</filename>
-            </link>
-        </para>
-        <para>
-            <link xlink:href="liskov/smnist3/SMNISTE3Activity.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTE3Activity.java</filename>
-            </link>
-        </para>
-        <para>
-            <link xlink:href="liskov/smnist3/SMNISTSurfaceView.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SMNISTSurfaceView.java</filename>
-            </link>
-        </para>
-        <para>
-            <link xlink:href="liskov/smnist3/SurfaceEvents.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/smnist3/SurfaceEvents.java</filename>
-            </link>
-        </para>
-        <para>
-          A projekt felélesztésében tutorált: Racs Tamás
-        </para>
-        <para>
-          Mivel csupán a forrásfájlokkal rendelkeztünk, létre kellett hoznunk egy üres Android Studio projektet. Egy kis módosítással a <function>AndroidManifest</function> fájlban és a forrásfájlok bemásolásával sikerült feléleszteni a projektet. Ehhez szükség volt az Android Studio és a szükséges Android SDK telepítéséhez, amihez <link xlink:href="https://developer.android.com/studio/install">itt</link> találsz segítséget.
-        </para>
-        <para>
-          A színvilág változtatásához a <function>SMNISTSurfaceView.java</function> fájlt kell átírni. Az eddigi megoldást, ahol 2 háttérszín váltakozott ciklusonként...
-        </para>
-        <programlisting language="c"><![CDATA[
-          /*int[] bgColor =
-                  {
-                          android.graphics.Color.rgb(11, 180, 250),
-                          android.graphics.Color.rgb(11, 250, 180)
-                  };*/
-          //int bgIdx = 0;
-          ...
-          //bgIdx = (bgIdx + 1) % 2;
-          ...
-          //canvas.drawColor(bgColor[bgIdx]);
-]]>
-        </programlisting>
-        <para>
-          ..., mostmár csak 1 szín van, így nem zavar a színek váltakozása. A színeket úgy választottam, hogy az kellemes legyen a szemnek és megőrizze a kontrasztot, hogy az ne akadályozza felhasználót a pontok számának meghatározásában.
-        </para>
-        <programlisting language="c"><![CDATA[
-          public void onDraw(android.graphics.Canvas canvas) {
-              ...
-                  canvas.drawColor(android.graphics.Color.rgb(25, 0, 51)); // háttérszín
-              ...
-          }
-          private void cinit(android.content.Context context) {
-
-              textPaint.setColor(android.graphics.Color.BLACK); // belső kör színe
-              textPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
-              textPaint.setAntiAlias(true);
-              textPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
-              textPaint.setTextSize(50);
-
-              msgPaint.setColor(android.graphics.Color.rgb(192, 192, 192)); // világosszürke; feliratok színe
-              msgPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
-              msgPaint.setAntiAlias(true);
-              msgPaint.setTextAlign(android.graphics.Paint.Align.LEFT);
-              msgPaint.setTextSize(40);
-
-              dotPaint.setColor(android.graphics.Color.WHITE); // belső pontok színe
-              dotPaint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
-              dotPaint.setAntiAlias(true);
-              dotPaint.setTextAlign(android.graphics.Paint.Align.CENTER);
-              dotPaint.setTextSize(50);
-
-              borderPaint.setStrokeWidth(2);
-              borderPaint.setColor(android.graphics.Color.BLACK); // a naracssárga körökben levő számok színe
-              fillPaint.setStyle(android.graphics.Paint.Style.FILL);
-              fillPaint.setColor(android.graphics.Color.rgb(240, 102, 0)); // narancssárga; a számok háttere
-              ...
-          }
-]]>
-        </programlisting>
-        <para>
-          Végül az app futtatásához szükség van a telefonodra vagy egy emulátorra. Ha a saját telefonod akarod használni, akkor előbb be kell kapcsolnod az USB debugging-ot a fejlesztői beállításokban.
+          A BPMN széles körben használt és elfogadott módja a folyamatok ábrázolásának. Ilyen ábrák készítéséhez a következő eszközök állnak a rendelkezésünkre:
         </para>
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/smnist3.png" scale="25"/>
+                <imagedata fileref="images/bpmn_tut.png" scale="75"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+          Példa: panaszlevelet küld egy vásárló. A support részleg elküldi válaszát a vásárlónak és vár a visszajelzésre. Ha a vásárló 2 napig nem válaszol, akkor nem foglalkoznak vele többet. Ha viszont válaszol, de válaszában további elégedetlenségét nyilvánítja ki, akkor az ide-oda levelezés tovább folytatódik amíg a vásárló elégedett nem lesz és így le nem zárul az ügy.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/bpmn.png" scale="75"/>
             </imageobject>
         </mediaobject>
 
@@ -294,14 +577,10 @@ Apró módosításokat eszközölj benne, pl. színvilág.
     </section>
 
     <section>
-        <title>Ciklomatikus komplexitás</title>
+        <title>TeX UML</title>
         <para>
-          Számoljuk ki valamelyik programunk függvényeinek ciklomatikus komplexitását! Lásd a fogalom
-tekintetében a https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_2.pdf (77-79
-fóliát)!
-        </para>
-        <para>
-            Megoldás videó:
+          Valamilyen TeX-es csomag felhasználásával készíts szép diagramokat az OOCWC projektről (pl.
+  use case és class diagramokat).
         </para>
         <para>
             Megoldás forrása:
