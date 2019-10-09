@@ -1,0 +1,140 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Chomsky!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>Encoding</title>
+        <para>
+          Fordítsuk le és futtassuk a Javat tanítok könyv MandelbrotHalmazNagyító.java forrását úgy, hogy a
+fájl nevekben és a forrásokban is meghagyjuk az ékezetes betűket!
+<link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/adatok.html">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/adatok.html</link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/encoding/MandelbrotHalmazNagyito.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotHalmazNagyito.java</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/encoding/MandelbrotHalmaz.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotHalmaz.java</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/encoding/MandelbrotIteraciok.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotIteraciok.java</filename>
+            </link>
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mandelbro.png" scale="30"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+          Kész!
+        </para>
+
+
+
+
+    </section>
+
+    <section>
+        <title>OOCWC lexer</title>
+        <para>
+          Izzítsuk be az OOCWC-t és vázoljuk a <link xlink:href="https://github.com/nbatfai/robocar-emulator/blob/master/justine/rcemu/src/carlexer.ll">https://github.com/nbatfai/robocar-emulator/blob/master/justine/rcemu/src/carlexer.ll</link> lexert és kapcsolását a programunk OO struktúrájába!
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.h">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.h</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>Paszigráfia Rapszódia OpenGL full screen vizualizáció</title>
+        <para>
+          Lásd vis_prel_para.pdf! Apró módosításokat eszközölj benne, pl. színvilág, textúrázás, a szintek jobb
+elkülönítése, kézreállóbb irányítás.
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="mandelbort2/esettan/PiBBPBench.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.java</filename>
+            </link>
+        </para>
+
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/uml_code_gen.png" scale="50"/>
+            </imageobject>
+        </mediaobject>
+
+
+
+
+    </section>
+
+    <section>
+        <title>Paszigráfia Rapszódia LuaLaTeX vizualizáció</title>
+        <para>
+          Lásd vis_prel_para.pdf! Apró módosításokat eszközölj benne, pl. színvilág, még erősebb 3D-s hatás.
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.cpp</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/bpmn_tut.png" scale="75"/>
+            </imageobject>
+        </mediaobject>
+
+
+
+
+    </section>
+
+    <section>
+        <title>Perceptron osztály</title>
+        <para>
+          Dolgozzuk be egy külön projektbe a projekt Perceptron osztályát!
+Lásd <link xlink:href="https://youtu.be/XpBnR31BRJY">https://youtu.be/XpBnR31BRJY</link>
+        </para>
+        <para>
+            Megoldás forrása:
+
+        </para>
+
+        <para>
+
+        </para>
+
+
+    </section>
+
+
+</chapter>
