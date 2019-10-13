@@ -64,7 +64,7 @@ void drawPaRaCube ( int idx )
 
         glBegin ( GL_QUADS );
 
-        glColor3f ( 0.818f, .900f, 0.824f );
+        glColor3f ( 0.18f, .210f, 0.24f );
 
         glVertex3f ( -1.0f, 1.0f, 1.0f );
         glVertex3f ( 1.0f, 1.0f, 1.0f );
@@ -99,7 +99,7 @@ void drawPaRaCube ( int idx )
         glEnd();
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[0]; i++ ) {
 
@@ -118,7 +118,7 @@ void drawPaRaCube ( int idx )
         for ( int i {0}; i<cubeLetters[idx].cc[0].size() /2; ++i ) {
                 glBegin ( GL_QUADS );
 
-                glColor3f ( .82f, .15f, .15f );
+                glColor3f ( .802f, .15f, .15f );
 
                 glVertex3f ( 1.0f- ( cubeLetters[idx].cc[0][2*i]+1 ) * ( 2.0/cubeLetters[idx].nn[0] ),
                              1.0f- ( cubeLetters[idx].cc[0][2*i+1]+1 ) * ( 2.0/cubeLetters[idx].nn[0] ), 1.002f );
@@ -134,7 +134,7 @@ void drawPaRaCube ( int idx )
 
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[1]; i++ ) {
 
@@ -168,7 +168,7 @@ void drawPaRaCube ( int idx )
         }
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[2]; i++ ) {
 
@@ -201,7 +201,7 @@ void drawPaRaCube ( int idx )
         }
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[3]; i++ ) {
 
@@ -233,7 +233,7 @@ void drawPaRaCube ( int idx )
         }
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[4]; i++ ) {
 
@@ -265,7 +265,7 @@ void drawPaRaCube ( int idx )
         }
 
         glBegin ( GL_LINES );
-        glColor3f ( .188f, 0.209f, 0.190f );
+        glColor3f ( .988f, 0.209f, 0.190f );
 
         for ( int i=0; i<=cubeLetters[idx].nn[5]; i++ ) {
 
@@ -302,7 +302,7 @@ void drawPaRaCube ( int idx )
 
 void draw ( void )
 {
-        glClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
+        glClearColor ( .8f, .8f, .8f, .8f );
 
         if ( transp )
                 glDisable ( GL_DEPTH_TEST );
