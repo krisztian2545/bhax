@@ -70,18 +70,7 @@ fájl nevekben és a forrásokban is meghagyjuk az ékezetes betűket!
         <para>
           Izzítsuk be az OOCWC-t és vázoljuk a <link xlink:href="https://github.com/nbatfai/robocar-emulator/blob/master/justine/rcemu/src/carlexer.ll">https://github.com/nbatfai/robocar-emulator/blob/master/justine/rcemu/src/carlexer.ll</link> lexert és kapcsolását a programunk OO struktúrájába!
         </para>
-        <para>
-            Megoldás forrása:
-            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.cpp">
-            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.cpp</filename>
-            </link>
-        </para>
-        <para>
-            Megoldás forrása:
-            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.h">
-            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.h</filename>
-            </link>
-        </para>
+
         <para>
 
         </para>
@@ -217,20 +206,6 @@ elkülönítése, kézreállóbb irányítás.
         <para>
           Lásd vis_prel_para.pdf! Apró módosításokat eszközölj benne, pl. színvilág, még erősebb 3D-s hatás.
         </para>
-        <para>
-            Megoldás forrása:
-            <link xlink:href="mandelbrot2/forward_uml/LZWBinFa.cpp">
-            <filename>bhax/thematic_tutorials/bhax_textbook/mandelbrot2/forward_uml/LZWBinFa.cpp</filename>
-            </link>
-        </para>
-        <para>
-
-        </para>
-        <mediaobject>
-            <imageobject>
-                <imagedata fileref="images/bpmn_tut.png" scale="75"/>
-            </imageobject>
-        </mediaobject>
 
 
 
@@ -245,12 +220,89 @@ Lásd <link xlink:href="https://youtu.be/XpBnR31BRJY">https://youtu.be/XpBnR31BR
         </para>
         <para>
             Megoldás forrása:
-
+            <link xlink:href="chomsky2/perceptron/mandel.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/perceptron/mandel.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/perceptron/main.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/perceptron/main.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/perceptron/mlp.hpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/perceptron/mlp.hpp</filename>
+            </link>
         </para>
 
         <para>
-
+          Gépi tanulásban a perceptron egy bináris osztályozás tanítására használt algoritmus, amely el tudja dönteni a bemenetről, hogy az benne van e az adott osztályban vagy sem.
         </para>
+        <para>
+          Először lefordítjuk a <function>mandel.cpp</function>-t, hogy aztán létrehozhassuk vele mandel.png-t. Később ez a kép lesz a bemenet a perceptronnak.
+        </para>
+        <programlisting><![CDATA[
+$ g++ mandel.cpp -lpng16 -o3 -o mandel
+$ ./mandel mandel.png
+2114
+21.1525 sec
+mandel.png mentve]]>
+        </programlisting>
+        <para>
+          A libpng  és libpng++ könyvtárkat a következő parancsokkal tudjuk feltelepíteni: <command>sudo apt-get install libpng-dev</command> és <command>sudo apt-get install libpng++-dev</command>
+          A <function>-o3</function> kapcsoló 3-as szintű optimizálást jelent, hogy a program majd gyorsabb legyen, cserébe viszont tovább tart a fordítás.
+        </para>
+
+        <programlisting><![CDATA[
+$ g++ mlp.hpp main.cpp -o perc -lpng -std=c++11
+$ ./perc mandel.png
+0.527632
+$ ./perc mandel.png
+0.696341 ]]>
+        </programlisting>
+        <para>
+          Deklaráljuk a képet tartalmazó objektumunkat a parancssori argumentumban megadott fájlnév alapján.
+        </para>
+        <programlisting><![CDATA[int main (int argc, char **argv)
+        {
+            png::image <png::rgb_pixel> png_image (argv[1]);
+            ...]]>
+        </programlisting>
+        <para>
+          Ezután kiszámoljuk és eltároljuk a kép "méretét" (területét), amit felhasználunk a perceptron bemeneti méretének meghatározásához. Ugyígy az <function>image</function> változó deklarálásakor.
+        </para>
+        <programlisting><![CDATA[
+int size = png_image.get_width() * png_image.get_height();
+
+Perceptron* p = new Perceptron (3, size, 256, 1);
+
+double* image = new double[size];]]>
+        </programlisting>
+        <para>
+          Egyesével végigmegyünk a kép összes pixelén és azok <function>red</function> értékét eltároljuk az <function>image</function> tömbbe, így a ciklusok végére megkapjuk a kép vörös színértékeit egydimenziós formára konvertálva. Erre azért volt szükség, mert a perceptron ilyen formában igényeli a bemenetet.
+        </para>
+        <programlisting><![CDATA[
+          for (int i = 0; i<png_image.get_width(); ++i)
+              for (int j = 0; j<png_image.get_height(); ++j)
+                  image[i*png_image.get_width() + j] = png_image[i][j].red;
+          ]]>
+        </programlisting>
+        <para>
+          Mostmár átadjuk a perceptronnak az értékeket és az eredményt elmentjük a <function>value</function> változóba. Végül már csak a kiíratás és a memória felszabadítása maraadt:
+        </para>
+        <programlisting><![CDATA[
+          double value = (*p) (image);
+
+          std::cout << value << std::endl;
+
+          delete p;
+          delete [] image;
+
+          }
+]]>
+        </programlisting>
 
 
     </section>
