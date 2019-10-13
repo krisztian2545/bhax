@@ -15,8 +15,8 @@ fájl nevekben és a forrásokban is meghagyjuk az ékezetes betűket!
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="chomsky2/encoding/MandelbrotHalmazNagyito.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotHalmazNagyito.java</filename>
+            <link xlink:href="chomsky2/encoding/MandelbrotHalmazNagyító.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotHalmazNagyító.java</filename>
             </link>
         </para>
         <para>
@@ -27,18 +27,38 @@ fájl nevekben és a forrásokban is meghagyjuk az ékezetes betűket!
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="chomsky2/encoding/MandelbrotIteraciok.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotIteraciok.java</filename>
+            <link xlink:href="chomsky2/encoding/MandelbrotIterációk.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/encoding/MandelbrotIterációk.java</filename>
             </link>
+        </para>
+        <para>
+          Általában nem szokás és nem is ajánlott ékezeteket használnunk a fájlnevekben és a forráskódban (mivel kicsi az esélye annak, hogy a kódodat csak magyarok fogják olvasni és így "mások" nem fogják érteni az azonosítóidat és bizonyos esetben a fordító encode-olási hibába ütközhet a kódod értelmezésekor), de nem árt ha tisztában vagyunk vele, hogy ez is lehetséges.
+        </para>
+        <para>
+          <command>-encoding encoding</command>
+
+    Sets the source file encoding name, such as EUC-JP and UTF-8. If the -encoding option is not specified, then the platform default converter is used.
+
+        </para>
+        <para>
+          A <command>javac</command> parancs után az <function>-encoding</function> kapcsolóval megmondhatjuk a fordítónak, hogy melyik encode-olás szerint értelmezze a forráskódunk. Ha ezt nem adjuk meg, akkor az alapértelmezett beállítás szerint végzi el. A támogatott kódolások listáját megtalálod <link xlink:href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">itt</link>.
+        </para>
+        <para>
+          A fordításhoz az <function>UTF-8</function>-as kódolást használtam, ami biztosítja hogy a fordító értelmezni tudja a magyar nyelv ékezetes betűit.
         </para>
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/mandelbro.png" scale="30"/>
+                <imagedata fileref="images/mandelbro.png" scale="35"/>
             </imageobject>
         </mediaobject>
         <para>
-          Kész!
+          Ha az alapértelmezett encode-olás <function>UTF-8</function>-ra van állítva, az <function>-encoding</function> kapcsoló elhanyagolható.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mandelbro2.png" scale="35"/>
+            </imageobject>
+        </mediaobject>
 
 
 
@@ -77,14 +97,26 @@ elkülönítése, kézreállóbb irányítás.
         </para>
         <para>
             Megoldás forrása:
-            <link xlink:href="mandelbort2/esettan/PiBBPBench.java">
-            <filename>bhax/thematic_tutorials/bhax_textbook/liskov/antioo/PiBBPBench.java</filename>
+            <link xlink:href="chomsky2/pasz_opengl/para6.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/pasz_opengl/para6.cpp</filename>
             </link>
+        </para>
+
+        <para>
+          A PaRa (Paszigráfia Rapszódia) egy mesterséges nyelv kialakítására való törkvés, amely lehetővé teszi a homunkulusz és a mesterséges homunkulusz közötti kommunikációt, ergó ez az esport kultúra nyelve. Az SMNIST-el ellentétben itt nem a pöttyök száma, hanem azok pontos elhelyezkedése számít.
+        </para>
+        <para>
+          A vizualizáláshoz az OpenGL könyvtárat fogjuk használni. Az importálást a következő sor teszi lehetővé:
+        </para>
+        <programlisting><![CDATA[#include <GL/glut.h>]]>
+        </programlisting>
+        <para>
+          
         </para>
 
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/uml_code_gen.png" scale="50"/>
+                <imagedata fileref="images/para.png" scale="50"/>
             </imageobject>
         </mediaobject>
 

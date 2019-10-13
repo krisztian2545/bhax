@@ -16,18 +16,18 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
     protected double a, b, c, d;
     /** A komplex sík vizsgált tartományára feszített
      * háló szélessége és magassága. */
-    protected int szelesseg, magassag;
+    protected int szélesség, magasság;
     /** A komplex sík vizsgált tartományára feszített hálónak megfelelő kép.*/
-    protected java.awt.image.BufferedImage kep;
+    protected java.awt.image.BufferedImage kép;
     /** Max. hány lépésig vizsgáljuk a z_{n+1} = z_n * z_n + c iterációt?
      * (tk. most a nagyítási pontosság) */
-    protected int iteraciosHatar = 255;
+    protected int iterációsHatár = 255;
     /** Jelzi, hogy éppen megy-e a szamítás? */
-    protected boolean szamitasFut = false;
+    protected boolean számításFut = false;
     /** Jelzi az ablakban, hogy éppen melyik sort számoljuk. */
     protected int sor = 0;
     /** A pillanatfelvételek számozásához. */
-    protected static int pillanatfelvetelSzamlalo = 0;
+    protected static int pillanatfelvételSzámláló = 0;
     /**
      * Létrehoz egy a Mandelbrot halmazt a komplex sík
      * [a,b]x[c,d] tartománya felett kiszámoló
@@ -37,22 +37,22 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
      * @param      b              a [a,b]x[c,d] tartomány b koordinátája.
      * @param      c              a [a,b]x[c,d] tartomány c koordinátája.
      * @param      d              a [a,b]x[c,d] tartomány d koordinátája.
-     * @param      szelesseg      a halmazt tartalmazó tömb szélessége.
-     * @param      iteraciosHatar a számítás pontossága.
+     * @param      szélesség      a halmazt tartalmazó tömb szélessége.
+     * @param      iterációsHatár a számítás pontossága.
      */
     public MandelbrotHalmaz(double a, double b, double c, double d,
-            int szelesseg, int iteraciosHatar) {
+            int szélesség, int iterációsHatár) {
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
-        this.szelesseg = szelesseg;
-        this.iteraciosHatar = iteraciosHatar;
-        // a magasság az (b-a) / (d-c) = szelesseg / magassag
+        this.szélesség = szélesség;
+        this.iterációsHatár = iterációsHatár;
+        // a magasság az (b-a) / (d-c) = szélesség / magasság
         // arányból kiszámolva az alábbi lesz:
-        this.magassag = (int)(szelesseg * ((d-c)/(b-a)));
-        // a kep, amire rárajzoljuk majd a halmazt
-        kep = new java.awt.image.BufferedImage(szelesseg, magassag,
+        this.magasság = (int)(szélesség * ((d-c)/(b-a)));
+        // a kép, amire rárajzoljuk majd a halmazt
+        kép = new java.awt.image.BufferedImage(szélesség, magasság,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
         // Az ablak bezárásakor kilépünk a programból.
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -66,23 +66,23 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
             // Az 's', 'n' és 'm' gombok lenyomását figyeljük
             public void keyPressed(java.awt.event.KeyEvent e) {
                 if(e.getKeyCode() == java.awt.event.KeyEvent.VK_S)
-                    pillanatfelvetel();
+                    pillanatfelvétel();
                 // Az 'n' gomb benyomásával pontosabb számítást végzünk.
                 else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_N) {
-                    if(szamitasFut == false) {
-                        MandelbrotHalmaz.this.iteraciosHatar += 256;
+                    if(számításFut == false) {
+                        MandelbrotHalmaz.this.iterációsHatár += 256;
                         // A számítás újra indul:
-                        szamitasFut = true;
+                        számításFut = true;
                         new Thread(MandelbrotHalmaz.this).start();
                     }
                     // Az 'm' gomb benyomásával pontosabb számítást végzünk,
                     // de közben sokkal magasabbra vesszük az iterációs
                     // határt, mint az 'n' használata esetén
                 } else if(e.getKeyCode() == java.awt.event.KeyEvent.VK_M) {
-                    if(szamitasFut == false) {
-                        MandelbrotHalmaz.this.iteraciosHatar += 10*256;
+                    if(számításFut == false) {
+                        MandelbrotHalmaz.this.iterációsHatár += 10*256;
                         // A számítás újra indul:
-                        szamitasFut = true;
+                        számításFut = true;
                         new Thread(MandelbrotHalmaz.this).start();
                     }
                 }
@@ -91,19 +91,19 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
         // Ablak tulajdonságai
         setTitle("A Mandelbrot halmaz");
         setResizable(false);
-        setSize(szelesseg, magassag);
+        setSize(szélesség, magasság);
         setVisible(true);
         // A számítás indul:
-        szamitasFut = true;
+        számításFut = true;
         new Thread(this).start();
     }
     /** A halmaz aktuális állapotának kirajzolása. */
     public void paint(java.awt.Graphics g) {
         // A Mandelbrot halmaz kirajzolása
-        g.drawImage(kep, 0, 0, this);
+        g.drawImage(kép, 0, 0, this);
         // Ha éppen fut a számítás, akkor egy vörös
         // vonallal jelöljük, hogy melyik sorban tart:
-        if(szamitasFut) {
+        if(számításFut) {
             g.setColor(java.awt.Color.RED);
             g.drawLine(0, sor, getWidth(), sor);
         }
@@ -114,25 +114,25 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
         paint(g);
     }
     /** Pillanatfelvételek készítése. */
-    public void pillanatfelvetel() {
+    public void pillanatfelvétel() {
         // Az elmentendő kép elkészítése:
-        java.awt.image.BufferedImage mentkep =
-                new java.awt.image.BufferedImage(szelesseg, magassag,
+        java.awt.image.BufferedImage mentKép =
+                new java.awt.image.BufferedImage(szélesség, magasság,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
-        java.awt.Graphics g = mentkep.getGraphics();
-        g.drawImage(kep, 0, 0, this);
+        java.awt.Graphics g = mentKép.getGraphics();
+        g.drawImage(kép, 0, 0, this);
         g.setColor(java.awt.Color.BLUE);
         g.drawString("a=" + a, 10, 15);
         g.drawString("b=" + b, 10, 30);
         g.drawString("c=" + c, 10, 45);
         g.drawString("d=" + d, 10, 60);
-        g.drawString("n=" + iteraciosHatar, 10, 75);
+        g.drawString("n=" + iterációsHatár, 10, 75);
         g.dispose();
         // A pillanatfelvétel képfájl nevének képzése:
         StringBuffer sb = new StringBuffer();
         sb = sb.delete(0, sb.length());
         sb.append("MandelbrotHalmaz_");
-        sb.append(++pillanatfelvetelSzamlalo);
+        sb.append(++pillanatfelvételSzámláló);
         sb.append("_");
         // A fájl nevébe belevesszük, hogy melyik tartományban
         // találtuk a halmazt:
@@ -146,32 +146,32 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
         sb.append(".png");
         // png formátumú képet mentünk
         try {
-            javax.imageio.ImageIO.write(mentkep, "png",
+            javax.imageio.ImageIO.write(mentKép, "png",
                     new java.io.File(sb.toString()));
         } catch(java.io.IOException e) {
             e.printStackTrace();
         }
     }
-    /**
+    /** 
      * A Mandelbrot halmaz számítási algoritmusa.
      * Az algoritmus részletes ismertetését lásd például a
-     * [BARNSLEY KÖNYV] (M. Barnsley: Fractals everywhere,
-     * Academic Press, Boston, 1986) hivatkozásban vagy
+     * [BARNSLEY KÖNYV] (M. Barnsley: Fractals everywhere, 
+     * Academic Press, Boston, 1986) hivatkozásban vagy 
      * ismeretterjesztő szinten a [CSÁSZÁR KÖNYV] hivatkozásban.
-     */
+     */     
     public void run() {
         // A [a,b]x[c,d] tartományon milyen sűrű a
         // megadott szélesség, magasság háló:
-        double dx = (b-a)/szelesseg;
-        double dy = (d-c)/magassag;
+        double dx = (b-a)/szélesség;
+        double dy = (d-c)/magasság;
         double reC, imC, reZ, imZ, ujreZ, ujimZ;
         int rgb;
         // Hány iterációt csináltunk?
-        int iteracio = 0;
+        int iteráció = 0;
         // Végigzongorázzuk a szélesség x magasság hálót:
-        for(int j=0; j<magassag; ++j) {
+        for(int j=0; j<magasság; ++j) {
             sor = j;
-            for(int k=0; k<szelesseg; ++k) {
+            for(int k=0; k<szélesség; ++k) {
                 // c = (reC, imC) a háló rácspontjainak
                 // megfelelő komplex szám
                 reC = a+k*dx;
@@ -179,7 +179,7 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
                 // z_0 = 0 = (reZ, imZ)
                 reZ = 0;
                 imZ = 0;
-                iteracio = 0;
+                iteráció = 0;
                 // z_{n+1} = z_n * z_n + c iterációk
                 // számítása, amíg |z_n| < 2 vagy még
                 // nem értük el a 255 iterációt, ha
@@ -187,34 +187,34 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
                 // hogy a kiinduláci c komplex számra
                 // az iteráció konvergens, azaz a c a
                 // Mandelbrot halmaz eleme
-                while(reZ*reZ + imZ*imZ < 4 && iteracio < iteraciosHatar) {
+                while(reZ*reZ + imZ*imZ < 4 && iteráció < iterációsHatár) {
                     // z_{n+1} = z_n * z_n + c
                     ujreZ = reZ*reZ - imZ*imZ + reC;
                     ujimZ = 2*reZ*imZ + imC;
                     reZ = ujreZ;
                     imZ = ujimZ;
-
-                    ++iteracio;
-
+                    
+                    ++iteráció;
+                    
                 }
                 // ha a < 4 feltétel nem teljesült és a
-                // iteracio < iteraciosHatar sérülésével lépett ki, azaz
+                // iteráció < iterációsHatár sérülésével lépett ki, azaz
                 // feltesszük a c-ről, hogy itt a z_{n+1} = z_n * z_n + c
-                // sorozat konvergens, azaz iteracio = iteraciosHatar
-                // ekkor az iteracio %= 256 egyenlő 255, mert az esetleges
-                // nagyítasok során az iteracio = valahány * 256 + 255
-                iteracio %= 256;
+                // sorozat konvergens, azaz iteráció = iterációsHatár
+                // ekkor az iteráció %= 256 egyenlő 255, mert az esetleges
+                // nagyítasok során az iteráció = valahány * 256 + 255
+                iteráció %= 256;
                 // így a halmaz elemeire 255-255 értéket használjuk,
                 // azaz (Red=0,Green=0,Blue=0) fekete színnel:
-                rgb = (255-iteracio)|
-                        ((255-iteracio) << 8) |
-                        ((255-iteracio) << 16);
+                rgb = (255-iteráció)|
+                        ((255-iteráció) << 8) |
+                        ((255-iteráció) << 16);
                 // rajzoljuk a képre az éppen vizsgált pontot:
-                kep.setRGB(k, j, rgb);
+                kép.setRGB(k, j, rgb);
             }
             repaint();
         }
-        szamitasFut = false;
+        számításFut = false;
     }
     /** Az aktuális Mandelbrot halmaz [a,b]x[c,d] adatai.
      * @return double a */
@@ -237,19 +237,19 @@ public class MandelbrotHalmaz extends java.awt.Frame implements Runnable {
         return d;
     }
     /** Az aktuális Mandelbrot halmaz feletti rács adatai.
-     * @return int szelesseg */
+     * @return int szélesség */    
     public int getSz() {
-        return szelesseg;
+        return szélesség;
     }
     /** Az aktuális Mandelbrot halmaz feletti rács adatai.
-     * @return int magassag */
+     * @return int magasság */    
     public int getM() {
-        return magassag;
+        return magasság;
     }
     /** Az aktuális Mandelbrot halmazt tartalmazó kép.
-     * @return BufferedImage kep */
-    public java.awt.image.BufferedImage kep() {
-        return kep;
+     * @return BufferedImage kép */    
+    public java.awt.image.BufferedImage kép() {
+        return kép;
     }
     /** Példányosít egy Mandelbrot halmazt kiszámoló obektumot. */
     public static void main(String[] args) {

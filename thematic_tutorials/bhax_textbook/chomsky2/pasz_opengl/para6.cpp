@@ -46,6 +46,7 @@ bool transp {false};
 GLdouble fovy = 70;
 int w = 640;
 int h = 480;
+bool fullScreen = false;
 
 std::vector<PaRaCube> cubeLetters;
 
@@ -357,6 +358,15 @@ void keyboard ( unsigned char key, int x, int y )
                 glLoadIdentity();
                 gluPerspective ( fovy, ( float ) w/ ( float ) h, .1f, 1000.0f );
                 glMatrixMode ( GL_MODELVIEW );
+
+        } else if ( key == 'f' ) {
+
+          fullScreen = !fullScreen;
+          if (fullScreen) {
+            glutFullScreen();
+          } else {
+            glutReshapeWindow(640 , 480);
+          }
 
         }
 
