@@ -52,7 +52,7 @@ fájl nevekben és a forrásokban is meghagyjuk az ékezetes betűket!
             </imageobject>
         </mediaobject>
         <para>
-          Ha az alapértelmezett encode-olás <function>UTF-8</function>-ra van állítva, az <function>-encoding</function> kapcsoló elhanyagolható.
+          Ha az alapértelmezett encode-olás a forrásunk kódolásával, akkor az <function>-encoding</function> kapcsoló elhanyagolható.
         </para>
         <mediaobject>
             <imageobject>
@@ -303,6 +303,8 @@ double* image = new double[size];]]>
           }
 ]]>
         </programlisting>
+
+        <!--<para>képet kell h visszaadjon</para>-->
 
 
     </section>
