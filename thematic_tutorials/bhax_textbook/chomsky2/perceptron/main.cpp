@@ -12,13 +12,32 @@ int main (int argc, char **argv)
 
     double* image = new double[size];
 
-    for (int i = 0; i<png_image.get_width(); ++i)
-        for (int j = 0; j<png_image.get_height(); ++j)
-            image[i*png_image.get_width() + j] = png_image[i][j].red;
+    int w = png_image.get_width();
+    int h = png_image.get_height();
 
-    double value = (*p) (image);
+    for (int i = 0; i < w; ++i)
+        for (int j = 0; j < h; ++j)
+            image[i*w + j] = png_image[i][j].red;
+
+    std::cout << "kezdes";
+
+    double* value = (*p) (image);
+
+    std::cout << "csere";
+
+    for (int i = 0; i < w; ++i)
+        for (int j = 0; j < h; ++j)
+            png_image[i][j].red = value[i*w + j];
+
+    std::cout << "iras";
+
+    png_image.write(argv[1]);
+
+    std::cout << "kiiratas";
 
     std::cout << value << std::endl;
+
+    std::cout << "vege";
 
     delete p;
     delete [] image;
