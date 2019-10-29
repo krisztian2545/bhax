@@ -1,0 +1,77 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Gödel!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>JDK osztályok</title>
+        <para>
+          Írjunk olyan Boost C++ programot (indulj ki például a fénykardból) amely kilistázza a JDK összes osztályát (miután kicsomagoltuk az src.zip állományt, arra ráengedve)!
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="stroustrup/jdk/jdk_counter.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/stroustrup/jdk/jdk_counter.cpp</filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mandelbro.png" scale="35"/>
+            </imageobject>
+        </mediaobject>
+
+
+    </section>
+
+    <section>
+        <title>Másoló-mozgató szemantika</title>
+        <para>
+          Kódcsipeteken (copy és move ctor és assign) keresztül vesd össze a C++11 másoló és a mozgató szemantikáját, a mozgató konstruktort alapozd a mozgató értékadásra!
+        </para>
+
+        <para>
+
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>Hibásan implementált RSA törése</title>
+        <para>
+          Készítsünk betű gyakoriság alapú törést egy hibásan implementált RSA kódoló: <link xlink:href="https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_3.pdf">https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_3.pdf</link> (71-73 fólia) által készített titkos szövegen.
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="chomsky2/pasz_opengl/para6.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/pasz_opengl/para6.cpp</filename>
+            </link>
+        </para>
+
+        <para>
+
+        </para>
+        <programlisting><![CDATA[#include <GL/glut.h>]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>Változó argumentumszámú ctor</title>
+        <para>
+          Készítsünk olyan példát, amely egy képet tesz az alábbi projekt Perceptron osztályának bemenetére és a Perceptron ne egy értéket, hanem egy ugyanakkora méretű „képet” adjon vissza. (Lásd még a 4 hét/Perceptron osztály feladatot is.)
+        </para>
+
+
+    </section>
+
+
+</chapter>
