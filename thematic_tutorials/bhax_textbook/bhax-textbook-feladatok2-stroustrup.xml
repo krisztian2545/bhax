@@ -18,12 +18,73 @@
             </link>
         </para>
         <para>
-          
+          A feladatban a JDK 11 forrásfájljainak a kilistázását fogjuk most megvalósítani. Ehhez azonban le kell töltenünk az src.zip állományt, mivel ez tartalmazza a Java osztályait. Ubuntu-n a következő paranccsal érhetjük ezt el: <command>sudo apt-get install openjdk-11-source</command> (különböző java verzió src.zip letöltéséhez elegendő a szám megváltoztatása a parancsban). A "/usr/lib/jvm/openjdk-11/lib/" mappában megtaláljuk a fájlunkat, amit én kicsomagoltam egy másik helyre, hogy az könnyen elérhető legyen a program számára.
         </para>
+        <para>
+          A Boost könyvtárból beimportáljuk a fájlkezeléshez szükséges header-eket és az átláthatóbb és egyszerűbb kódolásért névtéret is létrehozunk számára.
+        </para>
+        <programlisting><![CDATA[#include <iostream>
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
+using namespace boost::filesystem;]]>
+        </programlisting>
+        <para>
+          Definiálunk 2 globális változót: a <function>counter</function>-t <function>long long</function>-nak, hogy biztosan beleférjünk a számtípusok határaiba, ugyanis ide fogjuk tárolni az osztályok számát; az <function>exclude</function> tartalmazza azokat a fájlneveket, amelyek nem Java osztályok. Ezután inicializáljuk a <function>root</function> változót a könyvtár elérési útvonalával. A szöveges útvonalat a Boost könyvtár függvényeinek megfelelő típusúvá konvertáljuk a <function>p</function> változó segítségével, amit át is adunk az Java fájlokat számláló eljárásnak.
+        </para>
+        <programlisting><![CDATA[
+        long long counter;
+        std::vector<std::string> exclude = {"module-info.java", "package-info.java"};
+
+        ...
+
+        int main(){
+
+          std::string root = "/home/krisztiann/Downloads/javalib/src";
+          counter = 0;
+
+          path p (root);
+          countJavaFiles(p);
+          std::cout << "counted java files: " << counter << std::endl;
+
+        }]]>
+        </programlisting>
+        <para>
+          ...
+        </para>
+        <programlisting><![CDATA[void countJavaFiles(path pathh){
+
+          recursive_directory_iterator p(pathh);
+          recursive_directory_iterator end;
+
+          while(p != end){
+
+            std::vector<std::string> result;
+            boost::split(result, p->path().string(), boost::is_any_of("/"));
+            std::string j = ".java";
+
+            if( is_directory(p->path()) ){
+
+              padding(result.size()-1);
+              std::cout << "/" << result[result.size()-1] << std::endl;
+
+            } else if( (std::find(exclude.begin(), exclude.end(), p->path().filename()) == exclude.end()) && (j.compare(p->path().extension().string()) == 0) ){
+
+              counter++;
+              padding(result.size()-1);
+              std::cout << result[result.size()-1] << std::endl;
+
+            }
+            ++p;
+
+          }
+
+        }]]>
+        </programlisting>
+
 
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/mandelbro.png" scale="35"/>
+                <imagedata fileref="images/jdk.png" scale="50"/>
             </imageobject>
         </mediaobject>
 
@@ -69,6 +130,74 @@
         <para>
           Készítsünk olyan példát, amely egy képet tesz az alábbi projekt Perceptron osztályának bemenetére és a Perceptron ne egy értéket, hanem egy ugyanakkora méretű „képet” adjon vissza. (Lásd még a 4 hét/Perceptron osztály feladatot is.)
         </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="stroustrup/ctor/main.cpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/stroustrup/ctor/main.cpp</filename>
+            </link>
+        </para>
+        <para>
+            Megoldás forrása:
+            <link xlink:href="stroustrup/ctor/mlp.hpp">
+            <filename>bhax/thematic_tutorials/bhax_textbook/stroustrup/ctor/mlp.hpp</filename>
+            </link>
+        </para>
+        <para>
+          A perceptron eddig csak egy értéket adott visssza, tehát ahhoz hogy egy úgymond "képet" kapjunk vissza, meg kell babrálnunk egy kicsit azt az osztályt. Ehhez 3 dolgot kell megváltoztani. Először gyorsan átírjuk az inicializálásnál a konstruktorban az utolsó argumentumot 1-ről <function>size</function>-ra, ami a kép területe.
+        </para>
+        <programlisting><![CDATA[Perceptron* p = new Perceptron (3, size, 256, size);]]>
+        </programlisting>
+        <para>
+          Ezután jön a lényeg, amit a zárójelek túlterhelésénél találunk, ugyanis így adjuk át a kép értékeit a perceptronnak (lásd: <function>double* value = (*p) (image);</function>). A visszatérési értéket <function>double*</function>-ra állítjuk, tehát mostmár az eredményunk ugyanolyan típusú mint ahogy kaptuk. De ez még nem elég, ugyanis eddig csupán az utolsó réteg első elemét adtuk vissza egy kicsit átszámolva, ami nekünk kevés egy kép megalkotásához. Ezért csak simán kitöröljük a függvényhívást és a második "[]" zárójeleket és visszakapjuk az utolsó réteget teljes egészében.
+        </para>
+        <programlisting><![CDATA[
+        double* operator() ( double image [] ) // <--------- valtozas itt
+        {
+
+            units[0] = image;
+
+            for ( int i {1}; i < n_layers; ++i )
+            {
+
+                #ifdef CUDA_PRCPS
+
+                cuda_layer ( i, n_units, units, weights );
+
+                #else
+
+                #pragma omp parallel for
+                for ( int j = 0; j < n_units[i]; ++j )
+                {
+                    units[i][j] = 0.0;
+
+                    for ( int k = 0; k < n_units[i-1]; ++k )
+                    {
+                        units[i][j] += weights[i-1][j][k] * units[i-1][k];
+                    }
+
+                    units[i][j] = sigmoid ( units[i][j] );
+
+                }
+
+                #endif
+
+            }
+
+            return units[n_layers - 1];//sigmoid ( units[n_layers - 1][0] ); <------- es itt
+
+        }]]>
+        </programlisting>
+        <para>
+          Összegezve: a mandelbrot halmazról készített kép vörös (red) értékeit átszámoltuk a perceptron osztállyal és most visszaírjuk azokat egy újonnan létrehozott kép (<function>png_image2</function>) red értékeibe. Ha az új kép kék és zöld értékeit az eredeti kép értékeivel pótoljuk, akkor annak egy elszínezett változatát kapjuk.
+        </para>
+        <para>
+          Ha viszont az előző eljárást alkalmazzuk mind a 3 színre, akkor először egy szinte teljesen fekete képet kapunk. Ez annak a következménye, hogy a perceptron által visszaadott értékek 0-nál kisebbek. De ha beszorozzuk őket 100-al, akkor egy ért\dekes kép rajzolódik ki.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mandel2.png" scale="50"/>
+            </imageobject>
+        </mediaobject>
 
 
     </section>

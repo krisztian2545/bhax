@@ -1,9 +1,6 @@
 // g++ jdk_counter.cpp -o jdk_counter -lboost_system -lboost_filesystem
 
 #include <iostream>
-#include <string>
-#include <bits/stdc++.h>
-
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 using namespace boost::filesystem;
@@ -25,20 +22,20 @@ void countJavaFiles(path pathh){
 
     std::vector<std::string> result;
     boost::split(result, p->path().string(), boost::is_any_of("/"));
+    std::string j = ".java";
 
     if( is_directory(p->path()) ){
 
       padding(result.size()-1);
       std::cout << "/" << result[result.size()-1] << std::endl;
 
-    } else if( (std::find(exclude.begin(), exclude.end(), p->path().filename()) == exclude.end()) ){
+    } else if( (std::find(exclude.begin(), exclude.end(), p->path().filename()) == exclude.end()) && (j.compare(p->path().extension().string()) == 0) ){
 
       counter++;
       padding(result.size()-1);
       std::cout << result[result.size()-1] << std::endl;
 
     }
-
     ++p;
 
   }
