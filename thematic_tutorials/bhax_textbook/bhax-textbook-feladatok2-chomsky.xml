@@ -304,8 +304,6 @@ double* image = new double[size];]]>
 ]]>
         </programlisting>
 
-        <!--<para>képet kell h visszaadjon</para>-->
-
 
     </section>
 

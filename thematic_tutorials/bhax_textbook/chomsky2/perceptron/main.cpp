@@ -19,25 +19,9 @@ int main (int argc, char **argv)
         for (int j = 0; j < h; ++j)
             image[i*w + j] = png_image[i][j].red;
 
-    std::cout << "kezdes";
-
-    double* value = (*p) (image);
-
-    std::cout << "csere";
-
-    for (int i = 0; i < w; ++i)
-        for (int j = 0; j < h; ++j)
-            png_image[i][j].red = value[i*w + j];
-
-    std::cout << "iras";
-
-    png_image.write(argv[1]);
-
-    std::cout << "kiiratas";
+    double value = (*p) (image);
 
     std::cout << value << std::endl;
-
-    std::cout << "vege";
 
     delete p;
     delete [] image;

@@ -147,7 +147,7 @@ public:
     }
 
 
-    double operator() ( double image [] )
+    double* operator() ( double image [] )
     {
 
         units[0] = image;
@@ -179,7 +179,7 @@ public:
 
         }
 
-        return sigmoid ( units[n_layers - 1][0] );
+        return units[n_layers - 1];//sigmoid ( units[n_layers - 1][0] );
 
     }
 

@@ -2,25 +2,41 @@
 
 #include <iostream>
 #include <string>
-#include <map>
-#include <iomanip>
-#include <fstream>
+#include <bits/stdc++.h>
 
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 using namespace boost::filesystem;
 
 long long counter;
 std::vector<std::string> exclude = {"module-info.java", "package-info.java"};
 
+void padding(int x){
+  for(int i = 0; i < x; i++)
+    std::cout << "   ";
+}
+
 void countJavaFiles(path pathh){
 
   recursive_directory_iterator p(pathh);
   recursive_directory_iterator end;
+
   while(p != end){
 
-    if( !is_directory(p->path()) && (std::find(exclude.begin(), exclude.end(), p->path().filename()) == exclude.end()) ){
+    std::vector<std::string> result;
+    boost::split(result, p->path().string(), boost::is_any_of("/"));
+
+    if( is_directory(p->path()) ){
+
+      padding(result.size()-1);
+      std::cout << "/" << result[result.size()-1] << std::endl;
+
+    } else if( (std::find(exclude.begin(), exclude.end(), p->path().filename()) == exclude.end()) ){
+
       counter++;
-      std::cout << p->path().string() << " : " << counter << std::endl;
+      padding(result.size()-1);
+      std::cout << result[result.size()-1] << std::endl;
+
     }
 
     ++p;
