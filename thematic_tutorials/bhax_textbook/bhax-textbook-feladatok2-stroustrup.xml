@@ -96,10 +96,71 @@ using namespace boost::filesystem;]]>
         <para>
           Kódcsipeteken (copy és move ctor és assign) keresztül vesd össze a C++11 másoló és a mozgató szemantikáját, a mozgató konstruktort alapozd a mozgató értékadásra!
         </para>
-
         <para>
-
+          A c++11 mozgató szemantikája megszabadít minket a felesleges memóriafoglalásoktól, ami akkor keletkezik, amikor A-t atmasoljuk B-be, de A-ra nincs szükségünk többé.
         </para>
+        <para>
+          Például, létrehozzuk az <function>old_house</function> objektumot, meghívódik a konstruktor és lefoglalódik a szükséges memória. Ezután létrehozzuk a <function>new_house</function> objektumot, ekkor meghívódik a másoló konstruktor, ami lefoglalja a <function>ptr</function>-nek szükséges memóriaterületet és ezután átmásolja az <function>old_house</function> értékét.
+        </para>
+        <programlisting><![CDATA[
+          struct A {
+            int* ptr;
+
+            A(){
+              ptr = new int;
+              cout << "Constructor..." << endl;
+            }
+
+            A(const A& a1){
+              cout << "Copy const..." << endl;
+              this->ptr = new int;
+              *this->ptr = *a1.ptr;
+            }
+
+            ~A(){
+              cout << "Destructor..." << endl;
+              delete ptr;
+            }
+
+          };
+
+          int main(){
+
+            A old_house = A();
+            A new_house = old_house;
+
+            return 0;
+          }
+
+$ ./mozgato
+Constructor...
+Copy const...
+Destructor...
+Destructor...]]>
+        </programlisting>
+        <para>
+          De mint amikor új házba költözünk és ahelyett, hogy új bútorokat vennénk, amelyek egyébként pont úgy néznek ki mint a régiek, inkább elhozzuk őket a régi lakásunkról, ugyanígy megtehetjük a mozgató szemantikával azt, hogy csupán átvesszük az <function>old_house</function> <function>ptr</function>-jének értékét a két mutató kicserélésével: az új pointer a tárolt értékre mutat, míg a régi pointer sehova.
+        </para>
+        <para>
+          Ehhez szükség lesz a jobbérték referenciára (jele: <function>&amp;&amp;</function>). Mivel az <function>old_house</function> balérték referencia, meghívjuk a <function>move()</function> függvényt, ami jobbérték referenciát csinál belőle.
+        </para>
+        <programlisting><![CDATA[
+          A(A&& a1){
+            cout << "Move contr..." << endl;
+            this->ptr = a1.ptr;
+            a1.ptr = nullptr;
+          }
+          ...
+          A old_house = A();
+          A new_house = move(old_house);
+          ...
+
+$ ./mozgato
+Constructor...
+Move contr...
+Destructor...
+Destructor...]]>
+        </programlisting>
 
 
     </section>
