@@ -7,9 +7,10 @@
     </info>
 
     <section>
-        <title>JDK osztályok</title>
+        <title>Gengszterek</title>
         <para>
-          Írjunk olyan Boost C++ programot (indulj ki például a fénykardból) amely kilistázza a JDK összes osztályát (miután kicsomagoltuk az src.zip állományt, arra ráengedve)!
+          Gengszterek rendezése lambdával a Robotautó Világbajnokságban
+https://youtu.be/DL6iQwPx1Yw (8:05-től)
         </para>
         <para>
             Megoldás forrása:
@@ -31,9 +32,10 @@
     </section>
 
     <section>
-        <title>Másoló-mozgató szemantika</title>
+        <title>C++11 Custom Allocator</title>
         <para>
-          Kódcsipeteken (copy és move ctor és assign) keresztül vesd össze a C++11 másoló és a mozgató szemantikáját, a mozgató konstruktort alapozd a mozgató értékadásra!
+          https://prezi.com/jvvbytkwgsxj/high-level-programming-languages-2-c11-allocators/ a
+CustomAlloc-os példa, lásd C forrást az UDPROG repóban!
         </para>
 
         <para>
@@ -44,9 +46,9 @@
     </section>
 
     <section>
-        <title>Hibásan implementált RSA törése</title>
+        <title>STL map érték szerinti rendezése</title>
         <para>
-          Készítsünk betű gyakoriság alapú törést egy hibásan implementált RSA kódoló: <link xlink:href="https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_3.pdf">https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_3.pdf</link> (71-73 fólia) által készített titkos szövegen.
+          Például: https://github.com/nbatfai/future/blob/master/cs/F9F2/fenykard.cpp#L180
         </para>
         <para>
             Megoldás forrása:
@@ -65,9 +67,50 @@
     </section>
 
     <section>
-        <title>Változó argumentumszámú ctor</title>
+        <title>Alternatív Tabella rendezése</title>
         <para>
-          Készítsünk olyan példát, amely egy képet tesz az alábbi projekt Perceptron osztályának bemenetére és a Perceptron ne egy értéket, hanem egy ugyanakkora méretű „képet” adjon vissza. (Lásd még a 4 hét/Perceptron osztály feladatot is.)
+          Mutassuk be a <link xlink:href="https://progpater.blog.hu/2011/03/11/alternativ_tabella">https://progpater.blog.hu/2011/03/11/alternativ_tabella</link> a programban a java.lang
+Interface Comparable&lt;T&gt; szerepét!
+        </para>
+        <para>
+          Javában az Interface-ek hasonlóan működnek, mint az osztályok, de az Interface-ekben sosem határozzuk meg a metódusok törzsét, így ez a feladat arra az osztályra hárul, amelyik implementálja azt. Implementálni az <function>implements</function> kulcsszóval lehet és az interface neve után kisebb-nagyobb opoerátorok között megadjuk az osztály nevét. C++-al ellentétben, Javában az osztályok egyszerre csupán 1 osztály leszármazottai lehetnek, de interface-ekből többet is implementálhatnak.
+        </para>
+        <programlisting><![CDATA[class Csapat implements Comparable<Csapat> {
+          ...
+}]]>
+        </programlisting>
+        <para>
+          Miután definiáltuk a <function>Csapat</function> osztály mezőit és metódusait, megírjuk a <function>Comparable</function> interface általunk használni kívánt <function>compareTo()</function> függvényének törzsét. A visszatérési érték egy <function>int</function> típusú pozitív vagy negatív szám vagy nulla. Ha a függvényt meghívó objektum <function>ertek</function> valtozója kisebb, mint az argumentumban átadotté, akkor az eredmény -1 lesz, jelezve ezzel, hogy az értékünk kisebb mint akihez hasonlítottuk azt, 1 lesz ha nagyobb értékünk van és 0 ha megegyeznek.
+        </para>
+        <programlisting><![CDATA[class Csapat implements Comparable<Csapat> {
+
+  protected String nev;
+  protected double ertek;
+
+  public Csapat(String nev, double ertek) {
+    this.nev = nev;
+    this.ertek = ertek;
+  }
+
+  public int compareTo(Csapat csapat) {
+    if (this.ertek < csapat.ertek) {
+      return -1;
+    } else if (this.ertek > csapat.ertek) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>Prolog családfa</title>
+        <para>
+          Ágyazd be a Prolog családfa programot C++ vagy Java programba! Lásd para_prog_guide.pdf!
         </para>
 
 
