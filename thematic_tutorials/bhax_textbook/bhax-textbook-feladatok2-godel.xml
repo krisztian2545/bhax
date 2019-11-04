@@ -13,20 +13,46 @@
 https://youtu.be/DL6iQwPx1Yw (8:05-től)
         </para>
         <para>
-            Megoldás forrása:
-            <link xlink:href="stroustrup/jdk/jdk_counter.cpp">
-            <filename>bhax/thematic_tutorials/bhax_textbook/stroustrup/jdk/jdk_counter.cpp</filename>
-            </link>
+          C++11-óta rendelkezésünkre áll az ún. lambda kifejezések létrehozására. Ezek úgy működnek, mint egy névtelen metódus amit ott hozunk létre, ahol éppen szükségünk van rá. Tegyük fel, hogy az egyik metódus egy függvényt kér harmadik paramétereként és ahelyett hogy írnál egy függvénnyt, amire csak egyszer lesz szükséged, megírhatod helyben, névtelenül és a kód továbbra is átlátható marad. Az alábbi példa ezt szemlélteti:
         </para>
+        <programlisting><![CDATA[
+              // function to count numbers greater than or equal to N
+              // [=] denotes,   can access all variable
+              int count_N = count_if(v1.begin(), v1.end(), [=](int a)
+              {
+                  return (a >= N);
+              }); ]]>
+        </programlisting>
         <para>
-
+          A lambda kifejezések 3 fő részből állnak:
         </para>
-
-        <mediaobject>
-            <imageobject>
-                <imagedata fileref="images/mandelbro.png" scale="35"/>
-            </imageobject>
-        </mediaobject>
+        <programlisting><![CDATA[[ captures ] ( params ) { body } ]]>
+        </programlisting>
+        <para>
+          A <function>[]</function> zárójelek között megadhatjuk a környezetéből azokat a változókat, amelyeket használni szeretnénk. Elérhetjük őket érték (<function>[=]</function>) vagy referencia (<function>[&amp;]</function>) alapján is. Például:
+        </para>
+        <programlisting><![CDATA[
+[&total, factor]
+[factor, &total]
+[&, factor]
+[factor, &]
+[=, &total]
+[&total, =]
+          ]]>
+        </programlisting>
+        <para>
+          A <function>()</function> zárójelek között definiáljuk a kis függvényünk paramétereit. Ez után jön a visszatérési érték megadása, amely nem kötelező.
+        </para>
+        <programlisting><![CDATA[[] () ->int { }]]>
+        </programlisting>
+        <para>
+          A Robotautó Világbajnokságban a <function>sort()</function> függvény harmadik paramétereként megadtunk egy saját függvényt, amely a szerint fogja rendezni a gengsztereket, hogy azok milyen messze vannak a rendőrtől. Visszatérési értéket nem definiáltunk mert egyértelmű és ilyenkor nincs rá szükség, mert a fordító megállapítja a típust.
+        </para>
+        <programlisting language="c++"><![CDATA[std::sort( gangsters.begin(), gangsters.end(),
+           [this, cop] ( unsigned x, unsigned y ) {
+               return dst(cop, x) < dst(cop, y);
+            } );]]>
+        </programlisting>
 
 
     </section>
