@@ -13,3 +13,5 @@ public:
 int main(){
 
 }
+
+Menlo, Consolas, DejaVu Sans Mono, monospace

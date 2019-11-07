@@ -63,10 +63,81 @@ https://youtu.be/DL6iQwPx1Yw (8:05-től)
           https://prezi.com/jvvbytkwgsxj/high-level-programming-languages-2-c11-allocators/ a
 CustomAlloc-os példa, lásd C forrást az UDPROG repóban!
         </para>
-
         <para>
-
+            Megoldás forrása:
+            <link xlink:href="godel/my_allocator.c">
+            <filename>bhax/thematic_tutorials/bhax_textbook/godel/my_allocator.c</filename>
+            </link>
         </para>
+        <para>
+          A standard allokátor az <function>std::allocator&lt;T&gt;</function>, de mi most egy sajátot fogunk írni C-ben.
+        </para>
+        <para>
+          A memóriafoglalást az <function>allocate(size)</function> függvény végzi. Attribútumként megkapja a tárolni kívánt elemek számát <function>size_t</function> típussal, amely az adatok méretét szokta tárolni (és a <function>sizeof()</function> függvény visszatérési értéke is ilyen típusú). Az <function>int s</function> és <function>char* p</function> változókat csupán szemléltetés végett léteznek, hogy kiírassuk az adattípust. A lényeg a <function>return</function> kulcsszó után van, ahol a <function>reinterpret_cast&lt;new_type&gt;(expression)</function> függvény jelen esetben <function>&lt;T*&gt;</function> típusúvá konvertálja amit átadunk neki. Mivel a <function>char</function> típus pontosan 1 bájtot foglal, így egy megfelelő méretű <function>char</function> típusú tömb pont annyi helyet fog foglalni, amennyire szükségünk van. Ezt úgy számoljuk ki, hogy a típus memóriaigényét megszorozzuk a darabszámmal.
+        </para>
+        <programlisting><![CDATA[
+          using size_type = size_t;
+          ...
+          pointer allocate(size_type n){
+            int s;
+            char* p = abi::__cxa_demangle( typeid(T).name(), 0, 0, &s );
+            std::cout << "Allocating "
+                  << n << " objects of "
+                  << n * sizeof(T)
+                  << " bytes. "
+                  << typeid(T).name() << "=" << p
+                  << std::endl;
+            free(p);
+            return reinterpret_cast<T*>( new char[ n * sizeof(T) ] );
+          }
+          ]]>
+        </programlisting>
+        <para>
+          A memória felszabadításához meghívjuk a <function>delete[]</function> kulcsszót és utána csinálunk egy kis nyomkövetést:
+        </para>
+        <programlisting><![CDATA[
+          void deallocate(pointer p, size_type n){
+            delete[] reinterpret_cast<char *>(p);
+            std::cout << "Deallocating "
+                  << n << " objects of "
+                  << n * sizeof(T)
+                  << " bytes. "
+                  << typeid(T).name() << "=" << p
+                  << std::endl;
+          }
+          ]]>
+        </programlisting>
+        <para>
+          Szemléltetés végett a <function>main()</function> metódusban létrehoztunk egy <function>int</function> típusú vektort és átadtuk neki a saját allokátorunkat, hogy azt használja, valamint feltöltöttük a vektort számokkal 0-tól 14-ig, hogy lássuk, mi is történik. Egy <function>int</function> 4 bájton tárolható és láthatjuk, hogy amint meghaladjuk a lefoglalt memóriát, újra foglalunk, de már 2-szer annyit és a régit felszabadítjuk:
+        </para>
+        <programlisting><![CDATA[$ ./my_allocator
+Allocating 1 objects of 4 bytes. i=int
+0
+Allocating 2 objects of 8 bytes. i=int
+Deallocating 1 objects of 4 bytes. i=0x564ff17cbe70
+1
+Allocating 4 objects of 16 bytes. i=int
+Deallocating 2 objects of 8 bytes. i=0x564ff17cc2a0
+2
+3
+Allocating 8 objects of 32 bytes. i=int
+Deallocating 4 objects of 16 bytes. i=0x564ff17cbe70
+4
+5
+6
+7
+Allocating 16 objects of 64 bytes. i=int
+Deallocating 8 objects of 32 bytes. i=0x564ff17cc2c0
+8
+9
+10
+11
+12
+13
+14
+Deallocating 16 objects of 64 bytes. i=0x564ff17cc2f0
+]]>
+        </programlisting>
 
 
     </section>
@@ -75,12 +146,6 @@ CustomAlloc-os példa, lásd C forrást az UDPROG repóban!
         <title>STL map érték szerinti rendezése</title>
         <para>
           Például: https://github.com/nbatfai/future/blob/master/cs/F9F2/fenykard.cpp#L180
-        </para>
-        <para>
-            Megoldás forrása:
-            <link xlink:href="chomsky2/pasz_opengl/para6.cpp">
-            <filename>bhax/thematic_tutorials/bhax_textbook/chomsky2/pasz_opengl/para6.cpp</filename>
-            </link>
         </para>
 
         <para>
