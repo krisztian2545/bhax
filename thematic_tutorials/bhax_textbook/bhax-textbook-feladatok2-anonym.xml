@@ -1,0 +1,111 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Anonym!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>FUTURE tevékenység editor</title>
+        <para>
+          Javítsunk valamit a ActivityEditor.java JavaFX programon!
+https://github.com/nbatfai/future/tree/master/cs/F6
+Itt láthatjuk működésben az alapot: https://www.twitch.tv/videos/222879467
+        </para>
+        <para>
+          A fordító nem látja a JavaFX-et
+        </para>
+
+
+
+    </section>
+
+    <section>
+        <title>OOCWC Boost ASIO hálózatkezelése</title>
+        <para>
+          Mutassunk rá a scanf szerepére és használatára! https://github.com/nbatfai/robocar-
+emulator/blob/master/justine/rcemu/src/carlexer.ll
+        </para>
+        <para>
+
+        </para>
+
+
+
+    </section>
+
+    <section>
+        <title>SamuCam</title>
+        <para>
+          Mutassunk rá a webcam (pl. Androidos mobilod) kezelésére ebben a projektben:
+  https://github.com/nbatfai/SamuCam
+        </para>
+        <para>
+
+        </para>
+        <programlisting><![CDATA[#include <GL/glut.h>]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>BrainB</title>
+        <para>
+          Mutassuk be a Qt slot-signal mechanizmust ebben a projektben: https://github.com/nbatfai/esport-
+talent-search
+        </para>
+        <para>
+          A program futtatásához szükség van Qt és opencv telepítéséhez, amit a következő parancsokkal érhetünk el Ubuntu rendszeren:
+        </para>
+        <programlisting><![CDATA[
+          sudo apt-get install libqt4-dev
+          sudo apt-get install libopencv-dev]]>
+        </programlisting>
+        <para>
+          Először töltsük le a forrásfájlokat a feladatleírásból, majd a következő parancsokkal létrehozzuk, fordítjuk és futtatjuk a projektet:
+        </para>
+        <programlisting><![CDATA[
+          $ qmake -project
+          $ qmake BrainB.pro
+          $ make
+          $ ./BrainB
+          ]]>
+        </programlisting>
+        <para>
+          A program 10 percig fut. Addig az a dolgunk, hogy a bal egérgombot nyomva tartva a Samu Entropy-n tartsuk az egeret. 10 perc után a program kiírja a statisztikánkat.
+        </para>
+        <para>
+          A forráskódban a slot-signal mechanizmust használtuk. Ez a mechanizmus teljesen független a GUI események ciklusaitól. Ezek különálló void típusú függvények. A slot függvények kezelik a signalokat, amelyeket a <function>connect()</function> függvénnyel kapcsolunk össze. Ezért fontos, hogy a signal paraméterlistája megegyezzen az őt fogadó slot paraméterlistájával, ugyanis a signal át kell hogy adja a paraméterként kapott adatait a hozzá kapcsolt slot-oknak.
+        </para>
+        <para>
+          A signal függvényeket arra használjuk, hogy tudassuk a programmal/figyelővel, hogy változás történt. Az <function>emit</function> kulcsszóval tudjuk meghívni őket. Meghíváskor lefut az összes hozzá kapcsolt slot függvény.
+        </para>
+        <para>
+          ...
+        </para>
+        <para>
+          Például a BrainB programban összekapcsoltuk a <function>heroesChanged()</function> signalt a <function>updateHeroes()</function> slottal. A <function>connect( sender, signal, reciever, slot )</function> függvénynek először megadjuk a signalt küldő objektumot ( ez esetben a <function>brainBThread</function>-ot, és ha megnézzük a forrást, akkor láthatjuk, hogy ő hívja meg a jelet: <function>emit heroesChanged ( dest, heroes[0].x, heroes[0].y );</function> ), a signalt a paramétereinek típusaival együtt, egy mutatót a slot-ot tartalmazó objektumra (ez esetben <function>this</function>, mert ez a kód a BrainBWin.cpp-ben szerepel, és a slot is itt van definiálva), valamint a slot metódust paramétereinek típusaival együtt. 
+        </para>
+        <programlisting><![CDATA[connect ( brainBThread, SIGNAL ( heroesChanged ( QImage, int, int ) ), this, SLOT ( updateHeroes ( QImage, int, int ) ) );]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>OSM térképre rajzolása</title>
+        <para>
+          Debrecen térképre dobjunk rá cuccokat, ennek mintájára, ahol én az országba helyeztem el a DEAC
+hekkereket: https://www.twitch.tv/videos/182262537 (de az OOCWC Java Swinges
+megjelenítőjéből:
+https://github.com/nbatfai/robocar-emulator/tree/master/justine/rcwin
+is kiindulhatsz, mondjuk az komplexebb, mert ott időfejlődés is van...)
+        </para>
+
+
+    </section>
+
+
+</chapter>
