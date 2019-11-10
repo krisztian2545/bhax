@@ -16,6 +16,11 @@ Itt láthatjuk működésben az alapot: https://www.twitch.tv/videos/222879467
         <para>
           A fordító nem látja a JavaFX-et
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/future_error.png" scale="30"/>
+            </imageobject>
+        </mediaobject>
 
 
 
@@ -86,7 +91,7 @@ talent-search
           ...
         </para>
         <para>
-          Például a BrainB programban összekapcsoltuk a <function>heroesChanged()</function> signalt a <function>updateHeroes()</function> slottal. A <function>connect( sender, signal, reciever, slot )</function> függvénynek először megadjuk a signalt küldő objektumot ( ez esetben a <function>brainBThread</function>-ot, és ha megnézzük a forrást, akkor láthatjuk, hogy ő hívja meg a jelet: <function>emit heroesChanged ( dest, heroes[0].x, heroes[0].y );</function> ), a signalt a paramétereinek típusaival együtt, egy mutatót a slot-ot tartalmazó objektumra (ez esetben <function>this</function>, mert ez a kód a BrainBWin.cpp-ben szerepel, és a slot is itt van definiálva), valamint a slot metódust paramétereinek típusaival együtt. 
+          Például a BrainB programban összekapcsoltuk a <function>heroesChanged()</function> signalt a <function>updateHeroes()</function> slottal. A <function>connect( sender, signal, reciever, slot )</function> függvénynek először megadjuk a signalt küldő objektumot ( ez esetben a <function>brainBThread</function>-ot, és ha megnézzük a forrást, akkor láthatjuk, hogy ő hívja meg a jelet: <function>emit heroesChanged ( dest, heroes[0].x, heroes[0].y );</function> ), a signalt a paramétereinek típusaival együtt, egy mutatót a slot-ot tartalmazó objektumra (ez esetben <function>this</function>, mert ez a kód a BrainBWin.cpp-ben szerepel, és a slot is itt van definiálva), valamint a slot metódust paramétereinek típusaival együtt.
         </para>
         <programlisting><![CDATA[connect ( brainBThread, SIGNAL ( heroesChanged ( QImage, int, int ) ), this, SLOT ( updateHeroes ( QImage, int, int ) ) );]]>
         </programlisting>
