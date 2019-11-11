@@ -41,25 +41,10 @@ emulator/blob/master/justine/rcemu/src/carlexer.ll
     </section>
 
     <section>
-        <title>SamuCam</title>
-        <para>
-          Mutassunk rá a webcam (pl. Androidos mobilod) kezelésére ebben a projektben:
-  https://github.com/nbatfai/SamuCam
-        </para>
-        <para>
-
-        </para>
-        <programlisting><![CDATA[#include <GL/glut.h>]]>
-        </programlisting>
-
-
-    </section>
-
-    <section>
         <title>BrainB</title>
         <para>
           Mutassuk be a Qt slot-signal mechanizmust ebben a projektben: https://github.com/nbatfai/esport-
-talent-search
+    talent-search
         </para>
         <para>
           A program futtatásához szükség van Qt és opencv telepítéséhez, amit a következő parancsokkal érhetünk el Ubuntu rendszeren:
@@ -95,6 +80,152 @@ talent-search
         </para>
         <programlisting><![CDATA[connect ( brainBThread, SIGNAL ( heroesChanged ( QImage, int, int ) ), this, SLOT ( updateHeroes ( QImage, int, int ) ) );]]>
         </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>SamuCam</title>
+        <para>
+          Mutassunk rá a webcam (pl. Androidos mobilod) kezelésére ebben a projektben:
+  https://github.com/nbatfai/SamuCam
+        </para>
+        <para>
+          A program fordításához és futtatásáhzo szükség van a Qt és az opencv telepítésére (lásd az előző feladatban).
+        </para>
+        <para>
+          A kamerát kezelő SamuCam osztály a <function>QThread</function> leszármazottja. Egy ilyen objektum egy szálat vezérel a programon belül. Futása a <function>run()</function> metódusban kezdődik.
+        </para>
+        <para>
+          SamuCam.h
+        </para>
+        <programlisting language="c++"><![CDATA[
+        class SamuCam : public QThread
+        {
+            Q_OBJECT
+
+        public:
+            SamuCam ( std::string videoStream, int width, int height );
+            ~SamuCam();
+
+            void openVideoStream();
+            void run();
+
+        private:
+            std::string videoStream;
+            cv::VideoCapture videoCapture;
+            int width;
+            int height;
+            int fps;
+
+        signals:
+            void faceChanged ( QImage * );
+            void webcamChanged ( QImage * );
+        };]]>
+        </programlisting>
+        <para>
+          A konstruktor csupán beállítja a privát változóit a kapott értékek alapján és meghívja az <function>openVideoStream()</function> metódust. Itt inicializáljuk a kamerát és beállítjuk azt. A <function>videoCapture.open ( 0 );</function> metódusnak 0-t adtunk paraméterül hogy az alapértelmezett kamera (esetemben laptop beépített kamerája) kerüljön használatra.
+        </para>
+        <programlisting><![CDATA[
+          SamuCam::SamuCam ( std::string videoStream, int width = 176, int height = 144 )
+            : videoStream ( videoStream ), width ( width ), height ( height )
+          {
+            openVideoStream();
+          }
+
+          void SamuCam::openVideoStream()
+          {
+            videoCapture.open ( 0 );
+
+            videoCapture.set ( CV_CAP_PROP_FRAME_WIDTH, width );
+            videoCapture.set ( CV_CAP_PROP_FRAME_HEIGHT, height );
+            videoCapture.set ( CV_CAP_PROP_FPS, 10 );
+          }
+          ]]>
+        </programlisting>
+        <para>
+          Visszatérve a <function>run()</function> metódushoz, a <function>CascadeClassifier</function> típusú <function>faceClassifier</function> objektum teszi lehetővé az arcok felismerését. A kamera kezelése a <function>videoCapture</function>-on keresztül történik. Az <function>isOpened()</function> függvénnyel vizsgáljuk, hogy a él-e a kapcsolat a kamerával és ha nem, akkor ismét meghívja az <function>openVideoStream()</function>-et. A <function>videoCapture.read ( frame )</function> megragadja számunkra a pillanatot, ami ha sikerül (<function>if ( !frame.empty() ) {...}</function>), akkor a <function>faceClassifier.detectMultiScale()</function> eljárás megkeresi az arcokat a képen, amiket majd a második paraméterként átadott <function>faces</function> vektorba tárol négyzetek formájában (1 négyzet 1 arcot vesz körül).
+        </para>
+        <programlisting><![CDATA[
+          void SamuCam::run()
+          {
+
+            cv::CascadeClassifier faceClassifier;
+
+            std::string faceXML = "lbpcascade_frontalface.xml"; // https://github.com/Itseez/opencv/tree/master/data/lbpcascades
+
+            if ( !faceClassifier.load ( faceXML ) )
+              {
+                qDebug() << "error: cannot found" << faceXML.c_str();
+                return;
+              }
+
+            cv::Mat frame;
+
+            while ( videoCapture.isOpened() )
+              {
+
+                QThread::msleep ( 50 );
+                while ( videoCapture.read ( frame ) )
+                  {
+
+                    if ( !frame.empty() )
+                      {
+
+                        cv::resize ( frame, frame, cv::Size ( 176, 144 ), 0, 0, cv::INTER_CUBIC );
+
+                        std::vector<cv::Rect> faces;
+                        cv::Mat grayFrame;
+
+                        cv::cvtColor ( frame, grayFrame, cv::COLOR_BGR2GRAY );
+                        cv::equalizeHist ( grayFrame, grayFrame );
+
+                        faceClassifier.detectMultiScale ( grayFrame, faces, 1.1, 4, 0, cv::Size ( 60, 60 ) );
+
+                        if ( faces.size() > 0 )
+                          {
+
+                            cv::Mat onlyFace = frame ( faces[0] ).clone();
+
+                            QImage* face = new QImage ( onlyFace.data,
+                                                        onlyFace.cols,
+                                                        onlyFace.rows,
+                                                        onlyFace.step,
+                                                        QImage::Format_RGB888 );
+
+                            cv::Point x ( faces[0].x-1, faces[0].y-1 );
+                            cv::Point y ( faces[0].x + faces[0].width+2, faces[0].y + faces[0].height+2 );
+                            cv::rectangle ( frame, x, y, cv::Scalar ( 240, 230, 200 ) );
+
+
+                            emit  faceChanged ( face );
+                          }
+
+                        QImage*  webcam = new QImage ( frame.data,
+                                                       frame.cols,
+                                                       frame.rows,
+                                                       frame.step,
+                                                       QImage::Format_RGB888 );
+
+                        emit  webcamChanged ( webcam );
+
+                      }
+
+                    QThread::msleep ( 80 );
+
+                  }
+
+                if ( ! videoCapture.isOpened() )
+                  {
+                    openVideoStream();
+                  }
+
+              }
+
+          }
+          ]]>
+        </programlisting>
+
 
 
     </section>
