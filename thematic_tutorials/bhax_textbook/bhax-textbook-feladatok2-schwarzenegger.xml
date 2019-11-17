@@ -1,0 +1,221 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Schwarzenegger!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>Port scan</title>
+        <para>
+          Mutassunk rá ebben a port szkennelő forrásban a kivételkezelés szerepére!
+<link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#id527287">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#id527287</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="schwarzenegger2/port/KapuSzkenner.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/schwarzenegger2/port/KapuSzkenner.java</filename>
+            </link>
+        </para>
+        <para>
+          Ez a rövid program megnézi, hogy az első 1024 port közül melyeket figyeli a gép amelyet a <function>java.net.Socket()</function> konstruktornak először első argumentumként adtuk meg. A gép nevét (ill. ip címét) parancssori argumentumként adjuk meg a programnak.
+        </para>
+        <para>
+          A kostruktor hívásakor a program megpróbál egy kapcsolatot létrehozni az éppen soron következő porton keresztül. Sikeres kapcsolat esetén kiírjuk, hogy "x figyeli" és egy <function>close()</function>-al megszakítjuk a kapcsolatot. De ha a kapcsolódás sikertelen, mert a soron következő port nincs figyelve, akkor a metódus <function>java.net.ConnectException</function>-t dob és ennek a hibaüzenetnek a kezelésére használjuk a kivételkezelést.
+        </para>
+        <programlisting language="java"><![CDATA[
+          public class KapuSzkenner {
+
+            public static void main(String[] args) {
+
+              for(int i = 0; i < 1024; ++i) {
+
+                try {
+
+                  java.net.Socket socket = new java.net.Socket(args[0], i);
+                  System.out.println(i + " figyeli");
+
+                  socket.close();
+
+                } catch(Exception e){
+
+                  System.out.println(i + " nem figyeli");
+
+                }
+
+              }
+
+            }
+
+          }
+          ]]>
+        </programlisting>
+
+
+
+    </section>
+
+    <section>
+        <title>AOP</title>
+        <para>
+          Szőj bele egy átszövő vonatkozást az első védési programod Java átiratába! (Sztenderd védési
+feladat volt korábban.)
+        </para>
+        <para>
+
+        </para>
+
+
+
+    </section>
+
+    <section>
+        <title>Android Játék</title>
+        <para>
+          Írjunk egy egyszerű Androidos „játékot”! Építkezzünk például a 2. hét „Helló, Android!” feladatára!
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://github.com/krisztian2545/Quiz/blob/master/ErettsegiQuiz/app/src/main/java/com/example/krisz/rettsgiquiz/MainActivity.java">
+            <filename>https://github.com/krisztian2545/Quiz/blob/master/ErettsegiQuiz/app/src/main/java/com/example/krisz/rettsgiquiz/MainActivity.java</filename>
+            </link>
+        </para>
+        <para>
+          Én egy egyszerű kvíz játékot írtam, amely segít felkészülni a magyar irodalom érettségi lehetséges tesztkérdéseire.
+        </para>
+        <para>
+          A program futása az <function>onCreate()</function> metódussal kezdődik. A <function>tv</function> változóhoz hozzárendelem a <function>textView</function> id-vel rendelkező szövegnézetet. A program folyamán ezzel a változóval tudjuk módosítani az xml fájlban deklarált szövegnézetet, amely a kérdések megjelenítésére fog szolgálni. Hasonlóképpen járunk el a gombokkal is, amelyeknek a háttérszínét is beállítjuk.
+        </para>
+        <programlisting language="java"><![CDATA[
+          public class MainActivity extends AppCompatActivity {
+
+              ...
+              TextView tv;
+              Button b, b2, b3, b4;
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  setContentView(R.layout.activity_main);
+
+                  tv = (TextView)findViewById(R.id.textView);
+
+                  b = (Button)findViewById(R.id.a);
+                  b2 = (Button)findViewById(R.id.b);
+                  b3 = (Button)findViewById(R.id.c);
+                  b4 = (Button)findViewById(R.id.d);
+                  //b4.setOnClickListener(this);
+
+                  b.setBackgroundColor(Color.LTGRAY);
+                  b2.setBackgroundColor(Color.LTGRAY);
+                  b3.setBackgroundColor(Color.LTGRAY);
+                  b4.setBackgroundColor(Color.LTGRAY);
+
+                  beolvas();
+                  program();
+
+              }
+              ...
+          ]]>
+        </programlisting>
+        <para>
+          Ezután a "fajl.txt" fájlból beolvassuk a kérdéseket és a hozzájuk tartozó 4 opciót - amelyek közül mindíg csak 1 helyes - az <function>al</function> szöveges listába.
+        </para>
+        <programlisting language="java"><![CDATA[
+          ...
+          ArrayList<String> al = new ArrayList<String>();
+          ...
+          void beolvas(){
+
+              try {
+
+                  InputStream is = getAssets().open("fajl.txt");
+                  BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+                  String s;
+                  while((s = br.readLine()) != null){
+                      al.add(s);
+                  }
+                  tv.setText(al.toString());
+
+              } catch (java.io.IOException e) {
+                  e.printStackTrace();
+                  String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                  AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+                  dlgAlert.setMessage(e.getMessage().toString() + "  asd  " + path);
+                  dlgAlert.setTitle("App Title");
+                  dlgAlert.setCancelable(true);
+                  dlgAlert.create().show();
+              }
+
+
+          }
+          ...
+          ]]>
+        </programlisting>
+        <para>
+          A <function>program()</function> eljárás előkészíti számunkra a játékot...
+        </para>
+        <programlisting language="java"><![CDATA[
+          ...
+          String helyes = "";
+          int max = 290; // kérdések száma
+          int pos;
+          ...
+          void program(){
+
+              Random r = new Random();
+              String kerdes;
+              ArrayList<String> valasz = new ArrayList<String>();
+
+                  pos = r.nextInt(max);
+
+                  kerdes = al.get(pos*5);
+                  helyes = al.get((pos * 5)+1);
+                  valasz.add(helyes);
+                  valasz.add(al.get((pos * 5)+2));
+                  valasz.add(al.get((pos * 5)+3));
+                  valasz.add(al.get((pos * 5)+4));
+
+                  valasz = shuffle(valasz);
+
+                  tv.setText(kerdes);
+
+                  b.setText(valasz.get(0));
+                  b2.setText(valasz.get(1));
+                  b3.setText(valasz.get(2));
+                  b4.setText(valasz.get(3));
+
+          }
+          ...
+          ]]>
+        </programlisting>
+
+
+    </section>
+
+    <section>
+        <title>Junit teszt</title>
+        <para>
+          A https://progpater.blog.hu/2011/03/05/labormeres_otthon_avagy_hogyan_dolgozok_fel_egy_pedat
+poszt kézzel számított mélységét és szórását dolgozd be egy Junit tesztbe (sztenderd védési feladat
+volt korábban).
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>OSCI</title>
+        <para>
+          Készíts egyszerű C++/OpenGL-es megjelenítőt, amiben egy kocsit irányítasz az úton. A kocsi
+állapotát minden pillanatban mentsd le. Ezeket add át egy Prolog programnak, ami egyszerű reflex
+ágensként adjon vezérlést a kocsinak, hasonlítsd össze a kézi és a Prolog-os vezérlést. Módosítsd
+úgy a programodat, hogy ne csak kézzel lehessen vezérelni a kocsit, hanem a Prolog reflex ágens
+vezérelje!
+        </para>
+
+
+    </section>
+
+
+</chapter>

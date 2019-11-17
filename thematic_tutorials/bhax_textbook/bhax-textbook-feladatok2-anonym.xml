@@ -14,13 +14,16 @@ https://github.com/nbatfai/future/tree/master/cs/F6
 Itt láthatjuk működésben az alapot: https://www.twitch.tv/videos/222879467
         </para>
         <para>
-          A fordító nem látja a JavaFX-et
+          A program felélesztése sok problémát okozott, mivel java 11-től a JavaFx külön csomagként szerepel. Az Oracle-s java8-ban még benne van, de azt a package-t már nem lehet apt install paranccsal telepíteni, csak ha letöltjük az oldalról.
         </para>
         <mediaobject>
             <imageobject>
                 <imagedata fileref="images/future_error.png" scale="30"/>
             </imageobject>
         </mediaobject>
+        <para>
+
+        </para>
 
 
 
