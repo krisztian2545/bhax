@@ -62,8 +62,72 @@
 feladat volt korábban.)
         </para>
         <para>
-
+            Megoldás forrása: <link xlink:href="schwarzenegger2/aop/Szoves.aj">
+            <filename>bhax/thematic_tutorials/bhax_textbook/schwarzenegger2/aop/Szoves.aj</filename>filename>
+            </link>
         </para>
+        <para>
+            Megoldás forrása: <link xlink:href="arroway/Lzw.java">
+            <filename>bhax/thematic_tutorials/bhax_textbook/arroway/Lzw.java</filename>
+            </link>
+        </para>
+        <para>
+          Az első védési feladat az LZWBinFa volt, amelynek a Java átirata megtalálható az "arroway" mappában Lzw.java néven.
+        </para>
+        <para>
+          Egy átszövés létrehozásához a <function>pointcut</function> után megadunk egy metódusnevet, amely a <function>call()</function> argumentumában leírt metódusok hívására utal. Ezután megadjuk, hogy minden egyes metódus hívása előtt (a <function>before()</function> miatt), amelyre a <function>fun()</function> utal (jelen esetben a <function>kiir()</function> eljárás), kiírat egy szöveget.
+        </para>
+        <programlisting language="java"><![CDATA[
+  pointcut fun(): call( public void kiir(java.io.PrintWriter));
+
+	before(): fun() {
+		System.out.println("Kiiratas elott ... ");
+	}
+          ]]>
+        </programlisting>
+        <para>
+          A második átszövést az <function>egyBitFeldolg()</function> eljárásra helyeztem, ahol kiíratjuk, hogy mely érték fog bekerülni a fába.
+        </para>
+        <programlisting language="java"><![CDATA[
+          pointcut fun2(): call( public void LZWBinFa.egyBitFeldolg(char) );
+
+          	before(): fun2() {
+          		Object[] args = thisJoinPoint.getArgs();
+          		System.out.println("binfa input: " + args[0].toString());
+          	}
+          ]]>
+        </programlisting>
+        <para>
+          Futtatás során a következő kimenetet kapjuk:
+        </para>
+        <programlisting><![CDATA[
+binfa input: 0
+binfa input: 1
+binfa input: 1
+binfa input: 0
+binfa input: 0
+binfa input: 0
+binfa input: 0
+binfa input: 1
+binfa input: 0
+binfa input: 1
+binfa input: 1
+binfa input: 1
+binfa input: 0
+binfa input: 0
+binfa input: 1
+binfa input: 1
+binfa input: 0
+binfa input: 1
+binfa input: 1
+binfa input: 0
+binfa input: 0
+binfa input: 1
+binfa input: 0
+binfa input: 0
+Kiiratas elott ...
+          ]]>
+        </programlisting>
 
 
 
