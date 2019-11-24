@@ -124,6 +124,24 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
         <para>
           Telepítsük fel, próbáljuk ki!
         </para>
+        <para>
+          Az applikáció letölthető akár egyenesen a Play áruházból, mivel többen is jónak látták feltölteni oda. Ahogy megnyitjuk az applikációt, egyből indulhatunk is felfedezni a környezetünket egy algoritmus szemszögéből.
+        </para>
+        <para>
+          A program képes egyszerre több objektumot is észrevenni, amelyeket körbekeretez és még a pontosságot is kiírja mellé. 
+        </para>
+        <para>
+          Hamar rájövünk, hogy azért vannak hiányosságai, ugyanis gyakran megesik, hogy éppen rossz szemszögből állítjuk rá a kamerát egy objektumra és egy fehér tálból hirtelen illemhelység lesz.
+        </para>
+        <para>
+          Ennek ellenére egész jól működik az egyszerű objektumokon (mint pl.: asztal, szék), de lássuk be hogy azért van még mit tanulnia.
+        </para>
+
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/tensor_od.png" scale="65"/>
+            </imageobject>
+        </mediaobject>
 
 
     </section>
