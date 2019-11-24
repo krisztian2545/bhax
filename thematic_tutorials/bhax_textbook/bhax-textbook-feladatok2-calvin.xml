@@ -1,0 +1,152 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Calvin!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>MNIST</title>
+        <para>
+          Az alap feladat megoldása, +saját kézzel rajzolt képet is ismerjen fel,
+https://progpater.blog.hu/2016/11/13/hello_samu_a_tensorflow-bol Háttérként ezt vetítsük le:
+<link xlink:href="https://prezi.com/0u8ncvvoabcr/no-programming-programming/">https://prezi.com/0u8ncvvoabcr/no-programming-programming/</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="calvin/mnist.py">
+            <filename>bhax/thematic_tutorials/bhax_textbook/calvin/mnist.py</filename>
+            </link>
+        </para>
+        <para>
+          A feladat megoldásához szükséges a Tensorflow telepítése (<link xlink:href="https://www.tensorflow.org/install">https://www.tensorflow.org/install</link>) és jobb esetben egy grafikus kártyára az Nvidia-tól. Én a TensorFlow 2.0 GPU-s verzióját használtam.
+        </para>
+        <para>
+          Először beolvassuk szépen az adatokat. Az <function>x_train</function> változó kapja a tanításhoz szükséges képeket, amelyek egy <function>numpy</function> tömbben vannak eltárolva 28 * 28-as felbontásban. Az <function>y_train</function> szintén egy tömb, ahol számon tartjuk, hogy milyen szám van a képeken. Innen tudja majd a program, hogy mi van a képen. Az <function>x_test</function> és <function>y_test</function> a teszteléshez szükséges képeket és címkéket tárolja.
+        </para>
+        <programlisting><![CDATA[
+          import tensorflow as tf
+
+          mnist = tf.keras.datasets.mnist
+
+          (x_train, y_train), (x_test, y_test) = mnist.load_data()
+          x_train, x_test = x_train / 255.0, x_test / 255.0
+          ]]>
+        </programlisting>
+        <para>
+          Ezután konfiguráljuk a modellt: ilyenkor fontos megadni a bemenet dimenzióit és az egyes rétegeket. Valamint kiválasztjuk a megfelelő <function>optimizer</function> és <function>loss</function> metódusokat.
+        </para>
+        <programlisting><![CDATA[
+          model = tf.keras.models.Sequential([
+            tf.keras.layers.Flatten(input_shape=(28, 28)),
+            tf.keras.layers.Dense(128, activation='relu'),
+            tf.keras.layers.Dropout(0.2),
+            tf.keras.layers.Dense(10, activation='softmax')
+          ])
+
+          model.compile(optimizer='adam',
+                        loss='sparse_categorical_crossentropy',
+                        metrics=['accuracy'])
+          ]]>
+        </programlisting>
+        <para>
+          A <function>fit()</function> eljárással indítjuk meg a tanítást. Az <function>epochs</function> argumentum határozza meg, hogy hánszor menjen végig az összes adaton. Az <function>evaluate()</function> metódussal leteszteljük azalgoritmust a félretett 10000 tesztalannyal. A <function>verbose</function> argumentummal az eredmény kiíratásának módját állíthatjuk.
+        </para>
+        <programlisting><![CDATA[
+          model.fit(x_train, y_train, epochs=5)
+          model.evaluate(x_test,  y_test, verbose=2)
+          ]]>
+        </programlisting>
+        <para>
+          Most következik a saját kép felismerése. Az <function>imread()</function> fogja nekünk beolvasni a képet egy <function>numpy</function> tömb formájában. A beolvasott kép RGB értékei 0 és 1 között vannak, így nincs szükség elosztani őket 255-el.
+        </para>
+        <programlisting><![CDATA[
+          from matplotlib.image import imread
+          import numpy as np
+
+          img = imread('eght.png')
+          ]]>
+        </programlisting>
+        <para>
+          Mivel a kép fekete-fehér, ezért mind az R, G és B érték ugyanaz, így elég csak az egyiket elmenteni, mert az algoritmus 28 * 28-as formátumot igényel (és nem 28*28*4(RGBA)).
+        </para>
+        <programlisting><![CDATA[
+          img_gray = 1 - img[:, :, 0]
+          ]]>
+        </programlisting>
+        <para>
+          A <function>predict</function> függvénynek <function>numpy array</function>-ba helyezett képek kellenek, ezért mi beletesszük a miénket és megkérjük a modelt hogy tippelje meg hogy mit írhattunk a képekre (nekünk csak 1 van most) és mentse el a <function>predicts</function> változóba tömbként (pl. [szerintem8, talán7, biztos3]).
+        </para>
+        <programlisting><![CDATA[
+          testimg = np.array([img_gray])
+          predicts = model.predict(testimg)
+          ]]>
+        </programlisting>
+        <para>
+          Megnézzük hogy az első (nulladik) képre mit tippelt. Ehhez szükség van az <function>argmax</function> függvényre, mert a model 10 értéket ad vissza egy kép tippelésekor (pl. szerinte ez 10%-ra 1-es, 20%-ra 2-es...), de nekünk csak a legnagyobb kell, amiben a legbiztosabb.
+        </para>
+        <programlisting><![CDATA[
+          print("sajat kep: ")
+          print( np.argmax(predicts[0]) )
+          ]]>
+        </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/mnist.png" scale="65"/>
+            </imageobject>
+        </mediaobject>
+
+
+
+    </section>
+
+    <section>
+        <title>Deep MNIST</title>
+        <para>
+          Mint az előző, de a mély változattal. Segítő ábra, vesd össze a forráskóddal a
+https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliáját!
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="calvin/deep_mnist.py">
+            <filename>bhax/thematic_tutorials/bhax_textbook/calvin/deep_mnist.py</filename>filename>
+            </link>
+        </para>
+        <para>
+
+        </para>
+
+
+
+    </section>
+
+    <section>
+        <title>Android telefonra a TF objektum detektálója</title>
+        <para>
+          Telepítsük fel, próbáljuk ki!
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>SMNIST for Machines</title>
+        <para>
+          Készíts saját modellt, vagy használj meglévőt, lásd: https://arxiv.org/abs/1906.12213
+        </para>
+
+
+    </section>
+
+    <section>
+        <title>Minecraft MALMO-s példa</title>
+        <para>
+          A https://github.com/Microsoft/malmo felhasználásával egy ágens példa, lásd pl.:
+https://youtu.be/bAPSu3Rndi8, https://bhaxor.blog.hu/2018/11/29/eddig_csaltunk_de_innentol_mi,
+https://bhaxor.blog.hu/2018/10/28/minecraft_steve_szemuvege
+        </para>
+
+
+    </section>
+
+
+</chapter>

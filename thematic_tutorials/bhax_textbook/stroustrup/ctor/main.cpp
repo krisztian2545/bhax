@@ -29,8 +29,8 @@ int main (int argc, char **argv)
         }
 
     double* value = (*p) (image);
-    double* value2 = (*p) (image);
-    double* value3 = (*p) (image);
+    double* value2 = (*p) (image2);
+    double* value3 = (*p) (image3);
 
 
 
