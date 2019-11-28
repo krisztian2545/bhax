@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 # Install TensorFlow
 
 import tensorflow as tf
+from tensorflow.keras.utils import to_categorical
 
 mnist = tf.keras.datasets.mnist
 
@@ -29,11 +30,22 @@ model.evaluate(x_test,  y_test, verbose=2)
 from matplotlib.image import imread # sajat kephez
 import numpy as np # sajat kephez
 
-img = imread('eght.png') # csak png-t hasznalj, az RGB értékek 0 és 1 között vannak, így nincs szükség elosztani őket 255-el
+# img = imread('eght.png') # csak png-t hasznalj, az RGB értékek 0 és 1 között vannak, így nincs szükség elosztani őket 255-el
 
-img_gray = 1 - img[:, :, 0] # mivel a kép fekete-fehér, ezért mind az R, G és B érték ugyanaz, így elég csak az egyiket elmenteni, mert az algoritmus 28 * 28-as formátumot igényel (és nem 28*28*4(RGBA))
-testimg = np.array([img_gray]) # a predict függvénynek numpy array-ba helyezett képek kellenek, ezért mi beletesszük a miénket
-predicts = model.predict(testimg) # megkérjük a model hogy tippelje meg h mit irhattunk a kepekre (nekünk csak 1 van most) és mentse el a predicts valtozozba tömbként (pl. [szerintem8, talán7, biztos3])
-print("sajat kep: ")
-print( np.argmax(predicts[0]) )
+# img_gray = 1 - img[:, :, 0] # mivel a kép fekete-fehér, ezért mind az R, G és B érték ugyanaz, így elég csak az egyiket elmenteni, mert az algoritmus 28 * 28-as formátumot igényel (és nem 28*28*4(RGBA))
+# testimg = np.array([img_gray]) # a predict függvénynek numpy array-ba helyezett képek kellenek, ezért mi beletesszük a miénket
+# predicts = model.predict(testimg) # megkérjük a model hogy tippelje meg h mit irhattunk a kepekre (nekünk csak 1 van most) és mentse el a predicts valtozozba tömbként (pl. [szerintem8, talán7, biztos3])
+# print("sajat kep: ")
+# print( np.argmax(predicts[0]) )
 """ megnézzük hogy az elso (nulladik) képre mit tippelt. Ehhez szükség van az argmax függvényre, mert a model 10 értéket ad vissza egy kép tippelésekor (pl. szerinte ez 10%-ra 1-es, 20%-ra 2-es...), de nekünk csak a legnagyobb kell, amiben a legbiztosabb """
+
+# védés
+import matplotlib.pyplot as plt
+
+w = model.layers[1].get_weights()[0]
+for i in range(784):
+    w[i][0] = np.sum(w[i])
+
+w = w[:, 0].reshape(28, 28)
+plt.imshow(w)
+plt.show()

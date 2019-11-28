@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> al = new ArrayList<String>();
     TextView tv;
-    boolean wait;
+    //boolean wait;
     Button b, b2, b3, b4;
     String helyes = "";
     boolean eltalalta = false;
