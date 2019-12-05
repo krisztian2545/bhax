@@ -16,15 +16,89 @@ Itt láthatjuk működésben az alapot: https://www.twitch.tv/videos/222879467
         <para>
           A program felélesztése sok problémát okozott, mivel java 11-től a JavaFx külön csomagként szerepel. Az Oracle-s java8-ban még benne van, de azt a package-t már nem lehet apt install paranccsal telepíteni, csak ha letöltjük az oldalról.
         </para>
+        <para>
+          Az OpenJDK 11-hez letöltöttem a 11-es javafx-et és fordításkor megadtam az elérési útvonalát és a használni kívánt modulokat. A futtatást a program könyvtárából kell futtatni, ugyanis ott vannak a fájlok amelyekkel dolgozik.
+        </para>
+        <programlisting><![CDATA[
+$ ./javac --module-path /home/krisztiann/Downloads/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/ --add-modules=javafx.fxml,javafx.controls /home/krisztiann/Documents/bhax-master/bhax/thematic_tutorials/bhax_textbook/anonym/future/ActivityEditor.java
+
+$ /home/krisztiann/Downloads/openjdk-11.0.2_linux-x64_bin/jdk-11.0.2/bin/java --module-path /home/krisztiann/Downloads/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib/ --add-modules=javafx.controls ActivityEditor --city=Debrecen --props=me.props,gaming.props,programming.props
+          ]]>
+        </programlisting>
+        <para>
+          Mivel a feladat ránk van bízva, így én a törlés opciót fogom megvalósítani az elemek számára, valamint hogyha létre akarunk hozni egy fájlt/altevékenység tulajdonságot, akkor vegye figyelembe hogy egy ilyen nevű fájl/elem már létezhet és ezért megszámozom őket.
+        </para>
+        <para>
+          A <function>createNewFile()</function> hamis értéket ad vissza abban az esetben is, hogyha a létrehozni kívánt fájl már létezik, ezért amíg ez nem igaz, hozzáfűzve egy egyest a fájlnévhez újra próbálkozunk.
+        </para>
+        <programlisting><![CDATA[
+          propsMenuItem.setOnAction((javafx.event.ActionEvent evt) -> {
+              java.io.File file = getTreeItem().getValue();
+
+              String filename = "Új altevékenység tulajdonságok";
+              java.io.File f = new java.io.File(file.getPath() + System.getProperty("file.separator") + filename);
+
+              try {
+                  // -------------------------------------
+                  byte b = 1;
+                  while (!f.createNewFile()) {
+
+                      String newfilename = filename + Byte.toString(b++);
+                      f = new java.io.File(file.getPath() + System.getProperty("file.separator") + newfilename);
+                      System.out.println("File already exists.");
+
+                  }
+                  System.out.println("New File is created!");
+
+              } catch (java.io.IOException e) {
+
+                  System.err.println(e.getMessage());
+
+              }
+
+              javafx.scene.control.TreeItem<java.io.File> newProps
+                      = new FileTreeItem(f, new javafx.scene.image.ImageView(actpropsIcon));
+              getTreeItem().getChildren().add(newProps);
+          });
+          ]]>
+        </programlisting>
+        <para>
+          A törlést megvalósító részhez létre kellett hozni és hozzá kellett adni egy új <function>MenuItem</function>-et az eddigiekhez, avalmint be kellett állítani a <function>setOnAction()</function>-nel hogy mi történjen ha rámegyünk.
+        </para>
+        <para>
+          Itt már a jelenleg kiválasztott állományt nyitjuk meg, hogy aztán a <function>delete()</function> függvénnyel megszabadulhassunk tőle. Ez nem fog sikerülni abban az esetben, ha egy nem üres könyvtárat próbálunk meg kitörölni, ugyanis hamis értéket kapunk vissza a műveletből, ezért az elem fából való eltávolítását az <function>else</function> ágba kell tenni, hogy ne tűnjön el sikertelen törlés estén is.
+        </para>
+        <para>
+          A fából való törlést a szülő szemszögéből kell végezni (erre kell a <function>getParent()</function>), mivel egyébként nem látná az elemet.
+        </para>
+        <programlisting><![CDATA[
+          javafx.scene.control.MenuItem DeleteItem = new javafx.scene.control.MenuItem("Törlés");
+          addMenu.getItems().add(DeleteItem);
+          DeleteItem.setOnAction((javafx.event.ActionEvent evt) -> {
+              java.io.File file = getTreeItem().getValue();
+
+              java.io.File f = new java.io.File(file.getPath());
+
+              if(!f.delete()){
+                System.err.println("sikertelen torles... (csak ures konyvtar torolheto)");
+              } else {
+                getTreeItem().getParent().getChildren().remove( getTreeItem() );
+              }
+
+          });
+          ]]>
+        </programlisting>
+
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/future_error.png" scale="30"/>
+                <imagedata fileref="images/delete1.png" scale="40"/>
             </imageobject>
         </mediaobject>
-        <para>
-
-        </para>
-
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/delete2.png" scale="40"/>
+            </imageobject>
+        </mediaobject>
 
 
     </section>

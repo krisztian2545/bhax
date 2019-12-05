@@ -120,22 +120,39 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
             </imageobject>
         </mediaobject>
         <para>
-          A változtatásokat a kép alapján fogom végrehajtani. Az első réteg egy konvolúciós réteg, ami szűrők alkalmazásával csökkenti a kép méretét. Első argumentumként megadjuk a réteg kimenetének méretét, ezután a szűrőt 5*5-ösre állítjuk. A <function>padding</function>-ot (a kép széleinek kiegészítése nullásokkal) "same"-re állítva igyekszik minden oldalról ugyanannyi <function>padding</function>-ot használni.
+          A változtatásokat a kép alapján fogom végrehajtani. Az első réteg egy konvolúciós réteg, ami szűrők alkalmazásával csökkenti a kép méretét. Első argumentumként megadjuk a réteg kimenetének méretét, ezután a szűrőt 5*5-ösre állítjuk. A <function>padding</function>-ot (a kép széleinek kiegészítése nullásokkal) "same"-re állítva igyekszik minden oldalról ugyanannyi <function>padding</function>-ot használni. Az egyes neuronok kimeneti értéke végső soron az aktivációs függvényen múlik, amely a kapott értéket egy 0 és 1 közötti vagy -1 és 1 közötti számmal reprezentálja. Ezek közül a ReLU (Rectified Linear Unit) az egyik leggyakoribb. Működését tekintve nullával értékeli a negatív számokat, egyébként pedig ugyanazt az értéket adja vissza (pl.: f(5) = 5 ).
         </para>
         <programlisting><![CDATA[
           model = tf.keras.models.Sequential([
             tf.keras.layers.Conv2D(32, kernel_size=(5, 5), padding="same", activation='relu', input_shape=input_shape),
             tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding="same"),
-            tf.keras.layers.Conv2D(64, kernel_size=(5, 5), padding="same", activation='relu'),
-            tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding="same"),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(1024, activation='relu'),
-            tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(10, activation='softmax')
+            ...
           ])
           ]]>
         </programlisting>
         <para>
+          Általában minden konvolúciós réteget egy összevonó réteg (Pooling Layer) követ az adatok csökkentésére. Maxpooling esetében egy adott mértű területről csak a legnagyobbat hagyjuk meg.
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/pooling.png" scale="65"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+          A <function>Flatten()</function> réteggel egydimenzióssá konvertáljuk a bemenetet, hogy az utána következő réteg tudjon vele dolgozni.
+        </para>
+        <programlisting><![CDATA[
+model = tf.keras.models.Sequential([
+  ...
+  tf.keras.layers.Flatten(),
+  tf.keras.layers.Dense(1024, activation='relu'),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(10, activation='softmax')
+])
+          ]]>
+        </programlisting>
+        <para>
+          Ez a hálózat már sokkal pontosabb eredményeket szolgáltatott az előző feladatéhoz képest.
         </para>
 
 
@@ -162,7 +179,7 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
 
         <mediaobject>
             <imageobject>
-                <imagedata fileref="images/tensor_od.png" scale="65"/>
+                <imagedata fileref="images/tensor_od.png" scale="30"/>
             </imageobject>
         </mediaobject>
 

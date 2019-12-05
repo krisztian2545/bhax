@@ -49,6 +49,7 @@
  * https://www.twitch.tv/videos/218289099
  * https://shrek.unideb.hu/~nbatfai/FUTURE6-series1bevezetes.pdf
  */
+
 class FileTree extends javafx.scene.control.TreeView<java.io.File> {
 
     class FileTreeItem extends javafx.scene.control.TreeItem<java.io.File> {
@@ -221,10 +222,21 @@ class FileTree extends javafx.scene.control.TreeView<java.io.File> {
             propsMenuItem.setOnAction((javafx.event.ActionEvent evt) -> {
                 java.io.File file = getTreeItem().getValue();
 
-                java.io.File f = new java.io.File(file.getPath() + System.getProperty("file.separator") + "Új altevékenység tulajdonságok");
+                String filename = "Új altevékenység tulajdonságok";
+                java.io.File f = new java.io.File(file.getPath() + System.getProperty("file.separator") + filename);
 
                 try {
-                    f.createNewFile();
+                    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+                    byte b = 1;
+                    while (!f.createNewFile()) {
+
+                        String newfilename = filename + Byte.toString(b++);
+                        f = new java.io.File(file.getPath() + System.getProperty("file.separator") + newfilename);
+                        System.out.println("File already exists.");
+
+                    }
+                    System.out.println("New File is created!");
+
                 } catch (java.io.IOException e) {
 
                     System.err.println(e.getMessage());
@@ -235,6 +247,21 @@ class FileTree extends javafx.scene.control.TreeView<java.io.File> {
 //                        = new javafx.scene.control.TreeItem<java.io.File>(f, new javafx.scene.image.ImageView(actpropsIcon));
                         = new FileTreeItem(f, new javafx.scene.image.ImageView(actpropsIcon));
                 getTreeItem().getChildren().add(newProps);
+            });
+
+            javafx.scene.control.MenuItem DeleteItem = new javafx.scene.control.MenuItem("Törlés"); // --------------------------------------------------------------------------
+            addMenu.getItems().add(DeleteItem);
+            DeleteItem.setOnAction((javafx.event.ActionEvent evt) -> {
+                java.io.File file = getTreeItem().getValue();
+
+                java.io.File f = new java.io.File(file.getPath());
+
+                if(!f.delete()){
+                  System.err.println("sikertelen torles... (csak ures konyvtar torolheto)");
+                } else {
+                  getTreeItem().getParent().getChildren().remove( getTreeItem() );
+                }
+
             });
 
         }
