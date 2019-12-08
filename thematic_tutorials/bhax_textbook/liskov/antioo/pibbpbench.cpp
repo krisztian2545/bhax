@@ -18,10 +18,43 @@
  * @author Bátfai Norbert, nbatfai@inf.unideb.hu
  * @version 0.0.1
  */
- #include <ctime>
+ #include <time.h>
  #include <cmath>
  #include <iostream>
-class PiBBPBench {
+
+
+ /**
+  * Bináris hatványozás mod k, a 16^n mod k kiszámítása.
+  *
+  * @param   n   kitevő
+  * @param   k   modulus
+  */
+ long n16modk(int n, int k) {
+
+     int t = 1;
+     while(t <= n)
+         t *= 2;
+
+     long r = 1;
+
+     while(true) {
+
+         if(n >= t) {
+             r = (16*r) % k;
+             n = n - t;
+         }
+
+         t = t/2;
+
+         if(t < 1)
+             break;
+
+         r = (r*r) % k;
+
+     }
+
+     return r;
+ };
     /**
      * BBP algoritmus a Pi-hez, a [BBP ALGORITMUS] David H. Bailey: The
      * BBP Algorithm for Pi. alapján a {16^d Sj} részlet kiszámítása.
@@ -29,8 +62,8 @@ class PiBBPBench {
      * @param   d   a d+1. hexa jegytől számoljuk a hexa jegyeket
      * @param   j   Sj indexe
      */
-public:
-    static double d16Sj(int d, int j) {
+
+    double d16Sj(int d, int j) {
 
         double d16Sj = 0.0d;
 
@@ -45,40 +78,9 @@ public:
 
         return d16Sj - floor(d16Sj);
     };
-    /**
-     * Bináris hatványozás mod k, a 16^n mod k kiszámítása.
-     *
-     * @param   n   kitevő
-     * @param   k   modulus
-     */
-    public static long n16modk(int n, int k) {
 
-        int t = 1;
-        while(t <= n)
-            t *= 2;
 
-        long r = 1;
 
-        while(true) {
-
-            if(n >= t) {
-                r = (16*r) % k;
-                n = n - t;
-            }
-
-            t = t/2;
-
-            if(t < 1)
-                break;
-
-            r = (r*r) % k;
-
-        }
-
-        return r;
-    };
-
-};
 
 /**
  * A [BBP ALGORITMUS] David H. Bailey: The
@@ -87,6 +89,7 @@ public:
  * kiszámítása, a {} a törtrészt jelöli. A Pi hexa kifejtésében a
  * d+1. hexa jegytől
  */
+
 
 main() {
 
@@ -99,9 +102,9 @@ main() {
 
     int jegy = 0;
 
-    long delta = System.currentTimeMillis();
+    long delta = clock();
 
-    for(int d=1000000; d<1000001; ++d) {
+    for(int d=100000000; d<100000001; ++d) {
 
         d16Pi = 0.0d;
 
@@ -118,7 +121,7 @@ main() {
 
     }
 
-    std::cout << jegy;
-    delta = System.currentTimeMillis() - delta;
-    std::cout << delta/1000.0;
+    std::cout << jegy << std::endl;
+    delta = clock() - delta;
+    std::cout << (double) delta/CLOCKS_PER_SEC << std::endl;
 }

@@ -96,7 +96,7 @@ public class PiBBPBench {
 
         System.DateTime kezd = System.DateTime.Now;
 
-        for(int d=1000000; d<1000001; ++d) {
+        for(int d=100000000; d<100000001; ++d) {
 
             d16Pi = 0.0d;
 

@@ -48,6 +48,35 @@ https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog1_6.pdf (28-32 
           Amint azt láthatjuk, a <function>Csomopont</function> kompozícióban van az <function>LZWBinFa</function>-val, mivel ha kitörölnénk egy <function>LZWBinFa</function> objektumot, akkor a hozzá tartozó <function>Csomopont</function> objektum is törlődne. Aggregáció esetén ez nem lenne igaz.
         </para>
 
+        <para>
+          A forráskódban ez úgy jelenik meg, hogy a <function>Csomopont</function> osztály az <function>LZWBinFa</function>-n belül van deklarálva és ezért a destruktorban felszabadítjuk.
+        </para>
+        <programlisting><![CDATA[
+          class LZWBinFa
+          {
+          public:
+
+              LZWBinFa ():fa (gyoker = new Csomopont('/'))
+              {
+              }
+              ~LZWBinFa ()
+              {
+                  szabadit (gyoker->egyesGyermek ());
+                  szabadit (gyoker->nullasGyermek ());
+              delete gyoker;
+              }
+              ...
+          private:
+              class Csomopont
+              {
+                  ...
+              };
+              ...
+          };
+          ]]>
+        </programlisting>
+
+
 
     </section>
 

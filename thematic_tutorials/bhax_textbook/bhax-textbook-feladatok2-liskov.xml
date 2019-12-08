@@ -196,7 +196,7 @@ Gyerek
         <para>
           A BBP algoritmussal a Pi hexadecimális kifejtésének a 0. pozíciótól számított 10<superscript>6</superscript>, 10<superscript>7</superscript>, 10<superscript>8</superscript> darab
 jegyét határozzuk meg C, C++, Java és C# nyelveken és vessük össze a futási időket!
-https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066
+<link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561066</link>
         </para>
         <para>
             Megoldás videó:
@@ -231,8 +231,27 @@ https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apas03.html#id561
               d16Pi = 0.0d;
 
               d16S1t = d16Sj(d, 1);
-          ...
+              d16S4t = d16Sj(d, 4);
+              d16S5t = d16Sj(d, 5);
+              d16S6t = d16Sj(d, 6);
 
+              d16Pi = 4.0d*d16S1t - 2.0d*d16S4t - d16S5t - d16S6t;
+
+              d16Pi = d16Pi - Math.floor(d16Pi);
+
+              jegy = (int)Math.floor(16.0d*d16Pi);
+
+          }
+
+          System.out.println(jegy);
+          delta = System.currentTimeMillis() - delta;
+          System.out.println(delta/1000.0);
+
+        ]]></programlisting>
+        <para>
+          A számítások végeztével kivonjuk a jelenlegi időből a kezdeti időt, így megkapjuk hogy mennyi ideig tartott a számítás. Ezután következhet a különböző nyelvek teljesítménybeli összehasonlítása, amelyből úgy tűnik hogy a Java jött ki nyertesként.
+        </para>
+        <programlisting><![CDATA[
 $  java PiBBPBench
 6
 1.803
@@ -245,6 +264,56 @@ $ java PiBBPBench
 12
 243.427
 ]]>
+        </programlisting>
+        <para>
+          C verzió:
+        </para>
+        <programlisting><![CDATA[
+$ ./pi_bbp_bench
+6
+2.053005
+
+$ ./pi_bbp_bench
+7
+24.198885
+
+$ ./pi_bbp_bench
+12
+260.660532          ]]>
+        </programlisting>
+        <para>
+          C++ verzió:
+        </para>
+        <programlisting><![CDATA[
+$ ./pibbpbench
+6
+1.99418
+
+$ ./pibbpbench
+7
+23.349
+
+$ ./pibbpbench
+12
+272.48
+          ]]>
+        </programlisting>
+        <para>
+          C# verzió:
+        </para>
+        <programlisting><![CDATA[
+$ mono PiBBPBench.exe
+6
+1.871523
+
+$ mono PiBBPBench.exe
+7
+21.884597
+
+$ mono PiBBPBench.exe
+12
+246.016081
+          ]]>
         </programlisting>
 
         <literallayout>

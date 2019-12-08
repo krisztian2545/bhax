@@ -148,11 +148,6 @@ Deallocating 16 objects of 64 bytes. i=0x564ff17cc2f0
           Például: https://github.com/nbatfai/future/blob/master/cs/F9F2/fenykard.cpp#L180
         </para>
 
-        <para>
-
-        </para>
-        <programlisting><![CDATA[#include <GL/glut.h>]]>
-        </programlisting>
 
 
     </section>
