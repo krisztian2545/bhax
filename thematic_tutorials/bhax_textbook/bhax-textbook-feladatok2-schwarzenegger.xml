@@ -86,7 +86,7 @@ feladat volt korábban.)
           ]]>
         </programlisting>
         <para>
-          A második átszövést az <function>egyBitFeldolg()</function> eljárásra helyeztem, ahol kiíratjuk, hogy mely érték fog bekerülni a fába.
+          A második átszövést az <function>egyBitFeldolg()</function> eljárásra helyeztem, ahol kiíratjuk, hogy mely érték fog bekerülni a fába. Ehhez a <function>thisJoinPoint.getArgs()</function> függvényt használtam, amellyel lekértem a függvény argumentumait és egyszerűen kiírattam azt.
         </para>
         <programlisting language="java"><![CDATA[
           pointcut fun2(): call( public void LZWBinFa.egyBitFeldolg(char) );
@@ -217,7 +217,19 @@ Kiiratas elott ...
           ]]>
         </programlisting>
         <para>
-          A <function>program()</function> eljárás előkészíti számunkra a játékot...
+          A <function>program()</function> eljárás előkészíti számunkra a játékot. Az adatok beolvasásához a véletlenszerűen választott kérdés számát beszorozzuk 5-el, ugyanis az adatok a következőképpen helyezkednek el a listában:
+        </para>
+        <literallayout>
+kérdés?
+helyes válasz
+helytelen válasz
+másik helytelen opció
+drgnfgfdghfg
+kérdés?
+...
+        </literallayout>
+        <para>
+          Bevallom sokkal praktikusabb lett volna egy 2 dimenziós listában tárolni, de ez 2 évvel ezelőtt valamiért nem jutott eszembe. A lényeg hogy működik. A <function>valasz</function> listába gyűjtjük a 4 opciót és a változatosság kedvéért összekerjük őket (de előtte eltároljuk a helyes választ, hogy később tudjuk melyik volt az), majd megjelenítjük mindezt.
         </para>
         <programlisting language="java"><![CDATA[
           ...
@@ -253,7 +265,97 @@ Kiiratas elott ...
           ...
           ]]>
         </programlisting>
+        <para>
+          A keverést a következő kis algoritmus végzi:
+        </para>
+        <programlisting language="java"><![CDATA[
+          ArrayList<String> shuffle(ArrayList<String> b){
 
+              ArrayList<String> a = new ArrayList<String>();
+              Random r = new Random();
+
+              for(int i = 4; i > 0; i--){
+
+                  try {
+                      Thread.sleep(200);
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
+                  }
+
+                  a.add(b.get(r.nextInt(i)));
+                  b.remove(a.get(4-i));
+              }
+
+              return a;
+
+          }
+          ]]>
+        </programlisting>
+        <para>
+          Ha lenyomjuk pl. az első gombot, akkor megvizsgáljuk, hogy az egyezik e a helyes válasszal. Helytelen válasz esetén piros színnel jelezzük a hibát és növeljük a próbálkozások számát, ugyanis ha elsőre nem sikerül eltalálni, akkor tovább próbálkozhatunk, de a kérdés továbbra is bentmarad a listában, hogy egy bizonyos idő után újra próbálkozhassunk vele.
+        </para>
+        <programlisting language="java"><![CDATA[
+          public void begy(View view) {
+
+              if(helyes.equals(b.getText())){
+                  ok(b);
+              } else {
+                  nemOk(b);
+              }
+
+          }
+          ...
+          public void ok(Button bu){
+
+              bu.setBackgroundColor(Color.GREEN);
+              probalkozas++;
+              if(probalkozas == 1) eltalalta = true;
+
+          }
+
+          public void nemOk(Button bu){
+
+              bu.setBackgroundColor(Color.RED);
+              probalkozas++;
+
+          }
+          ]]>
+        </programlisting>
+        <para>
+          A "következő" gomb megnyomásával lezárjuk a ciklust. Ekkor megvizsgáljuk nem e fogytak el a kérdések, ellenben eltávolítjuk a kérdést válaszaival együtt ha elsőre eltaláltuk azt. Végül mindent visszaállítunk a kezdőállapotba és a <function>program()</function> eljárás hívásával újraindul a ciklus.
+        </para>
+        <programlisting language="java"><![CDATA[
+          public void kovetkezo(View view){
+
+              if((max == 1) && eltalalta) {
+                  myAlert();
+              } else if(eltalalta) {
+                  for(int i = 0; i < 5; i++) al.remove((pos * 5));
+                  max--;
+              }
+
+              probalkozas = 0;
+              eltalalta = false;
+
+              b.setBackgroundColor(Color.LTGRAY);
+              //b.setBackgroundResource(R.);
+              b2.setBackgroundColor(Color.LTGRAY);
+              b3.setBackgroundColor(Color.LTGRAY);
+              b4.setBackgroundColor(Color.LTGRAY);
+
+              program();
+
+          }
+          ]]>
+        </programlisting>
+        <para>
+          Szemléltető képek:
+        </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/kviz.png" scale="30"/>
+            </imageobject>
+        </mediaobject>
 
     </section>
 

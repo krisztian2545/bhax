@@ -108,7 +108,7 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
         </para>
         <para>
             Megoldás forrása: <link xlink:href="calvin/deep.py">
-            <filename>bhax/thematic_tutorials/bhax_textbook/calvin/deep_mnist.py</filename>filename>
+            <filename>bhax/thematic_tutorials/bhax_textbook/calvin/deep.py</filename>
             </link>
         </para>
         <para>
@@ -139,7 +139,7 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
             </imageobject>
         </mediaobject>
         <para>
-          A <function>Flatten()</function> réteggel egydimenzióssá konvertáljuk a bemenetet, hogy az utána következő réteg tudjon vele dolgozni.
+          A <function>Flatten()</function> réteggel egydimenzióssá konvertáljuk a bemenetet, hogy az utána következő réteg tudjon vele dolgozni. Ezután következik a 2legfontosabb réteg, a <function>Dense</function> rétegek - közöttük egy <function>Dropout</function> réteggel, hogy csökkentsük az "overfitting" esélyét - , ugyanis valójában ez a 2 réteg fogja felismerni a számot. 
         </para>
         <programlisting><![CDATA[
 model = tf.keras.models.Sequential([
@@ -154,6 +154,16 @@ model = tf.keras.models.Sequential([
         <para>
           Ez a hálózat már sokkal pontosabb eredményeket szolgáltatott az előző feladatéhoz képest.
         </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/deep_acc.png" scale="45"/>
+            </imageobject>
+        </mediaobject>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/deep_res.png" scale="45"/>
+            </imageobject>
+        </mediaobject>
 
 
 
