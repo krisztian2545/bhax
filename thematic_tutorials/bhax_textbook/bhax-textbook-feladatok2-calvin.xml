@@ -104,7 +104,7 @@ https://progpater.blog.hu/2016/11/13/hello_samu_a_tensorflow-bol Háttérként e
         <title>Deep MNIST</title>
         <para>
           Mint az előző, de a mély változattal. Segítő ábra, vesd össze a forráskóddal a
-https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliáját!
+<link xlink:href="https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf">https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf</link> 8. fóliáját!
         </para>
         <para>
             Megoldás forrása: <link xlink:href="calvin/deep.py">
@@ -138,8 +138,11 @@ https://arato.inf.unideb.hu/batfai.norbert/NEMESPOR/DE/denbatfai2.pdf 8. fóliá
                 <imagedata fileref="images/pooling.png" scale="65"/>
             </imageobject>
         </mediaobject>
+        <para><link xlink:href="https://towardsdatascience.com/image-classification-in-10-minutes-with-mnist-dataset-54c35b77a38d">kép forrása</link>
+        </para>
+
         <para>
-          A <function>Flatten()</function> réteggel egydimenzióssá konvertáljuk a bemenetet, hogy az utána következő réteg tudjon vele dolgozni. Ezután következik a 2legfontosabb réteg, a <function>Dense</function> rétegek - közöttük egy <function>Dropout</function> réteggel, hogy csökkentsük az "overfitting" esélyét - , ugyanis valójában ez a 2 réteg fogja felismerni a számot. 
+          A <function>Flatten()</function> réteggel egydimenzióssá konvertáljuk a bemenetet, hogy az utána következő réteg tudjon vele dolgozni. Ezután következik a 2legfontosabb réteg, a <function>Dense</function> rétegek - közöttük egy <function>Dropout</function> réteggel, hogy csökkentsük az "overfitting" esélyét - , ugyanis valójában ez a 2 réteg fogja felismerni a számot.
         </para>
         <programlisting><![CDATA[
 model = tf.keras.models.Sequential([
