@@ -50,6 +50,11 @@
           }
           ]]>
         </programlisting>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="images/port_scan.png" scale="40"/>
+            </imageobject>
+        </mediaobject>
 
 
 
